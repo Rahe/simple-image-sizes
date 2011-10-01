@@ -18,6 +18,16 @@
 		line-height: 39px;
 		text-align: center;
 	}
+input.h,input.w{
+	border-color: #DFDFDF;
+	background-color: white;
+	border-width: 1px;
+	border-style: solid;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
 tr{	
 	-webkit-transition: all .5s ease-in-out;
     -moz-transition: all .5s ease-in-out;

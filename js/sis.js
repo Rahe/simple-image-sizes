@@ -41,6 +41,20 @@ var regenerate = {
 		// Refresh the progress Bar
 		jQuery(".progress").progressbar();
 	},
+	checkStartRegenerating : function(){
+		if( jQuery( '.notSaved' ).size() > 0 ) {
+			var confirmation = confirm( sis.notSaved );
+			
+			// Delete if ok else not delete
+			if( confirmation == true ) {
+				this.startRegenerating();
+			} else {
+				return false;
+			}
+		} else {
+			this.startRegenerating();
+		}
+	},
 	startRegenerating : function( ) {
 		var _self = this;
 		
@@ -56,7 +70,6 @@ var regenerate = {
 				
 				// Disable the button
 				jQuery( "#ajax_thumbnail_rebuild" ).attr( "disabled", true );
-				jQuery("#time").show();
 				// Display the message
 				_self.setMessage(  sis.reading );
 				
@@ -65,6 +78,15 @@ var regenerate = {
 				_self.getPostTypes();
 			},
 			success: function( r ) {
+
+				if( typeof r !== 'object' ) {
+					_self.reInit();
+					_self.setMessage( sis.phpError );
+					return false;
+				}
+				
+				jQuery("#time").show();
+				
 				// Eval the response
 				_self.list = r ;
 				
@@ -93,7 +115,7 @@ var regenerate = {
 		if ( this.curr >= this.list.length ) {
 			var now = new Date();
 			this.reInit();
-			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+' finished at :'+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
+			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()+sis.finishedAt+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
 			return;
 		}
 		
@@ -116,11 +138,16 @@ var regenerate = {
 				jQuery( ".progress-percent span.text" ).html( Math.round( _self.percent ) + "%").closest( '.progress-percent' ).animate( { left: Math.round( _self.percent )-2.5 + "%" }, 500 );
 			},
 			success: function( r ) {
-				
 				// Check if error or a message in response
-				if( ( !r.src || !r.time ) && r.error ) {
+				if( ( !r.src || !r.time ) || r.error || typeof r !== 'object' ) {
+					var message ='';
+					if( typeof r !== 'object' )
+						message = sis.phpError;
+					else 
+						message = r.error
+
 					jQuery( '#error_messages' ).addClass( 'error message' );
-					jQuery( '#error_messages ul.messages' ).append( '<li>'+r.error+'</li>' );
+					jQuery( '#error_messages ul.messages' ).append( '<li>'+message+'</li>' );
 				} else {
 					
 					// Append a message if needed
@@ -254,9 +281,10 @@ var sizes = {
 											name: 'custom_image_sizes[' + name + '][w]',
 											step: 1,
 											min: 0,
-											id: 'custom_image_sizes[' + name + '][w]'
+											id: 'custom_image_sizes[' + name + '][w]',
+											base_w:0
 										}
-										).val( "0" ).addClass( "w" )
+										).val( "0" ).addClass( "w small-text" )
 		).appendTo( tdEl );
 		
 		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][h]' ).text(sis.maximumHeight).append( 
@@ -264,9 +292,10 @@ var sizes = {
 											name: 'custom_image_sizes[' + name + '][h]',
 											step: 1,
 											min: 0,
-											id: 'custom_image_sizes[' + name + '][h]'
+											id: 'custom_image_sizes[' + name + '][h]',
+											base_h:0
 										}
-										).val( "0" ).addClass( "h" )
+										).val( "0" ).addClass( "h small-text" )
 		).appendTo( tdEl );
 		
 		jQuery( '<div />' )
@@ -276,7 +305,8 @@ var sizes = {
 						.attr( { 	
 									type: 'checkbox', 
 									name: 'custom_image_sizes[' + name + '][c]',
-									id: 'custom_image_sizes[' + name + '][c]'
+									id: 'custom_image_sizes[' + name + '][c]',
+									base_c:0
 								} )
 						.val( "1" )
 						.addClass( 'c' )
@@ -296,7 +326,8 @@ var sizes = {
 						.attr( { 	
 									type: 'checkbox', 
 									name: 'custom_image_sizes[' + name + '][s]',
-									id: 'custom_image_sizes[' + name + '][s]'
+									id: 'custom_image_sizes[' + name + '][s]',
+									base_s:0
 								} )
 						.val( "1" )
 						.addClass( 's' )
@@ -412,11 +443,18 @@ var sizes = {
 						_self.addToArray( n, w, h, c, classTr );
 					}
 					
+					// Add the new sizes values for checking of changed or not
+					parent.find( 'input.h' ).attr( { base_h : h } );
+					parent.find( 'input.w' ).attr( { base_w : w } );
+					parent.find( 'input.c' ).attr( { base_c : c } );
+					parent.find( 'input.s' ).attr( { base_s : s } );
+					
 					// Add the generated class
 					parent.addClass( classTr );
+					parent.find( 'td' ).removeClass( "notSaved" );
 					
 					// Change the button text
-					parent.find( '.add_size .ui-button-text' ).text( sis.update ) ;
+					parent.find( '.add_size' ).removeClass('validate_size').hide().children('.ui-button-text' ).text( sis.update ) ;
 					
 					clearTimeout( timer );
 					// Remove classes after 3 seconds
@@ -500,16 +538,60 @@ var sizes = {
 		} );
 		jQuery(".add_size").button( {
 			icons: {
-				primary: 'ui-icon-circle-check'
+				primary: 'ui-icon-check'
 			}
 		} );
-		jQuery(".crop,.show").button();
+		jQuery(".crop").button({
+			icons: {
+				primary: 'ui-icon-arrow-4-diag'
+			}
+		});
+		jQuery(".show").button({
+			icons: {
+				primary: 'ui-icon-lightbulb'
+			}
+		});
+	},
+	displayChange : function( el ) {
+		el = jQuery( el );
+		
+		var h_el = el.closest( 'tr' ).find( 'input.h' );
+		var w_el = el.closest( 'tr' ).find( 'input.w' );
+		var c_el = el.closest( 'tr' ).find( 'input.c' );
+		var s_el = el.closest( 'tr' ).find( 'input.s' );
+		
+		var h = h_el.val();
+		var w = w_el.val();
+		var c = c_el.prop( 'checked' );
+		var s = s_el.prop( 'checked' );
+		
+		var base_h = h_el.attr( 'base_h' );
+		var base_w = w_el.attr( 'base_w' );
+		var base_c = c_el.attr( 'base_c' );
+		var base_s = s_el.attr( 'base_s' );
+		
+		if( base_c == "0" )
+			base_c = false;
+		else
+			base_c = true;
+			
+		if( base_s == "0" )
+			base_s = false;
+		else
+			base_s = true;
+			
+		
+		if( h != base_h || w != base_w || c != base_c || s != base_s ) {
+			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').show();
+		} else {
+			el.closest( 'td' ).removeClass( 'notSaved' ).find('.add_size').hide();
+		}
 	}
 }
 jQuery(function() {
 	
 	// Regeneration listener
-	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { regenerate.startRegenerating(); } );
+	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { regenerate.checkStartRegenerating(); } );
 	
 	// Add size button listener
 	jQuery('#add_size').click(function( e ){ sizes.add( e, this ); });
@@ -519,7 +601,9 @@ jQuery(function() {
 	
 	// Delete and Adding buttons
 	jQuery('.delete_size').live( 'click', function( e ) { sizes.deleteSize( e, this ); } );
-	jQuery('.validate_size').live( 'click', function( e ) { sizes.ajaxRegister( e, this ); } );
+	jQuery('.add_size').live( 'click', function( e ) { sizes.ajaxRegister( e, this ); } );
+	
+	jQuery( '.h,.w,.c,.s' ).live( 'click', function( e ) { sizes.displayChange( this ); } );
 	
 	// Seup the getphp
 	jQuery('#get_php').click( function( e ){ sizes.getPhp( e, this ) } );
@@ -531,10 +615,12 @@ jQuery(function() {
 	} );
 	jQuery('span.theme_size').closest('tr').children('th').css( {
 		'color': '#F2A13A'
-	} );	
+	} );
 
 	// Set the buttons
 	sizes.setButtons();
+	
+	jQuery(".add_size").hide();
 
 	// Error ajax handler
 	jQuery( '<div class="ui-widget" id="msg"><div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Alert:</strong> <ul class="msg" ></ul></p></div></div>').prependTo( "div#wpwrap" ).slideUp( 0 );

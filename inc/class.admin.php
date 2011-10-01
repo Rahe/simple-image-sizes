@@ -20,6 +20,9 @@ Class SISAdmin {
 		
 		// Add link in plugins list
 		add_filter('plugin_action_links', array( &$this,'addSettingsLink'), 10, 2 );
+		
+		// Add action in media row quick actions
+		add_filter( 'media_row_actions', array(&$this, 'addActionsList'), 10, 2 );
 	}
 	
 	/**
@@ -32,7 +35,7 @@ Class SISAdmin {
 	public function registerScripts($hook_suffix = '' ) {
 		if( isset( $hook_suffix ) && $hook_suffix == 'options-media.php' ) {
 			// Add javascript
-			wp_enqueue_script( 'sis-jquery-ui-sis',  SIS_URL.'js/jquery-ui-1.8.12.custom.min.js', array('jquery'), '1.8.12' );
+			wp_enqueue_script( 'sis-jquery-ui-sis',  SIS_URL.'js/jquery-ui-1.8.16.custom.min.js', array('jquery'), '1.8.16' );
 			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis.min.js', array('jquery','sis-jquery-ui-sis'), SIS_VERSION );
 			
 			// Add javascript translation
@@ -41,6 +44,12 @@ Class SISAdmin {
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
 			wp_enqueue_style( 'sis_css', SIS_URL.'css/sis-style.css', array(), SIS_VERSION );
+		} elseif( isset( $hook_suffix ) && $hook_suffix == 'upload.php' ) {
+			// Add javascript
+			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
+			
+			// Add javascript translation
+			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
 		}
 	}
 	
@@ -53,31 +62,53 @@ Class SISAdmin {
 	 */
 	public function localizeVars() {
 		return array(
-			'ajaxUrl' =>  admin_url( '/admin-ajax.php' ),
-			'reading' => __( 'Reading attachments...', 'sis' ),
-			'maximumWidth' => __( 'Maximum width', 'sis' ),
-			'maximumHeight' => __( 'Maximum height', 'sis' ),
-			'crop' => __( 'Crop ?', 'sis' ),
-			'tr' => __( 'yes', 'sis' ),
-			'fl' => __( 'no', 'sis' ),
-			'show' => __( 'Show in post insertion ?', 'sis' ),
-			'of' => __( ' of ', 'sis' ),
-			'or' => __( ' or ', 'sis' ),
-			'beforeEnd' => __( ' before the end.', 'sis' ),
-			'deleteImage' => __( 'Delete', 'sis' ),
-			'noMedia' => __( 'No media in your site to regenerate !', 'sis' ),
-			'regenerating' => __( 'Regenerating ', 'sis'),
-			'validate' => __( 'Validate image size name', 'sis' ),
-			'done' => __( 'Done.', 'sis' ),
-			'size' => __( 'Size', 'sis' ),	
-			'notOriginal' => __( 'Don\'t use the basic Wordpress thumbnail size name, use the form above to edit them', 'sis' ),
-			'alreadyPresent' => __( 'This size is already registered, edit it instead of recreating it.', 'sis' ),
-			'confirmDelete' => __( 'Do you really want to delete these size ?', 'sis' ),
-			'update' => __( 'Update', 'sis' ),
-			'ajaxErrorHandler' => __( 'Error requesting page', 'sis' ),
+			'ajaxUrl' 			=>  admin_url( '/admin-ajax.php' ),
+			'reading' 			=> __( 'Reading attachments...', 'sis' ),
+			'maximumWidth' 		=> __( 'Maximum width', 'sis' ),
+			'maximumHeight' 	=> __( 'Maximum height', 'sis' ),
+			'crop' 				=> __( 'Crop ?', 'sis' ),
+			'tr' 				=> __( 'yes', 'sis' ),
+			'fl'				=> __( 'no', 'sis' ),
+			'show'				=> __( 'Show in post insertion ?', 'sis' ),
+			'of' 				=> __( ' of ', 'sis' ),
+			'or' 				=> __( ' or ', 'sis' ),
+			'beforeEnd' 		=> __( ' before the end.', 'sis' ),
+			'deleteImage' 		=> __( 'Delete', 'sis' ),
+			'noMedia' 			=> __( 'No media in your site to regenerate !', 'sis' ),
+			'regenerating' 		=> __( 'Regenerating ', 'sis'),
+			'validate' 			=> __( 'Validate image size name', 'sis' ),
+			'done' 				=> __( 'Done.', 'sis' ),
+			'size' 				=> __( 'Size', 'sis' ),	
+			'notOriginal' 		=> __( 'Don\'t use the basic Wordpress thumbnail size name, use the form above to edit them', 'sis' ),
+			'alreadyPresent' 	=> __( 'This size is already registered, edit it instead of recreating it.', 'sis' ),
+			'confirmDelete' 	=> __( 'Do you really want to delete these size ?', 'sis' ),
+			'update' 			=> __( 'Update', 'sis' ),
+			'ajaxErrorHandler' 	=> __( 'Error requesting page', 'sis' ),
 			'messageRegenerated' => __( 'images have been regenerated !', 'sis' ),
-			'validateButton' => __( 'Validate', 'sis' ),
+			'validateButton' 	=> __( 'Validate', 'sis' ),
+			'startedAt' 		=> __( ' started at', 'sis' ),
+			'finishedAt' 		=> __( ' finished at :', 'sis' ),
+			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'sis' ),
+			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'sis' ),
+			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'sis' ),
 		);
+	}
+	
+	/**
+	 * Add action in media row
+	 * 
+	 * @since 2.2
+	 * @access public
+	 * @return $actions : array of actions and content to display
+	 * @author Nicolas Juen
+	 */
+	function addActionsList( $actions, $object ) {
+		
+		// Add action for regeneration
+		$actions['sis-regenerate'] = "<a href='#' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>";
+		
+		// Return actions
+		return $actions;
 	}
 	
 	/**
@@ -143,7 +174,7 @@ Class SISAdmin {
 			}
 			
 			// Add the setting field for this size
-			add_settings_field( 'image_size_'.$s, __( 'Size ', 'sis' ).$s, array( &$this, 'imageSizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
+			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'sis' ), $s ), array( &$this, 'imageSizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
 		}
 
 		// Register the setting for media option page
@@ -187,32 +218,29 @@ Class SISAdmin {
 		?>
 		<input type="hidden" value="<?php echo $args['name']; ?>" name="image_name" />
 		<?php if( $custom ): ?>
-			<span class="custom_size"> <?php _e( 'Custom size', 'sis'); ?> : </span>
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
 		<?php else: ?>
-			<span class="theme_size"> <?php _e( 'Theme size', 'sis'); ?> : </span>
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
+			<input name="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
 		<?php endif; ?>
-		<label for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
+		<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
 			<?php _e( 'Maximum width', 'sis'); ?> 
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" value="<?php echo esc_attr( $width); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php esc_attr_e( $width ); ?>' value="<?php esc_attr_e( $width ); ?>" />
 		</label>
 
-		<label for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
+		<label for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
 			<?php _e( 'Maximum height', 'sis'); ?> 
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" value="<?php echo esc_attr( $height ); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php esc_attr_e( $height ); ?>' value="<?php esc_attr_e( $height ); ?>" />
 		</label>
 
 		<div class="crop">
-			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c" name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
-			<label for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
+			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c" base_c='<?php esc_attr_e( $crop ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
+			<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
 		</div>
 
 		<div class="show">
-			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s" name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
-			<label for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
+			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s" base_s='<?php esc_attr_e( $show ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
+			<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
 		</div>
-
 		<div class="delete_size"><?php _e( 'Delete', 'sis'); ?></div>
 		<div class="add_size validate_size"><?php _e( 'Update', 'sis'); ?></div>
 	<?php }
@@ -423,8 +451,8 @@ Class SISAdmin {
 		
 		// Check entries
 		$name = isset( $_POST['name'] ) ? remove_accents ( $_POST['name'] ): '' ;
-		$height = !isset( $_POST['height'] )? 0 : (int)$_POST['height'];
-		$width =  !isset( $_POST['width'] )? 0 : (int)$_POST['width'];
+		$height = !isset( $_POST['height'] )? 0 : absint( $_POST['height'] );
+		$width =  !isset( $_POST['width'] )? 0 : absint( $_POST['width'] );
 		$crop = isset( $_POST['crop'] ) &&  $_POST['crop'] == 'false' ? false : true;
 		$show = isset( $_POST['show'] ) &&  $_POST['show'] == 'false' ? false : true;
 		
@@ -433,7 +461,7 @@ Class SISAdmin {
 			echo 0;
 			die();
 		}
-		
+
 		// Make values
 		$values = array( 'custom' => 1, 'w' => $width , 'h' => $height, 'c' => $crop, 's' => $show );
 
@@ -599,6 +627,8 @@ Class SISAdmin {
 	 */
 	public function wp_generate_attachment_metadata_custom( $attachment_id, $file, $thumbnails = NULL ) {
 		$attachment = get_post( $attachment_id );
+		
+		$meta_datas = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
 
 		$metadata = array();
 		if ( preg_match('!^image/!', get_post_mime_type( $attachment )) && file_is_displayable_image($file) ) {
@@ -634,15 +664,27 @@ Class SISAdmin {
 
 			foreach ( $sizes as $size => $size_data ) {
 				if( isset( $thumbnails ) )
-					if( !in_array( $size, $thumbnails ) )
+					if( !in_array( $size, $thumbnails ) ) {
 						continue;
+					}
 
 				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
-
+				
+				// Remove the size from the orignal sizes for after work
+				unset( $meta_datas['size'][$size] );
+				
 				if ( $resized )
 					$metadata['sizes'][$size] = $resized;
 			}
-
+			
+			// Only if not all sizes
+			if( is_array( $thumbnails ) ) {
+				// Fill the array with the other sizes not have to be done
+				foreach( $meta_datas['sizes'] as $name => $fsize ) {
+					$metadata['sizes'][$name] = $fsize;
+				}
+			}
+			
 			// fetch additional metadata from exif/iptc
 			$image_meta = wp_read_image_metadata( $file );
 			if ( $image_meta )

@@ -33,6 +33,15 @@ I have improved the php and javascript, you can know if the image have been rege
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.2
+	* Add new version of css aristo
+	* Add some icons
+	* Display button for saving changes only when changes detected
+	* Display message when a size is modified but not saved and wanted to regenerate
+	* Debug functionnality when regenerating only some sizes, metas not crushed
+	* Add solo regenerating
+	* Remove displaying for theme/not theme sizes
+	* Use WordPress class for small inputs 
 * 2.1
 	* Add javascript timer
 	* Improve javascript and more IE friendly
