@@ -2,210 +2,255 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  \n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/simple-image-sizes\n"
-"POT-Creation-Date: 2011-07-05 19:34:56+00:00\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-02 00:11+0100\n"
+"PO-Revision-Date: 2011-10-02 00:11+0100\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Poedit-KeywordsList: _e;__;esc_attr_e;esc_attr_\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
 
-#: inc/class.admin.php:57
+#: ../inc/class.admin.php:66
 msgid "Reading attachments..."
 msgstr ""
 
-#: inc/class.admin.php:58 inc/class.admin.php:198
+#: ../inc/class.admin.php:67
+#: ../inc/class.admin.php:226
 msgid "Maximum width"
 msgstr ""
 
-#: inc/class.admin.php:59 inc/class.admin.php:203
+#: ../inc/class.admin.php:68
+#: ../inc/class.admin.php:231
 msgid "Maximum height"
 msgstr ""
 
-#: inc/class.admin.php:60 inc/class.admin.php:209 inc/class.admin.php:281
-#: inc/class.admin.php:342
+#: ../inc/class.admin.php:69
+#: ../inc/class.admin.php:237
+#: ../inc/class.admin.php:307
+#: ../inc/class.admin.php:366
 msgid "Crop ?"
 msgstr ""
 
-#: inc/class.admin.php:61 inc/class.admin.php:330
+#: ../inc/class.admin.php:70
+#: ../inc/class.admin.php:354
 msgid "yes"
 msgstr ""
 
-#: inc/class.admin.php:62 inc/class.admin.php:330
+#: ../inc/class.admin.php:71
+#: ../inc/class.admin.php:354
 msgid "no"
 msgstr ""
 
-#: inc/class.admin.php:63 inc/class.admin.php:214
+#: ../inc/class.admin.php:72
+#: ../inc/class.admin.php:242
 msgid "Show in post insertion ?"
 msgstr ""
 
-#: inc/class.admin.php:64
+#: ../inc/class.admin.php:73
 msgid " of "
 msgstr ""
 
-#: inc/class.admin.php:65
+#: ../inc/class.admin.php:74
 msgid " or "
 msgstr ""
 
-#: inc/class.admin.php:66
+#: ../inc/class.admin.php:75
 msgid " before the end."
 msgstr ""
 
-#: inc/class.admin.php:67 inc/class.admin.php:217
+#: ../inc/class.admin.php:76
+#: ../inc/class.admin.php:244
 msgid "Delete"
 msgstr ""
 
-#: inc/class.admin.php:68
+#: ../inc/class.admin.php:77
 msgid "No media in your site to regenerate !"
 msgstr ""
 
-#: inc/class.admin.php:69
+#: ../inc/class.admin.php:78
 msgid "Regenerating "
 msgstr ""
 
-#: inc/class.admin.php:70
+#: ../inc/class.admin.php:79
 msgid "Validate image size name"
 msgstr ""
 
-#: inc/class.admin.php:71
+#: ../inc/class.admin.php:80
 msgid "Done."
 msgstr ""
 
-#: inc/class.admin.php:72
+#: ../inc/class.admin.php:81
 msgid "Size"
 msgstr ""
 
-#: inc/class.admin.php:73
-msgid ""
-"Don't use the basic Wordpress thumbnail size name, use the form above to "
-"edit them"
+#: ../inc/class.admin.php:82
+msgid "Don't use the basic Wordpress thumbnail size name, use the form above to edit them"
 msgstr ""
 
-#: inc/class.admin.php:74
+#: ../inc/class.admin.php:83
 msgid "This size is already registered, edit it instead of recreating it."
 msgstr ""
 
-#: inc/class.admin.php:75
+#: ../inc/class.admin.php:84
 msgid "Do you really want to delete these size ?"
 msgstr ""
 
-#: inc/class.admin.php:76 inc/class.admin.php:218
+#: ../inc/class.admin.php:85
+#: ../inc/class.admin.php:245
 msgid "Update"
 msgstr ""
 
-#: inc/class.admin.php:77
+#: ../inc/class.admin.php:86
 msgid "Error requesting page"
 msgstr ""
 
-#: inc/class.admin.php:78
+#: ../inc/class.admin.php:87
 msgid "images have been regenerated !"
 msgstr ""
 
-#: inc/class.admin.php:79
+#: ../inc/class.admin.php:88
 msgid "Validate"
 msgstr ""
 
-#: inc/class.admin.php:97
+#: ../inc/class.admin.php:89
+msgid " started at"
+msgstr ""
+
+#: ../inc/class.admin.php:90
+msgid " finished at :"
+msgstr ""
+
+#: ../inc/class.admin.php:91
+msgid "Error during the php treatment, be sure to not have php errors in your page"
+msgstr ""
+
+#: ../inc/class.admin.php:92
+msgid "All the sizes you have modifed are not saved, continue anyway ?"
+msgstr ""
+
+#: ../inc/class.admin.php:93
+#, php-format
+msgid "This image has been regenerated in %s seconds"
+msgstr ""
+
+#: ../inc/class.admin.php:108
+msgid "Regenerate thumbnails"
+msgstr ""
+
+#: ../inc/class.admin.php:128
 msgid "Settings"
 msgstr ""
 
-#: inc/class.admin.php:147
-msgid "Size "
+#: ../inc/class.admin.php:177
+#, php-format
+msgid "%s size"
 msgstr ""
 
-#: inc/class.admin.php:154
+#: ../inc/class.admin.php:184
 msgid "Add a new size"
 msgstr ""
 
-#: inc/class.admin.php:157
+#: ../inc/class.admin.php:187
 msgid "Legend of the sizes"
 msgstr ""
 
-#: inc/class.admin.php:160
+#: ../inc/class.admin.php:190
 msgid "Get php for theme"
 msgstr ""
 
-#: inc/class.admin.php:163
+#: ../inc/class.admin.php:193
 msgid "Thumbnail regeneration"
 msgstr ""
 
-#: inc/class.admin.php:191
-msgid "Custom size"
+#: ../inc/class.admin.php:221
+#: ../inc/class.admin.php:223
+#: ../inc/class.admin.php:225
+#: ../inc/class.admin.php:227
+#: ../inc/class.admin.php:230
+#: ../inc/class.admin.php:232
+#: ../inc/class.admin.php:236
+#: ../inc/class.admin.php:237
+#: ../inc/class.admin.php:241
+#: ../inc/class.admin.php:242
+msgid "custom_image_sizes["
 msgstr ""
 
-#: inc/class.admin.php:194
-msgid "Theme size"
-msgstr ""
-
-#: inc/class.admin.php:229
+#: ../inc/class.admin.php:256
 msgid "Add a new size of thumbnail"
 msgstr ""
 
-#: inc/class.admin.php:241
+#: ../inc/class.admin.php:268
 msgid "Get the PHP for the theme"
 msgstr ""
 
-#: inc/class.admin.php:242
-msgid ""
-"Copy and paste the code below into your Wordpress theme function file if you "
-"wanted to save them and deactivate the plugin."
+#: ../inc/class.admin.php:269
+msgid "Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin."
 msgstr ""
 
-#: inc/class.admin.php:255
-msgid ""
-"The images created on your theme are <span style=\"color:#F2A13A\">orange</"
-"span> and your custom size are <span style=\"color:#89D76A\"> green </span>."
+#: ../inc/class.admin.php:282
+msgid "The images created on your theme are <span style=\"color:#F2A13A\">orange</span> and your custom size are <span style=\"color:#89D76A\"> green </span>."
 msgstr ""
 
-#: inc/class.admin.php:273
+#: ../inc/class.admin.php:299
 msgid "Select which thumbnails you want to rebuild:"
 msgstr ""
 
-#: inc/class.admin.php:277 inc/class.admin.php:338 inc/class.admin.php:351
-#: inc/class.admin.php:377
+#: ../inc/class.admin.php:303
+#: ../inc/class.admin.php:362
+#: ../inc/class.admin.php:375
+#: ../inc/class.admin.php:400
 msgid "Resize ?"
 msgstr ""
 
-#: inc/class.admin.php:278 inc/class.admin.php:339
+#: ../inc/class.admin.php:304
+#: ../inc/class.admin.php:363
 msgid "Size name"
 msgstr ""
 
-#: inc/class.admin.php:279 inc/class.admin.php:340
+#: ../inc/class.admin.php:305
+#: ../inc/class.admin.php:364
 msgid "Width"
 msgstr ""
 
-#: inc/class.admin.php:280 inc/class.admin.php:341
+#: ../inc/class.admin.php:306
+#: ../inc/class.admin.php:365
 msgid "Height"
 msgstr ""
 
-#: inc/class.admin.php:347
+#: ../inc/class.admin.php:371
 msgid "Select which post type source thumbnails you want to rebuild:"
 msgstr ""
 
-#: inc/class.admin.php:352 inc/class.admin.php:378
+#: ../inc/class.admin.php:376
+#: ../inc/class.admin.php:401
 msgid "Post type"
 msgstr ""
 
-#: inc/class.admin.php:400
+#: ../inc/class.admin.php:423
 msgid "End time calculated :"
 msgstr ""
 
-#: inc/class.admin.php:411
+#: ../inc/class.admin.php:434
 msgid "Last image:"
 msgstr ""
 
-#: inc/class.admin.php:412
+#: ../inc/class.admin.php:435
 msgid "Regenerate Thumbnails"
 msgstr ""
 
-#: inc/class.admin.php:577
+#: ../inc/class.admin.php:600
 msgid "No id given in POST datas."
 msgstr ""
 
-#: inc/class.admin.php:587 inc/class.admin.php:589
-msgid ""
-"This file does not exists and have not been regenerated :<br/><a target="
-"\"_blank\" href=\"%1$s\" >%2$s</a>"
+#: ../inc/class.admin.php:610
+#: ../inc/class.admin.php:612
+#, php-format
+msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
 msgstr ""
+
