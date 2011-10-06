@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 2.2
+Tested up to: 3.3
+Stable tag: 2.2.1
 
 == Description ==
 
@@ -13,6 +13,7 @@ You can regenerate all the sizes you have just created and choose which one you 
 You can now get all the code to copy and paste to your function theme file.
 Now you can use the generated sizes directly into your posts and insert images at the right size !
 Now you choose if you want display the size in the post insert image.
+Now you can regenerate the images one by one in the 'Medias' general pane.
 
 I have added a timer so when you regeneration your thumbnails, you can know approximately when the regeneration will be ended.
 I have improved the php and javascript, you can know if the image have been regenerated or not or if there is an error and which one.
@@ -33,6 +34,11 @@ I have improved the php and javascript, you can know if the image have been rege
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.2.1
+	* Use buttonset for the checkboxes
+	* Add Pointer for WordPress 3.3
+	* Fix translation in French
+	* Some medias queries for small windows ( change size of buttons and alignment )
 * 2.2
 	* Add new version of css aristo
 	* Add some icons

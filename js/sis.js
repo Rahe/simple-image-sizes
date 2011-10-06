@@ -1,3 +1,4 @@
+sis_small = true;
 // Functions for the regenerating of images
 var regenerate = {
 	post_types : '',
@@ -222,7 +223,7 @@ var sizes = {
 		e.preventDefault();
 		
 		// Create the template
-		var elTr = jQuery( '<tr />' ).attr( 'valign', 'top' ).addClass( 'new_size_' + this.i );
+		var elTr = jQuery( '<tr />' ).attr( 'valign', 'top' ).addClass( 'new_size_' + this.i+' new_size' );
 		jQuery( '<th />' ).attr( 'scope', 'row' ).append( 
 								jQuery( '<input />' )
 									.attr( { 	
@@ -276,7 +277,7 @@ var sizes = {
 		jQuery( '<input />' ).attr( { type: 'hidden', name: 'image_name' } ).val( name ).appendTo( tdEl ) ;
 		jQuery( '<input />' ).attr( { type :'hidden', name : 'custom_image_sizes[' + name + '][custom]' } ).val( "1" ).appendTo( tdEl );
 		
-		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][w]' ).text(sis.maximumWidth).append( 
+		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][w]' ).addClass( 'sis-label' ).text(sis.maximumWidth).append( 
 			jQuery( '<input />' ).attr( { 	type: 'number', 
 											name: 'custom_image_sizes[' + name + '][w]',
 											step: 1,
@@ -287,7 +288,7 @@ var sizes = {
 										).val( "0" ).addClass( "w small-text" )
 		).appendTo( tdEl );
 		
-		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][h]' ).text(sis.maximumHeight).append( 
+		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][h]' ).addClass( 'sis-label' ).text(sis.maximumHeight).append( 
 			jQuery( '<input />' ).attr( { 	type: 'number', 
 											name: 'custom_image_sizes[' + name + '][h]',
 											step: 1,
@@ -298,9 +299,9 @@ var sizes = {
 										).val( "0" ).addClass( "h small-text" )
 		).appendTo( tdEl );
 		
-		jQuery( '<div />' )
-			.addClass( 'crop' )
-				.append( 
+		els = jQuery( '<span />' )
+			.addClass( 'size_options' )
+				.append(
 					jQuery( '<input />' )
 						.attr( { 	
 									type: 'checkbox', 
@@ -309,19 +310,19 @@ var sizes = {
 									base_c:0
 								} )
 						.val( "1" )
-						.addClass( 'c' )
+						.addClass( 'c crop' )
 				)
 				.append(
 					jQuery( '<label />' )
 						.attr( { 	
-									'for': 'checkbox', 
-									id: 'custom_image_sizes[' + name + '][c]'
+									'for': 'custom_image_sizes[' + name + '][c]',
+									id: 'custom_image_sizes[' + name + '][c]',
+									'class': 'c',
+									title:sis.crop
 								} )
 						.text( sis.crop ) 
-				).appendTo( tdEl );
-		jQuery( '<div />' )
-			.addClass( 'show' )
-				.append( 
+				)
+				.append(
 					jQuery( '<input />' )
 						.attr( { 	
 									type: 'checkbox', 
@@ -330,16 +331,19 @@ var sizes = {
 									base_s:0
 								} )
 						.val( "1" )
-						.addClass( 's' )
+						.addClass( 's show' )
 				)
 				.append(
 					jQuery( '<label />' )
 						.attr( { 	
-									'for': 'checkbox', 
-									id: 'custom_image_sizes[' + name + '][s]'
+									'for': 'custom_image_sizes[' + name + '][s]',
+									id: 'custom_image_sizes[' + name + '][s]',
+									'class': 's',
+									title:sis.show
 								} )
 						.text( sis.show ) 
-				).appendTo( tdEl );
+				);
+		els.appendTo(tdEl);
 		
 		jQuery( '<div />' ).text( sis.deleteImage ).addClass('delete_size').appendTo( tdEl );
 		jQuery( '<div />' ).text( sis.validateButton ).addClass('add_size validate_size').appendTo( tdEl );
@@ -347,8 +351,13 @@ var sizes = {
 		// Add the row to the current list
 		jQuery('#' + id).closest( 'tr' ).html( thEl.after( tdEl ) );
 		
-		// Refresh the buttons
-		this.setButtons();
+		if( sis_small == true ){
+			// Refresh the buttons
+			this.setButtonsSmall();
+		} else {
+			// Refresh the buttons
+			this.setButtons();
+		}
 	},
 	deleteSize: function( e, el ) {
 		e.preventDefault();
@@ -392,8 +401,8 @@ var sizes = {
 		var timer;
 		var parent = jQuery( el ).closest( 'tr' );
 		var n = parent.find( 'input[name="image_name"]' ).val();
-		var c = parent.find( 'input.c' ).attr( 'checked' );
-		var s = parent.find( 'input.s' ).attr( 'checked' );
+		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
+		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
 
 		if( c == false || c == undefined ) {
 			c = false;
@@ -417,15 +426,16 @@ var sizes = {
 				dataType :'json',
 				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s },
 				beforeSend: function() {
+					console.log( parent );
 					// Remove status and set pending
-					parent.removeClass( 'errorAdding notChangedAdding successAdding' );
+					parent.removeClass();
 					parent.addClass( 'addPending' );
 					parentTable.addClass( 'ajaxing' );
 				},
 				success: function(result) {
 					// Set basic class and remove pending
 					var classTr = '';
-					parent.removeClass( 'addPending' );
+					parent.removeClass();
 					parentTable.removeClass( 'ajaxing' )
 					
 					// Check the result for the different messages
@@ -534,52 +544,78 @@ var sizes = {
 		jQuery(".delete_size").button( {
 			icons: {
 				primary: 'ui-icon-circle-close'
-			}
+			},
+			text: true
 		} );
 		jQuery(".add_size").button( {
 			icons: {
 				primary: 'ui-icon-check'
-			}
+			},
+			text: true
 		} );
 		jQuery(".crop").button({
 			icons: {
 				primary: 'ui-icon-arrow-4-diag'
-			}
+			},
+			text: true
 		});
 		jQuery(".show").button({
 			icons: {
 				primary: 'ui-icon-lightbulb'
-			}
+			},
+			text: true
 		});
+		jQuery( '.size_options' ).buttonset();
+	},
+	setButtonsSmall: function() {
+		// UI for delete,crop and add buttons
+		jQuery(".delete_size").button( {icons: {
+				primary: 'ui-icon-circle-close'
+			},text: false} );
+		jQuery(".add_size").button( { icons: {
+				primary: 'ui-icon-check'
+			},text: false} );
+		jQuery(".crop").button({icons: {
+				primary: 'ui-icon-arrow-4-diag'
+			},text: false});
+		jQuery(".show").button( {icons: {
+				primary: 'ui-icon-lightbulb'
+			},text: false});
 	},
 	displayChange : function( el ) {
 		el = jQuery( el );
+		var parent = el.closest( 'tr' );
 		
-		var h_el = el.closest( 'tr' ).find( 'input.h' );
-		var w_el = el.closest( 'tr' ).find( 'input.w' );
-		var c_el = el.closest( 'tr' ).find( 'input.c' );
-		var s_el = el.closest( 'tr' ).find( 'input.s' );
+		// Check not new size
+		if( parent.hasClass( 'new_size' ) )
+			return false;
+		
+		var h_el = parent.find( 'input.h' );
+		var w_el = parent.find( 'input.w' );
+		var c_el = parent.find( 'input.c' );
+		var s_el = parent.find( 'input.s' );
 		
 		var h = h_el.val();
 		var w = w_el.val();
-		var c = c_el.prop( 'checked' );
-		var s = s_el.prop( 'checked' );
+		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
+		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
 		
 		var base_h = h_el.attr( 'base_h' );
 		var base_w = w_el.attr( 'base_w' );
 		var base_c = c_el.attr( 'base_c' );
 		var base_s = s_el.attr( 'base_s' );
 		
-		if( base_c == "0" )
+		if( base_c == '0' )
 			base_c = false;
 		else
 			base_c = true;
 			
-		if( base_s == "0" )
+		if( base_s == '0' )
 			base_s = false;
 		else
 			base_s = true;
 			
+		
 		
 		if( h != base_h || w != base_w || c != base_c || s != base_s ) {
 			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').show();
@@ -617,8 +653,6 @@ jQuery(function() {
 		'color': '#F2A13A'
 	} );
 
-	// Set the buttons
-	sizes.setButtons();
 	
 	jQuery(".add_size").hide();
 
@@ -629,4 +663,22 @@ jQuery(function() {
 	jQuery("#msg").ajaxError( function(event, request, settings ) {
 		jQuery( this ).find( '.msg' ).append( "<li>"+sis.ajaxErrorHandler+" " + settings.url + ", status "+request.status+" : "+request.statusText+"</li>" ).end().stop( false, false ).slideDown( 200 ).delay( 5000 ).slideUp( 200 );
 	});
+	
+	// Check resizing of the window
+	jQuery(window).bind('resize', sisCheckWindowSize );
+	
+	function sisCheckWindowSize() {
+		if( window.innerWidth <= 820 && sis_small == false ) {
+			console.log('called !');
+			sizes.setButtonsSmall();
+			sis_small = true;
+		} else if( window.innerWidth > 820 && sis_small == true ){
+			console.log('called too !');
+			sizes.setButtons();
+			sis_small = false;
+		}
+	}
+	
+	// Set the buttons
+	sizes.setButtons();
 });

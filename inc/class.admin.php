@@ -51,6 +51,29 @@ Class SISAdmin {
 			// Add javascript translation
 			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
 		}
+		
+		// Check if user have already close the box or not
+		$welcome = get_user_setting( 'sis_medias_config_pointer', 0 );
+		$welcome = false;
+		if ( !$welcome ) {
+			// Add the pointer lib we need and css
+			wp_enqueue_script( 'wp-pointer' );
+			
+			// needed for setUserSetting in js
+			wp_enqueue_script( 'utils' ); 
+			
+			// Pointer Css
+			wp_enqueue_style( 'wp-pointer' );
+			
+			//Javascript file for pointer
+			wp_enqueue_script( 'sis_pointers', SIS_URL.'js/sis-pointers.js', array( 'jquery', 'wp-pointer' ), SIS_VERSION );
+			
+			// Localize the elements for the pointers
+			wp_localize_script( 'sis_pointers' , 'sis_pointer', array( 
+				'pointerMediasConfig'=> sprintf( __( '<h3>Welcome to Simple Image Sizes !</h3><p>In this plugin, you can add new image sizes<br/> and regenerate the images that doesn\'t exist yet.<br/> Click on <a href="%s">Medias</a> for configurate the images</p>' , 'sis' ), admin_url( 'options-media.php' ) ), 
+				) 
+			);
+		}
 	}
 	
 	/**
@@ -222,27 +245,24 @@ Class SISAdmin {
 		<?php else: ?>
 			<input name="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
 		<?php endif; ?>
-		<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
+		<label class="sis-label" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
 			<?php _e( 'Maximum width', 'sis'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php esc_attr_e( $width ); ?>' value="<?php esc_attr_e( $width ); ?>" />
 		</label>
 
-		<label for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
+		<label class="sis-label" for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
 			<?php _e( 'Maximum height', 'sis'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php esc_attr_e( $height ); ?>' value="<?php esc_attr_e( $height ); ?>" />
 		</label>
-
-		<div class="crop">
-			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c" base_c='<?php esc_attr_e( $crop ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
-			<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
-		</div>
-
-		<div class="show">
-			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s" base_s='<?php esc_attr_e( $show ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
-			<label for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
-		</div>
-		<div class="delete_size"><?php _e( 'Delete', 'sis'); ?></div>
-		<div class="add_size validate_size"><?php _e( 'Update', 'sis'); ?></div>
+		<span class="size_options">
+			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c crop" base_c='<?php esc_attr_e( $crop ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
+			<label class="c" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
+			
+			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php esc_attr_e( $show ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
+			<label class="s" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
+		</span>
+		<span class="delete_size"><?php _e( 'Delete', 'sis'); ?></span>
+		<span class="add_size validate_size"><?php _e( 'Update', 'sis'); ?></span>
 	<?php }
 	
 	/**
