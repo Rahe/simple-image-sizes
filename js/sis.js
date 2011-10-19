@@ -426,7 +426,6 @@ var sizes = {
 				dataType :'json',
 				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s },
 				beforeSend: function() {
-					console.log( parent );
 					// Remove status and set pending
 					parent.removeClass();
 					parent.addClass( 'addPending' );
@@ -618,9 +617,9 @@ var sizes = {
 		
 		
 		if( h != base_h || w != base_w || c != base_c || s != base_s ) {
-			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').show();
+			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').css( 'display', 'inline-block' );
 		} else {
-			el.closest( 'td' ).removeClass( 'notSaved' ).find('.add_size').hide();
+			el.closest( 'td' ).removeClass( 'notSaved' ).find('.add_size').css( 'display', 'none' );
 		}
 	}
 }
@@ -669,11 +668,9 @@ jQuery(function() {
 	
 	function sisCheckWindowSize() {
 		if( window.innerWidth <= 820 && sis_small == false ) {
-			console.log('called !');
 			sizes.setButtonsSmall();
 			sis_small = true;
 		} else if( window.innerWidth > 820 && sis_small == true ){
-			console.log('called too !');
 			sizes.setButtons();
 			sis_small = false;
 		}

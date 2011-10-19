@@ -4,7 +4,7 @@ Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 
 == Description ==
 
@@ -34,6 +34,9 @@ I have improved the php and javascript, you can know if the image have been rege
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.2.2
+	* Debug js for the buttons
+	* Remove console.log calls
 * 2.2.1
 	* Use buttonset for the checkboxes
 	* Add Pointer for WordPress 3.3
