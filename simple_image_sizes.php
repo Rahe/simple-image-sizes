@@ -8,7 +8,7 @@ Author: Rahe
 Author URI: http://nicolas-juen.fr
 Text Domain: sis
 Domain Path: /languages/
-Network: true
+Network: false
 
 Copyright 2011 Nicolas JUEN (njuen@beapi.fr) - Be-API
 
