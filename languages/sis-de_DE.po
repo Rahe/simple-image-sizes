@@ -1,0 +1,373 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-02 00:11+0100\n"
+"PO-Revision-Date: 2011-10-02 00:11+0100\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: inc/class.admin.php:89
+#@ sis
+msgid "Reading attachments..."
+msgstr "Lese Anhänge…"
+
+#: inc/class.admin.php:90
+#: inc/class.admin.php:249
+#@ sis
+msgid "Maximum width"
+msgstr "Maximale Breite"
+
+#: inc/class.admin.php:91
+#: inc/class.admin.php:254
+#@ sis
+msgid "Maximum height"
+msgstr "Maximale Höhe"
+
+#: inc/class.admin.php:92
+#: inc/class.admin.php:259
+#: inc/class.admin.php:327
+#: inc/class.admin.php:386
+#@ sis
+msgid "Crop ?"
+msgstr "Beschneiden?"
+
+#: inc/class.admin.php:93
+#: inc/class.admin.php:374
+#@ sis
+msgid "yes"
+msgstr "ja"
+
+#: inc/class.admin.php:94
+#: inc/class.admin.php:374
+#@ sis
+msgid "no"
+msgstr "nein"
+
+#: inc/class.admin.php:95
+#: inc/class.admin.php:262
+#@ sis
+msgid "Show in post insertion ?"
+msgstr "Beim Einfügen in den Beitrag anzeigen?"
+
+#: inc/class.admin.php:96
+#@ sis
+msgid " of "
+msgstr "von"
+
+#: inc/class.admin.php:97
+#@ sis
+msgid " or "
+msgstr "oder"
+
+#: inc/class.admin.php:98
+#@ sis
+msgid " before the end."
+msgstr "vor dem Ende."
+
+#: inc/class.admin.php:99
+#: inc/class.admin.php:264
+#@ sis
+msgid "Delete"
+msgstr "Löschen"
+
+#: inc/class.admin.php:100
+#@ sis
+msgid "No media in your site to regenerate !"
+msgstr "Keine Medien neu zu generieren!"
+
+#: inc/class.admin.php:101
+#@ sis
+msgid "Regenerating "
+msgstr "Neu generieren"
+
+#: inc/class.admin.php:102
+#@ sis
+msgid "Validate image size name"
+msgstr "Bildgrößenbezeichnung überprüfen"
+
+#: inc/class.admin.php:103
+#@ sis
+msgid "Done."
+msgstr "Fertig."
+
+#: inc/class.admin.php:104
+#@ sis
+msgid "Size"
+msgstr "Bildgröße"
+
+#: inc/class.admin.php:105
+#@ sis
+msgid "Don't use the basic Wordpress thumbnail size name, use the form above to edit them"
+msgstr "Nutze nicht die vorgegebene Thumbnail-Bezeichnung in WordPress! Nutze das Formular, um diese zu bearbeiten."
+
+#: inc/class.admin.php:106
+#@ sis
+msgid "This size is already registered, edit it instead of recreating it."
+msgstr "Die Bildgröße existiert bereits. Du kannst sie bearbeiten, anstatt sie doppelt anzulegen."
+
+#: inc/class.admin.php:107
+#@ sis
+msgid "Do you really want to delete these size ?"
+msgstr "Willst du diese Bildgröße/n wirklich löschen?"
+
+#: inc/class.admin.php:108
+#: inc/class.admin.php:265
+#@ sis
+msgid "Update"
+msgstr "Aktualisieren"
+
+#: inc/class.admin.php:109
+#@ sis
+msgid "Error requesting page"
+msgstr "Fehler beim Abruf der Seite"
+
+#: inc/class.admin.php:110
+#@ sis
+msgid "images have been regenerated !"
+msgstr "Bilder wurden neu generiert!"
+
+#: inc/class.admin.php:111
+#@ sis
+msgid "Validate"
+msgstr "Überprüfen"
+
+#: inc/class.admin.php:112
+#@ sis
+msgid " started at"
+msgstr "begonnen: "
+
+#: inc/class.admin.php:113
+#@ sis
+msgid " finished at :"
+msgstr "beendet: "
+
+#: inc/class.admin.php:114
+#@ sis
+msgid "Error during the php treatment, be sure to not have php errors in your page"
+msgstr "Fehler während des PHP-Durchlaufs! Stelle sicher, dass sich keine PHP-Fehler in deiner Seite befinden."
+
+#: inc/class.admin.php:115
+#@ sis
+msgid "All the sizes you have modifed are not saved, continue anyway ?"
+msgstr "Deine veränderten Bildgrößen wurden noch nicht gespeichert. Trotzdem fortfahren?"
+
+#: inc/class.admin.php:116
+#, php-format
+#@ sis
+msgid "This image has been regenerated in %s seconds"
+msgstr "Dieses Bild wurde neu generiert in %s Sekunden."
+
+#: inc/class.admin.php:131
+#@ sis
+msgid "Regenerate thumbnails"
+msgstr "Artikelbilder neu generieren"
+
+#: inc/class.admin.php:151
+#@ sis
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: inc/class.admin.php:200
+#, php-format
+#@ sis
+msgid "%s size"
+msgstr "Bildgröße „%s“"
+
+#: inc/class.admin.php:207
+#@ sis
+msgid "Add a new size"
+msgstr "Neue Bildgröße hinzufügen"
+
+#: inc/class.admin.php:210
+#@ sis
+msgid "Legend of the sizes"
+msgstr "Legende für deine Bildgrößen"
+
+#: inc/class.admin.php:213
+#@ sis
+msgid "Get php for theme"
+msgstr "PHP für dein Theme generieren"
+
+#: inc/class.admin.php:216
+#@ sis
+msgid "Thumbnail regeneration"
+msgstr "Artikelbilder neu generieren"
+
+#: inc/class.admin.php:276
+#@ sis
+msgid "Add a new size of thumbnail"
+msgstr "Neue Bildgröße für Thumbnail hinzufügen"
+
+#: inc/class.admin.php:288
+#@ sis
+msgid "Get the PHP for the theme"
+msgstr "Hol‘ dir den PHP-Code für dein Theme!"
+
+#: inc/class.admin.php:289
+#@ sis
+msgid "Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin."
+msgstr "Falls du deine Bildgrößen behalten und das Plugin deaktivieren möchtest, kopiere diesen PHP-Code in die Datei functions.php deines Theme."
+
+#: inc/class.admin.php:302
+#@ sis
+msgid "The images created on your theme are <span style=\"color:#F2A13A\">orange</span> and your custom size are <span style=\"color:#89D76A\"> green </span>."
+msgstr "Die von deinem Theme generierten Bildgrößen sind <span style=\"color:#F2A13A\">orange</span>, deine selbst erstellten Bildgrößen sind <span style=\"color:#89D76A\"> grün </span>."
+
+#: inc/class.admin.php:319
+#@ sis
+msgid "Select which thumbnails you want to rebuild:"
+msgstr "Wähle die Artikelbilder aus, die neu generiert werden sollen:"
+
+#: inc/class.admin.php:323
+#: inc/class.admin.php:382
+#: inc/class.admin.php:395
+#: inc/class.admin.php:420
+#@ sis
+msgid "Resize ?"
+msgstr "Bearbeiten?"
+
+#: inc/class.admin.php:324
+#: inc/class.admin.php:383
+#@ sis
+msgid "Size name"
+msgstr "Bildgrößenbezeichnung"
+
+#: inc/class.admin.php:325
+#: inc/class.admin.php:384
+#@ sis
+msgid "Width"
+msgstr "Breite"
+
+#: inc/class.admin.php:326
+#: inc/class.admin.php:385
+#@ sis
+msgid "Height"
+msgstr "Höhe"
+
+#: inc/class.admin.php:391
+#@ sis
+msgid "Select which post type source thumbnails you want to rebuild:"
+msgstr "Wähle die Inhaltstypen aus, deren Artikelbilder du neu generieren willst:"
+
+#: inc/class.admin.php:396
+#: inc/class.admin.php:421
+#@ sis
+msgid "Post type"
+msgstr "Inhaltstyp"
+
+#: inc/class.admin.php:443
+#@ sis
+msgid "End time calculated :"
+msgstr "Berechnetes Ende:"
+
+#: inc/class.admin.php:454
+#@ sis
+msgid "Last image:"
+msgstr "Letztes Bild:"
+
+#: inc/class.admin.php:455
+#@ sis
+msgid "Regenerate Thumbnails"
+msgstr "Artikelbilder neu generieren"
+
+#: inc/class.admin.php:620
+#@ sis
+msgid "No id given in POST datas."
+msgstr "Keine ID in den POST-Daten gegeben."
+
+#: inc/class.admin.php:630
+#: inc/class.admin.php:632
+#, php-format
+#@ sis
+msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgstr "Diese Datei existiert nicht und wurde nicht neu generiert:<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+
+#: inc/class.admin.php:73
+#, php-format
+#@ sis
+msgid "<h3>Welcome to Simple Image Sizes !</h3><p>In this plugin, you can add new image sizes<br/> and regenerate the images that doesn't exist yet.<br/> Click on <a href=\"%s\">Medias</a> for configurate the images</p>"
+msgstr "<h3>Willkommen bei Simple Image Sizes!</h3><p>Mit diesem Plugin kannst du neue Bildgrößen hinzufügen<br/> und für bereits existierende Bilder neu generieren.<br/> Gehe zur <a href=\"%s\">Mediathek</a>, um deine Bilder neu zu konfigurieren.</p>"
+
+#: inc/class.admin.php:244
+#@ default
+msgid "custom_image_sizes[name][custom]"
+msgstr ""
+
+#: inc/class.admin.php:246
+#@ default
+msgid "custom_image_sizes[name][theme]"
+msgstr ""
+
+#: inc/class.admin.php:248
+#: inc/class.admin.php:250
+#@ default
+msgid "custom_image_sizes[name][w]"
+msgstr ""
+
+#: inc/class.admin.php:253
+#: inc/class.admin.php:255
+#@ default
+msgid "custom_image_sizes[name][h]"
+msgstr ""
+
+#: inc/class.admin.php:258
+#: inc/class.admin.php:259
+#@ default
+msgid "custom_image_sizes[name][c]"
+msgstr ""
+
+#: inc/class.admin.php:261
+#: inc/class.admin.php:262
+#@ default
+msgid "custom_image_sizes[name][s]"
+msgstr ""
+
+#. translators: plugin header field 'Name'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "Simple Image Size"
+msgstr "Simple Image Size"
+
+#. translators: plugin header field 'PluginURI'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "http://redmine.beapi.fr/projects/show/simple-image-sizes"
+msgstr "http://redmine.beapi.fr/projects/show/simple-image-sizes"
+
+#. translators: plugin header field 'Description'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "Add options in media setting page for images sizes"
+msgstr "Optionen für Bildgrößen in den Mediathek-Einstellungen hinzufügen"
+
+#. translators: plugin header field 'Author'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "Rahe"
+msgstr "Rahe"
+
+#. translators: plugin header field 'AuthorURI'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "http://nicolas-juen.fr"
+msgstr "http://nicolas-juen.fr"
+
+#. translators: plugin header field 'Version'
+#: simple_image_sizes.php:0
+#@ sis
+msgid "2.2.3"
+msgstr ""
+

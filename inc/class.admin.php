@@ -33,7 +33,10 @@ Class SISAdmin {
 	 * @author Nicolas Juen
 	 */
 	public function registerScripts($hook_suffix = '' ) {
-		if( isset( $hook_suffix ) && $hook_suffix == 'options-media.php' ) {
+		if( !isset( $hook_suffix ) || empty( $hook_suffix ) )
+			return false;
+		
+		if( $hook_suffix == 'options-media.php' ) {
 			// Add javascript
 			wp_enqueue_script( 'sis-jquery-ui-sis',  SIS_URL.'js/jquery-ui-1.8.16.custom.min.js', array('jquery'), '1.8.16' );
 			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis.min.js', array('jquery','sis-jquery-ui-sis'), SIS_VERSION );
@@ -44,35 +47,12 @@ Class SISAdmin {
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
 			wp_enqueue_style( 'sis_css', SIS_URL.'css/sis-style.css', array(), SIS_VERSION );
-		} elseif( isset( $hook_suffix ) && $hook_suffix == 'upload.php' ) {
+		} elseif( $hook_suffix == 'upload.php' ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
 			
 			// Add javascript translation
 			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
-		}
-		
-		// Check if user have already close the box or not
-		$welcome = get_user_setting( 'sis_medias_config_pointer', 0 );
-		$welcome = false;
-		if ( !$welcome ) {
-			// Add the pointer lib we need and css
-			wp_enqueue_script( 'wp-pointer' );
-			
-			// needed for setUserSetting in js
-			wp_enqueue_script( 'utils' ); 
-			
-			// Pointer Css
-			wp_enqueue_style( 'wp-pointer' );
-			
-			//Javascript file for pointer
-			wp_enqueue_script( 'sis_pointers', SIS_URL.'js/sis-pointers.js', array( 'jquery', 'wp-pointer' ), SIS_VERSION );
-			
-			// Localize the elements for the pointers
-			wp_localize_script( 'sis_pointers' , 'sis_pointer', array( 
-				'pointerMediasConfig'=> sprintf( __( '<h3>Welcome to Simple Image Sizes !</h3><p>In this plugin, you can add new image sizes<br/> and regenerate the images that doesn\'t exist yet.<br/> Click on <a href="%s">Medias</a> for configurate the images</p>' , 'sis' ), admin_url( 'options-media.php' ) ), 
-				) 
-			);
 		}
 	}
 	
@@ -239,7 +219,7 @@ Class SISAdmin {
 		$show 		=	isset( $sizes[$args['name']]['s'] ) && !empty( $sizes[$args['name']]['s'] )? '1' : '0' ;
 		$custom 	=	isset( $sizes[$args['name']]['custom'] ) && !empty( $sizes[$args['name']]['custom'] )? '1' : '0' ;
 		?>
-		<input type="hidden" value="<?php echo $args['name']; ?>" name="image_name" />
+		<input type="hidden" value="<?php esc_attr_e( $args['name'] ); ?>" name="image_name" />
 		<?php if( $custom ): ?>
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
 		<?php else: ?>
@@ -249,7 +229,6 @@ Class SISAdmin {
 			<?php _e( 'Maximum width', 'sis'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php esc_attr_e( $width ); ?>' value="<?php esc_attr_e( $width ); ?>" />
 		</label>
-
 		<label class="sis-label" for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
 			<?php _e( 'Maximum height', 'sis'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php esc_attr_e( $height ); ?>' value="<?php esc_attr_e( $height ); ?>" />
@@ -263,6 +242,8 @@ Class SISAdmin {
 		</span>
 		<span class="delete_size"><?php _e( 'Delete', 'sis'); ?></span>
 		<span class="add_size validate_size"><?php _e( 'Update', 'sis'); ?></span>
+		
+		<input type="hidden" class="deleteSize" value='<?php echo wp_create_nonce( 'delete_'.$args['name'] ); ?>' />
 	<?php }
 	
 	/**
@@ -314,13 +295,16 @@ Class SISAdmin {
 		// Get the sizes
 		global $_wp_additional_image_sizes;
 ?>
+		<input type="hidden" class="addSize" value='<?php echo wp_create_nonce( 'add_size' ); ?>' />
+		<input type="hidden" class="regen" value='<?php echo wp_create_nonce( 'regen' ); ?>' />
+		<input type="hidden" class="getList" value='<?php echo wp_create_nonce( 'getList' ); ?>' />
 		<div id="sis-regen">
 			<div class="wrapper" style="">
 				<h4> <?php _e( 'Select which thumbnails you want to rebuild:', 'sis'); ?> </h4>
-				<table cellspacing="0" class="widefat page fixed sis">
+				<table cellspacing="0" id="sis_sizes" class="widefat page fixed sis">
 					<thead>
 						<tr>
-							<th class="manage-column" scope="col"><?php _e( 'Resize ?', 'sis'); ?></th>
+							<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
 							<th class="manage-column" scope="col"><?php _e( 'Size name', 'sis'); ?></th>
 							<th class="manage-column" scope="col"><?php _e( 'Width', 'sis'); ?></th>
 							<th class="manage-column" scope="col"><?php _e( 'Height', 'sis'); ?></th>
@@ -351,35 +335,35 @@ Class SISAdmin {
 								$crop = get_option( "{$s}_crop" );
 							?>
 							<tr>
-								<td>
+								<th  class="check-column">
 									<input type="checkbox" class="thumbnails" id="<?php echo $s ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
-								</td>
-								<td>
-									<label for="<?php echo esc_attr( $s ); ?>">
-										<?php echo esc_html( $s ); ?>
+								</th>
+								<th>
+									<label for="<?php esc_attr_e( $s ); ?>">
+										<?php esc_html_e( $s ); ?>
 									</label>
-								</td>
-								<td>
-									<label for="<?php echo esc_attr( $s ); ?>">
-										<?php echo esc_html( $width); ?> px
+								</th>
+								<th>
+									<label for="<?php esc_attr_e( $s ); ?>">
+										<?php esc_html_e( $width); ?> px
 									</label>
-								</td>
-								<td>
-									<label for="<?php echo esc_attr( $s ); ?>">
-										<?php echo esc_html( $height ); ?> px
+								</th>
+								<th>
+									<label for="<?php esc_attr_e( $s ); ?>">
+										<?php esc_html_e( $height ); ?> px
 									</label>
-								</td>
-								<td>
-									<label for="<?php echo esc_attr( $s ); ?>">
+								</th>
+								<th>
+									<label for="<?php esc_attr_e( $s ); ?>">
 										<?php echo ( $crop == 1 )? __( 'yes', 'sis' ):__( 'no', 'sis' ); ?>
 									</label>
-								</td>
+								</th>
 							</tr>
 						<?php endforeach;?>
 					</tbody>
 					<tfoot>
 						<tr>
-							<th class="manage-column" scope="col"><?php _e( 'Resize ?', 'sis'); ?></th>
+							<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
 							<th class="manage-column" scope="col"><?php _e( 'Size name', 'sis'); ?></th>
 							<th class="manage-column" scope="col"><?php _e( 'Width', 'sis'); ?></th>
 							<th class="manage-column" scope="col"><?php _e( 'Height', 'sis'); ?></th>
@@ -392,7 +376,7 @@ Class SISAdmin {
 				<table cellspacing="0" class="widefat page fixed sis">
 						<thead>
 							<tr>
-								<th class="manage-column" scope="col"><?php _e( 'Resize ?', 'sis'); ?></th>
+								<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
 								<th class="manage-column" scope="col"><?php _e( 'Post type', 'sis'); ?></th>
 							</tr>
 						</thead>
@@ -402,22 +386,22 @@ Class SISAdmin {
 						foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $ptype ):
 							?>
 							<tr>
-								<td>
-									<label for="<?php echo esc_attr( $ptype->name ); ?>">
+								<th class="check-column">
+									<label for="<?php esc_attr_e( $ptype->name ); ?>">
 										<input type="checkbox" class="post_types" name="post_types[]" checked="checked" id="<?php echo esc_attr( $ptype->name ); ?>" value="<?php echo esc_attr( $ptype->name ); ?>" />
 									</label>
-								</td>
-								<td>
-								<label for="<?php echo esc_attr( $ptype->name ); ?>">
-									<em><?php echo esc_html( $ptype->labels->name ); ?></em>
-								</label>
-								</td>
+								</th>
+								<th>
+									<label for="<?php esc_attr_e( $ptype->name ); ?>">
+										<em><?php esc_html_e( $ptype->labels->name ); ?></em>
+									</label>
+								</th>
 							</tr>
 						<?php endforeach;?>
 					</tbody>
 					<tfoot>
 						<tr>
-							<th class="manage-column" scope="col"><?php _e( 'Resize ?', 'sis'); ?></th>
+							<th scope="col" id="cb" class="manage-column column-cb check-column"><input checked="checked" type="checkbox"></th>
 							<th class="manage-column" scope="col"><?php _e( 'Post type', 'sis'); ?></th>
 						</tr>
 					</tfoot>
@@ -447,8 +431,8 @@ Class SISAdmin {
 			</div>
 			<div id="error_messages">
 				<p>
-					<ul class="messages">
-					</ul>
+					<ol class="messages">
+					</ol>
 				</p>
 			</div>
 			<div id="thumb"><h4><?php _e( 'Last image:', 'sis'); ?></h4><img id="thumb-img" /></div>
@@ -466,15 +450,24 @@ Class SISAdmin {
 	 */
 	public function ajaxAddSize() {
 		
+		// Get the nonce
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
+		
 		// Get old options
 		$sizes = (array)get_option( SIS_OPTION );
 		
 		// Check entries
-		$name = isset( $_POST['name'] ) ? remove_accents ( $_POST['name'] ): '' ;
+		$name = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ): '' ;
 		$height = !isset( $_POST['height'] )? 0 : absint( $_POST['height'] );
 		$width =  !isset( $_POST['width'] )? 0 : absint( $_POST['width'] );
 		$crop = isset( $_POST['crop'] ) &&  $_POST['crop'] == 'false' ? false : true;
 		$show = isset( $_POST['show'] ) &&  $_POST['show'] == 'false' ? false : true;
+		
+		// Check the nonce
+		if( !wp_verify_nonce( $nonce , 'add_size' ) ) {
+			echo 0;
+			die();
+		}
 		
 		// If no name given do not save
 		if( empty( $name ) ) {
@@ -507,11 +500,22 @@ Class SISAdmin {
 	 * @author Nicolas Juen
 	 */
 	public function ajaxRemoveSize() {
+		
 		// Get old options
 		$sizes = (array)get_option( SIS_OPTION );
 		
+		// Get the nonce and name
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
+		$name = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ): '' ;
+		
+		// Check the nonce
+		if( !wp_verify_nonce( $nonce , 'delete_'.$name ) ) {
+			echo 0;
+			die();
+		}
+		
 		// Remove the size
-		unset( $sizes[apply_filters( 'sanitize_title', $_POST['name'] )] );
+		unset( $sizes[sanitize_title( $name )] );
 		unset( $sizes[0] );
 		
 		// Display the results
@@ -567,6 +571,9 @@ Class SISAdmin {
 	public function ajaxThumbnailRebuildAjax() {
 		global $wpdb;
 		
+		// Get the nonce
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
+		
 		// Time a the begining
 		$start_time = microtime(true);
 		
@@ -577,6 +584,12 @@ Class SISAdmin {
 		$thumbnails = isset( $_POST['thumbnails'] )? $_POST['thumbnails'] : NULL;
 		
 		if ( $action == "getlist" ) {
+			// Check the nonce
+			if( !wp_verify_nonce( $nonce , 'getlist' ) ) {
+				echo json_encode( array( ) );
+				die();
+			}
+			
 			if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
 				
 				// Get image medias
@@ -612,12 +625,19 @@ Class SISAdmin {
 			// Return the Id's and Title of medias
 			die( json_encode( $res ) );
 		} else if ( $action == "regen" ) {
+			
+			// Check the nonce
+			if( !wp_verify_nonce( $nonce , 'regen' ) ) {
+				echo json_encode( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
+				die();
+			}
+			
 			// Get the id
 			$id = $_POST["id"];
 			
 			// Check Id
 			if( (int)$id == 0 ) {
-				die( json_encode( array( round( microtime( true ) - $start_time, 4 ), 'error' => __( 'No id given in POST datas.', 'sis' ) ) ) );
+				die( json_encode( array( 'time' => round( microtime( true ) - $start_time, 4 ), 'error' => __( 'No id given in POST datas.', 'sis' ) ) ) );
 			}
 			
 			// Get the path
@@ -627,7 +647,7 @@ Class SISAdmin {
 			if ( FALSE !== $fullsizepath && @file_exists( $fullsizepath ) ) {
 				set_time_limit( 30 );
 				if( wp_update_attachment_metadata( $id, $this->wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false )
-					die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ) ,'message' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
+					die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ) ,'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
 			} else {
 				die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ), 'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
 			}
@@ -732,7 +752,7 @@ Class SISAdmin {
 			
 			if ( is_array( $sizes_custom ) ) {
 				foreach( $sizes_custom as $key => $value ) {
-					if( $value['s'] == 1 )
+					if( isset( $value['s'] ) && $value['s'] == 1 )
 					$size_names[$key] = $key;
 				}
 			}

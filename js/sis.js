@@ -58,6 +58,7 @@ var regenerate = {
 	},
 	startRegenerating : function( ) {
 		var _self = this;
+		var wp_nonce = jQuery('input.getList').val();
 		
 		this.dateScript = new Date();
 		
@@ -66,7 +67,7 @@ var regenerate = {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_ajax_thumbnail_rebuild&do=getlist" + _self.post_types,
+			data: "action=sis_ajax_thumbnail_rebuild&do=getlist" + _self.post_types+'&nonce='+wp_nonce,
 			beforeSend: function() {
 				
 				// Disable the button
@@ -104,6 +105,7 @@ var regenerate = {
 	},
 	regenItem : function( ) {
 		var _self = this;
+		var wp_nonce = jQuery('input.regen').val();
 		
 		// If the list is empty display the message of emptyness and reinitialize the form
 		if ( !this.list ) {
@@ -127,7 +129,7 @@ var regenerate = {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list[this.curr].id + this.thumbnails,
+			data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list[this.curr].id + this.thumbnails + '&nonce='+wp_nonce,
 			beforeSend : function() {
 				// Calculate the percentage of regeneration
 				_self.percent = ( _self.curr / _self.list.length ) * 100;
@@ -148,12 +150,12 @@ var regenerate = {
 						message = r.error
 
 					jQuery( '#error_messages' ).addClass( 'error message' );
-					jQuery( '#error_messages ul.messages' ).append( '<li>'+message+'</li>' );
+					jQuery( '#error_messages ul.messages' ).prepend( '<li>'+message+'</li>' );
 				} else {
 					
 					// Append a message if needed
 					if( r.message )
-						jQuery( '#time ul.messages' ).append( '<li>'+r.message+'</li>' );
+						jQuery( '#time ul.messages' ).prepend( '<li>'+r.message+'</li>' );
 						
 					// Actual time
 					var dateEnd = new Date();
@@ -399,6 +401,7 @@ var sizes = {
 		var _self = this;
 		var parentTable = jQuery( el ).closest( 'table' );
 		var timer;
+		var wp_nonce = jQuery( '.addSize' ).val();
 		var parent = jQuery( el ).closest( 'tr' );
 		var n = parent.find( 'input[name="image_name"]' ).val();
 		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
@@ -424,7 +427,7 @@ var sizes = {
 				url: sis.ajaxUrl,
 				type: "POST",
 				dataType :'json',
-				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s },
+				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s, nonce : wp_nonce },
 				beforeSend: function() {
 					// Remove status and set pending
 					parent.removeClass();
@@ -478,12 +481,13 @@ var sizes = {
 		// Get name and _self object
 		var _self = this;
 		var n =  jQuery( el ).closest('tr').find( 'input[name="image_name"]' ).val();
+		var wp_nonce = jQuery( el ).closest('tr').find( 'input.deleteSize' ).val();
 		
 		// Make the ajax call
 		jQuery.ajax({
 			url: sis.ajaxUrl,
 			type: "POST",
-			data: { action : "remove_size", name: n },
+			data: { action : "remove_size", name: n, nonce : wp_nonce },
 			success: function(result) {
 				_self.removeFromArray( el );
 			}
@@ -491,7 +495,7 @@ var sizes = {
 	},
 	addToArray: function( n, w, h, c, s ) {
 		// Get the row for editing or updating
-		var testRow = jQuery( '#sis-regen .wrapper > table > tbody input[value="'+n+'"]' );
+		var testRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' );
 		var newRow = '';
 		var timer;
 		
@@ -499,7 +503,7 @@ var sizes = {
 		if( testRow.length != 0 )
 			newRow = testRow.closest( 'tr' );
 		else
-			newRow = jQuery( '#sis-regen .wrapper > table > tbody > tr:first' ).clone();
+			newRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody > tr:first' ).clone();
 		
 		if( c == true )
 			c = sis.tr;
@@ -507,20 +511,20 @@ var sizes = {
 			c = sis.fl;
 		
 		// Set the datas with the given datas
-		newRow.find( 'td > label' ).attr( 'for', n )
+		newRow.find( 'th > label' ).attr( 'for', n )
 		.end()
 		.find( 'input.thumbnails' ).val( n ).attr( 'id', n ).end()
-		.find( 'td:nth-child(2) > label' ).text( n )
+		.find( 'th:nth-child(2) > label' ).text( n )
 		.end()
-		.find( 'td:nth-child(3) > label' ).text( w+'px' )
+		.find( 'th:nth-child(3) > label' ).text( w+'px' )
 		.end()
-		.find( 'td:nth-child(4) > label' ).text( h+'px' )
+		.find( 'th:nth-child(4) > label' ).text( h+'px' )
 		.end()
-		.find( 'td:nth-child(5) > label' ).text( c );
+		.find( 'th:nth-child(5) > label' ).text( c );
 		
 		// If new then add the row
 		if( testRow.length == 0 )
-			newRow.appendTo( '#sis-regen .wrapper > table > tbody' );
+			newRow.appendTo( '#sis-regen .wrapper > table#sis_sizes > tbody' );
 		
 		// Remove the previous status classes and add the status class
 		newRow.removeClass( 'errorAdding notChangedAdding successAdding' ).addClass( s );
@@ -536,7 +540,7 @@ var sizes = {
 		var n = jQuery( el ).closest( 'tr' ).find( 'input[name=image_name]' ).val();
 		
 		// Remove the given name from the array
-		jQuery( '#sis-regen .wrapper > table > tbody input[value="'+n+'"]' ).closest( 'tr' ).remove();
+		jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' ).closest( 'tr' ).remove();
 	},
 	setButtons: function() {
 		// UI for delete,crop and add buttons
