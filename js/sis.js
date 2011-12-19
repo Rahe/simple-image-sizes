@@ -118,7 +118,7 @@ var regenerate = {
 		if ( this.curr >= this.list.length ) {
 			var now = new Date();
 			this.reInit();
-			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()+sis.finishedAt+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
+			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()+sis.finishedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
 			return;
 		}
 		
@@ -269,7 +269,7 @@ var sizes = {
 			return false;
 		} else if( checkPresent !=0 ) {
 			alert( sis.alreadyPresent );
-			return false;		
+			return false;
 		}
 		
 		// Create td and th elements fo the row

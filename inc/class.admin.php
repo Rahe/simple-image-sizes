@@ -108,7 +108,7 @@ Class SISAdmin {
 	function addActionsList( $actions, $object ) {
 		
 		// Add action for regeneration
-		$actions['sis-regenerate'] = "<a href='#' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>";
+		$actions['sis-regenerate'] = "<a href='#' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>".'<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />';
 		
 		// Return actions
 		return $actions;
@@ -585,7 +585,7 @@ Class SISAdmin {
 		
 		if ( $action == "getlist" ) {
 			// Check the nonce
-			if( !wp_verify_nonce( $nonce , 'getlist' ) ) {
+			if( !wp_verify_nonce( $nonce , 'getList' ) ) {
 				echo json_encode( array( ) );
 				die();
 			}

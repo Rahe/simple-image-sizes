@@ -4,7 +4,7 @@ Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 
 == Description ==
 
@@ -34,6 +34,10 @@ I have improved the php and javascript, you can know if the image have been rege
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.2.5
+	* Debug the regeneration buggy !
+	* Complete the french translation
+	* Security update for single regeneration, include the nonce this time :)
 * 2.2.4
 	* Add security nonces for every actions
 	* Put the messages at the begining of the log

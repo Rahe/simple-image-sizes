@@ -27,12 +27,13 @@ jQuery( function(){
 			},
 			regenItem : function( ) {
 				var _self = this;
+				var wp_nonce = jQuery('input.regen').val();
 		
 				jQuery.ajax( {
 					url: sis.ajaxUrl,
 					type: "POST",
 					dataType: 'json',
-					data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list.id,
+					data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list.id+'&nonce='+wp_nonce,
 					beforeSend : function() {
 						_self.el.fadeTo( 'fast' ,'0.2' ).addClass('ajaxing');
 					},
