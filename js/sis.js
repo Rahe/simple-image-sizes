@@ -301,6 +301,16 @@ var sizes = {
 										).val( "0" ).addClass( "h small-text" )
 		).appendTo( tdEl );
 		
+		
+		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][n]' ).addClass( 'sis-label' ).text(sis.customName).append( 
+			jQuery( '<input />' ).attr( { 	type: 'text', 
+											name: 'custom_image_sizes[' + name + '][n]',
+											id: 'custom_image_sizes[' + name + '][n]',
+											base_n:name
+										}
+										).val( name ).addClass( "n small-text" )
+		).appendTo( tdEl );
+		
 		els = jQuery( '<span />' )
 			.addClass( 'size_options' )
 				.append(
@@ -345,6 +355,7 @@ var sizes = {
 								} )
 						.text( sis.show ) 
 				);
+				
 		els.appendTo(tdEl);
 		
 		jQuery( '<div />' ).text( sis.deleteImage ).addClass('delete_size').appendTo( tdEl );
@@ -406,6 +417,7 @@ var sizes = {
 		var n = parent.find( 'input[name="image_name"]' ).val();
 		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
 		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
+		var cn = parent.find( 'input.n' ).val();
 
 		if( c == false || c == undefined ) {
 			c = false;
@@ -427,7 +439,7 @@ var sizes = {
 				url: sis.ajaxUrl,
 				type: "POST",
 				dataType :'json',
-				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s, nonce : wp_nonce },
+				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s, customName : cn , nonce : wp_nonce },
 				beforeSend: function() {
 					// Remove status and set pending
 					parent.removeClass();
@@ -597,16 +609,19 @@ var sizes = {
 		var w_el = parent.find( 'input.w' );
 		var c_el = parent.find( 'input.c' );
 		var s_el = parent.find( 'input.s' );
+		var n_el = parent.find( 'input.n' );
 		
 		var h = h_el.val();
 		var w = w_el.val();
 		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
 		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
+		var n = n_el.val();
 		
 		var base_h = h_el.attr( 'base_h' );
 		var base_w = w_el.attr( 'base_w' );
 		var base_c = c_el.attr( 'base_c' );
 		var base_s = s_el.attr( 'base_s' );
+		var base_n = n_el.attr( 'base_n' );
 		
 		if( base_c == '0' )
 			base_c = false;
@@ -620,7 +635,7 @@ var sizes = {
 			
 		
 		
-		if( h != base_h || w != base_w || c != base_c || s != base_s ) {
+		if( h != base_h || w != base_w || c != base_c || s != base_s || n != base_n ) {
 			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').css( 'display', 'inline-block' );
 		} else {
 			el.closest( 'td' ).removeClass( 'notSaved' ).find('.add_size').css( 'display', 'none' );
@@ -642,7 +657,7 @@ jQuery(function() {
 	jQuery('.delete_size').live( 'click', function( e ) { sizes.deleteSize( e, this ); } );
 	jQuery('.add_size').live( 'click', function( e ) { sizes.ajaxRegister( e, this ); } );
 	
-	jQuery( '.h,.w,.c,.s' ).live( 'click', function( e ) { sizes.displayChange( this ); } );
+	jQuery( '.h,.w,.c,.s,.n' ).live( 'click skeyup change', function( e ) { sizes.displayChange( this ); } );
 	
 	// Seup the getphp
 	jQuery('#get_php').click( function( e ){ sizes.getPhp( e, this ) } );

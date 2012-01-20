@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 2.2.5
+Tested up to: 3.3.1
+Stable tag: 2.3
 
 == Description ==
 
@@ -17,6 +17,8 @@ Now you can regenerate the images one by one in the 'Medias' general pane.
 
 I have added a timer so when you regeneration your thumbnails, you can know approximately when the regeneration will be ended.
 I have improved the php and javascript, you can know if the image have been regenerated or not or if there is an error and which one.
+
+Contribute on https://github.com/Rahe/Simple-image-sizes
 
 == Installation ==
  **PHP5 Required.**
@@ -34,6 +36,9 @@ I have improved the php and javascript, you can know if the image have been rege
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.3
+	* Add the custom size name in the attachment insertion
+	* Exclude post_type wich do not support the post-thumbnail feature
 * 2.2.5
 	* Debug the regeneration buggy !
 	* Complete the french translation

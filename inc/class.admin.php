@@ -15,14 +15,19 @@ Class SISAdmin {
 		add_action('wp_ajax_add_size', array( &$this, 'ajaxAddSize' ) );
 		add_action('wp_ajax_remove_size', array( &$this, 'ajaxRemoveSize' ) );
 		
-		// Add image sizes in the form
-		add_filter( 'attachment_fields_to_edit', array( &$this, 'sizesInForm' ), 11, 2 ); // Add our sizes to media forms
+		// Add image sizes in the form, check if 3.3 is installed or not
+		if( !function_exists( 'is_main_query' ) ) {
+			add_filter( 'attachment_fields_to_edit', array( &$this, 'sizesInForm' ), 11, 2 ); // Add our sizes to media forms
+		} else {
+			add_filter( 'image_size_names_choose', array( &$this, 'AddThumbnailName' ) );
+		}
 		
 		// Add link in plugins list
 		add_filter('plugin_action_links', array( &$this,'addSettingsLink'), 10, 2 );
 		
 		// Add action in media row quick actions
 		add_filter( 'media_row_actions', array(&$this, 'addActionsList'), 10, 2 );
+		
 	}
 	
 	/**
@@ -90,6 +95,7 @@ Class SISAdmin {
 			'messageRegenerated' => __( 'images have been regenerated !', 'sis' ),
 			'validateButton' 	=> __( 'Validate', 'sis' ),
 			'startedAt' 		=> __( ' started at', 'sis' ),
+			'customName'		=> __( 'Public name', 'sis' ),
 			'finishedAt' 		=> __( ' finished at :', 'sis' ),
 			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'sis' ),
 			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'sis' ),
@@ -218,27 +224,33 @@ Class SISAdmin {
 		$crop 		=	isset( $sizes[$args['name']]['c'] ) && !empty( $sizes[$args['name']]['c'] )? $sizes[$args['name']]['c'] : $args['c'] ;
 		$show 		=	isset( $sizes[$args['name']]['s'] ) && !empty( $sizes[$args['name']]['s'] )? '1' : '0' ;
 		$custom 	=	isset( $sizes[$args['name']]['custom'] ) && !empty( $sizes[$args['name']]['custom'] )? '1' : '0' ;
+		$name 		=	isset( $sizes[$args['name']]['n'] ) && !empty( $sizes[$args['name']]['n'] )? esc_html( $sizes[$args['name']]['n'] ) : esc_html( $args['name'] ) ;
+		
 		?>
-		<input type="hidden" value="<?php esc_attr_e( $args['name'] ); ?>" name="image_name" />
+		<input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name" />
 		<?php if( $custom ): ?>
-			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
 		<?php else: ?>
-			<input name="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
 		<?php endif; ?>
-		<label class="sis-label" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
+		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
 			<?php _e( 'Maximum width', 'sis'); ?> 
-			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php esc_attr_e( $width ); ?>' value="<?php esc_attr_e( $width ); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>" />
 		</label>
 		<label class="sis-label" for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
 			<?php _e( 'Maximum height', 'sis'); ?> 
-			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php esc_attr_e( $height ); ?>' value="<?php esc_attr_e( $height ); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>" />
+		</label>
+		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>">
+			<?php _e( 'Public name', 'sis'); ?> 
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" />
 		</label>
 		<span class="size_options">
-			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c crop" base_c='<?php esc_attr_e( $crop ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
-			<label class="c" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
+			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
+			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
 			
-			<input type='checkbox' id="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php esc_attr_e( $show ); ?>' name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
-			<label class="s" for="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
+			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
+			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
 		</span>
 		<span class="delete_size"><?php _e( 'Delete', 'sis'); ?></span>
 		<span class="add_size validate_size"><?php _e( 'Update', 'sis'); ?></span>
@@ -293,7 +305,7 @@ Class SISAdmin {
 	 */
 	public function thumbnailRegenerate() {
 		// Get the sizes
-		global $_wp_additional_image_sizes;
+		global $_wp_additional_image_sizes,$_wp_post_type_features;
 ?>
 		<input type="hidden" class="addSize" value='<?php echo wp_create_nonce( 'add_size' ); ?>' />
 		<input type="hidden" class="regen" value='<?php echo wp_create_nonce( 'regen' ); ?>' />
@@ -336,21 +348,21 @@ Class SISAdmin {
 							?>
 							<tr>
 								<th  class="check-column">
-									<input type="checkbox" class="thumbnails" id="<?php echo $s ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
+									<input type="checkbox" class="thumbnails" id="<?php echo esc_attr( $s ) ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
 								</th>
 								<th>
 									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php esc_html_e( $s ); ?>
+										<?php echo esc_html( $s ); ?>
 									</label>
 								</th>
 								<th>
 									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php esc_html_e( $width); ?> px
+										<?php echo esc_html( $width); ?> px
 									</label>
 								</th>
 								<th>
 									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php esc_html_e( $height ); ?> px
+										<?php echo esc_html( $height ); ?> px
 									</label>
 								</th>
 								<th>
@@ -383,7 +395,10 @@ Class SISAdmin {
 						<tbody>
 						<?php
 						// Diplay the post types table
-						foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $ptype ):
+						foreach ( get_post_types( array( 'public' => true, '_builtin' => false ), 'objects', 'or' ) as $ptype ):
+							// Avoid the post_types without post thumbnails feature
+							if( !array_key_exists( 'thumbnail' , $_wp_post_type_features[$ptype->name] ) || $_wp_post_type_features[$ptype->name] == false )
+								continue;
 							?>
 							<tr>
 								<th class="check-column">
@@ -393,7 +408,7 @@ Class SISAdmin {
 								</th>
 								<th>
 									<label for="<?php esc_attr_e( $ptype->name ); ?>">
-										<em><?php esc_html_e( $ptype->labels->name ); ?></em>
+										<em><?php echo esc_html( $ptype->labels->name ); ?></em>
 									</label>
 								</th>
 							</tr>
@@ -462,6 +477,7 @@ Class SISAdmin {
 		$width =  !isset( $_POST['width'] )? 0 : absint( $_POST['width'] );
 		$crop = isset( $_POST['crop'] ) &&  $_POST['crop'] == 'false' ? false : true;
 		$show = isset( $_POST['show'] ) &&  $_POST['show'] == 'false' ? false : true;
+		$cn = isset( $_POST['customName'] ) && !empty( $_POST['customName'] ) ? sanitize_text_field( $_POST['customName'] ): $name ;
 		
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'add_size' ) ) {
@@ -476,7 +492,7 @@ Class SISAdmin {
 		}
 
 		// Make values
-		$values = array( 'custom' => 1, 'w' => $width , 'h' => $height, 'c' => $crop, 's' => $show );
+		$values = array( 'custom' => 1, 'w' => $width , 'h' => $height, 'c' => $crop, 's' => $show, 'n' => $cn );
 
 		// If the size have not changed return 2
 		if( isset( $sizes[$name] ) && $sizes[$name] === $values ) {
@@ -730,6 +746,7 @@ Class SISAdmin {
 			if ( $image_meta )
 				$metadata['image_meta'] = $image_meta;
 		}
+
 		return apply_filters( 'wp_generate_attachment_metadata', $metadata, $attachment_id );
 	}
 	
@@ -752,8 +769,9 @@ Class SISAdmin {
 			
 			if ( is_array( $sizes_custom ) ) {
 				foreach( $sizes_custom as $key => $value ) {
-					if( isset( $value['s'] ) && $value['s'] == 1 )
-					$size_names[$key] = $key;
+					if( isset( $value['s'] ) && $value['s'] == 1 ) {
+						$size_names[$key] = $this->_getThumbnailName( $key );;
+					}
 				}
 			}
 			foreach ( $size_names as $size => $label ) {
@@ -798,6 +816,66 @@ Class SISAdmin {
 		} // End protect from Media editor
 		
 		return $form_fields;
+	}
+
+	/**
+	 * Add the thumbnail name in the post insertion, based on new WP filter
+	 * 
+	 * @access public
+ 	 * @param array $sizes
+	 * @return array
+	 * @since 2.3
+	 * @author Nicolas Juen
+	 * @author radeno based on this post : http://www.wpmayor.com/wordpress-hacks/how-to-add-custom-image-sizes-to-wordpress-uploader/
+	 */
+	function AddThumbnailName($sizes) {
+		// Get options
+		$sizes_custom = get_option( SIS_OPTION );
+		// init size array
+		$addsizes = array();
+		
+		// check there is custom sizes
+		if ( is_array( $sizes_custom ) && !empty( $sizes_custom ) ) {
+			foreach( $sizes_custom as $key => $value ) {
+				// If we show this size in the admin
+				if( isset( $value['s'] ) && $value['s'] == 1 )
+					$addsizes[$key] = $this->_getThumbnailName( $key );
+			}
+		}
+		
+		// Merge the two array
+		$newsizes = array_merge($sizes, $addsizes);
+		
+		// Add new size
+		return $newsizes;
+	}
+	
+	/**
+	 * Get a thumbnail name from its slug
+	 * 
+	 * @access private
+ 	 * @param string $thumbnailSlug : the slug of the thumbnail
+	 * @return array
+	 * @since 2.3
+	 * @author Nicolas Juen
+	 */
+	private function _getThumbnailName( $thumbnailSlug = '' ) {
+		
+		// get the options
+		$sizes_custom = get_option( SIS_OPTION );
+		
+		// If the size exists
+		if( isset( $sizes_custom[$thumbnailSlug] ) ) {
+			// If the name exists return it, slug by default
+			if( isset( $sizes_custom[$thumbnailSlug]['n'] ) && !empty( $sizes_custom[$thumbnailSlug]['n'] ) ) {
+				return $sizes_custom[$thumbnailSlug]['n'];
+			} else {
+				return $thumbnailSlug;
+			}
+		}
+		
+		// return slug if not found
+		return $thumbnailSlug;
 	}
 }
 ?>
