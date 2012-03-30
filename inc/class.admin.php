@@ -10,10 +10,10 @@ Class SISAdmin {
 		add_action ( 'admin_enqueue_scripts', array( &$this, 'registerScripts' ), 11 );
 		
 		// Add ajax action
-		add_action('wp_ajax_sis_ajax_thumbnail_rebuild', array( &$this, 'ajaxThumbnailRebuildAjax' ) );
-		add_action('wp_ajax_get_sizes', array( &$this, 'ajaxGetSizes' ) );
-		add_action('wp_ajax_add_size', array( &$this, 'ajaxAddSize' ) );
-		add_action('wp_ajax_remove_size', array( &$this, 'ajaxRemoveSize' ) );
+		add_action( 'wp_ajax_'.'sis_ajax_thumbnail_rebuild', array( &$this, 'ajaxThumbnailRebuildAjax' ) );
+		add_action( 'wp_ajax_'.'get_sizes', array( &$this, 'ajaxGetSizes' ) );
+		add_action( 'wp_ajax_'.'add_size', array( &$this, 'ajaxAddSize' ) );
+		add_action( 'wp_ajax_'.'remove_size', array( &$this, 'ajaxRemoveSize' ) );
 		
 		// Add image sizes in the form, check if 3.3 is installed or not
 		if( !function_exists( 'is_main_query' ) ) {
@@ -23,10 +23,13 @@ Class SISAdmin {
 		}
 		
 		// Add link in plugins list
-		add_filter('plugin_action_links', array( &$this,'addSettingsLink'), 10, 2 );
+		add_filter( 'plugin_action_links', array( &$this,'addSettingsLink' ), 10, 2 );
 		
 		// Add action in media row quick actions
-		add_filter( 'media_row_actions', array(&$this, 'addActionsList'), 10, 2 );
+		add_filter( 'media_row_actions', array(&$this, 'addActionsList' ), 10, 2 );
+		
+		// Add filter for the Media single
+		add_filter( 'attachment_fields_to_edit', array( &$this, 'addFieldRegenerate' ), 9, 2 );
 		
 	}
 	
@@ -52,7 +55,7 @@ Class SISAdmin {
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
 			wp_enqueue_style( 'sis_css', SIS_URL.'css/sis-style.css', array(), SIS_VERSION );
-		} elseif( $hook_suffix == 'upload.php' ) {
+		} elseif( $hook_suffix == 'upload.php' || ( $hook_suffix == 'media.php' && isset( $_GET['attachment_id'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
 			
@@ -84,6 +87,7 @@ Class SISAdmin {
 			'deleteImage' 		=> __( 'Delete', 'sis' ),
 			'noMedia' 			=> __( 'No media in your site to regenerate !', 'sis' ),
 			'regenerating' 		=> __( 'Regenerating ', 'sis'),
+			'regenerate' 		=> __( 'Regenerate ', 'sis'),
 			'validate' 			=> __( 'Validate image size name', 'sis' ),
 			'done' 				=> __( 'Done.', 'sis' ),
 			'size' 				=> __( 'Size', 'sis' ),	
@@ -726,8 +730,10 @@ Class SISAdmin {
 
 				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
 				
-				// Remove the size from the orignal sizes for after work
-				unset( $meta_datas['size'][$size] );
+				if( isset( $meta_datas['size'][$size] ) ) {
+					// Remove the size from the orignal sizes for after work
+					unset( $meta_datas['size'][$size] );
+				}
 				
 				if ( $resized )
 					$metadata['sizes'][$size] = $resized;
@@ -876,6 +882,33 @@ Class SISAdmin {
 		
 		// return slug if not found
 		return $thumbnailSlug;
+	}
+	
+	/**
+	 * Get a thumbnail name from its slug
+	 * 
+	 * @access public
+ 	 * @param array $fields : the fields of the media
+	 * @param object $post : the post object
+	 * @return array
+	 * @since 2.3.1
+	 * @author Nicolas Juen
+	 */
+	function addFieldRegenerate( $fields, $post ) {
+		// Check this is an image
+		if( strpos( $post->post_mime_type, 'image' ) === false )
+			return $fields;
+		
+		$fields['sis-regenerate'] = array(
+			'label'	=> __( 'Regenerate Thumbnails', 'sis' ),
+			'input'	=> 'html',
+			'html'	=> '
+			<input type="button" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'sis' ).'" />
+			<span class="title"><em></em></span>
+			<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />
+			'
+		);
+		return $fields;
 	}
 }
 ?>

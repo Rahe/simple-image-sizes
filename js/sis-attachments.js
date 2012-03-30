@@ -40,13 +40,21 @@ jQuery( function() {
 			messageZone : '',
 			init: function( el ) {
 				this.el = jQuery( el );
-				id = jQuery( el ).attr( 'id' );
-				this.id = id.replace( 'post-', '' );
+				id = this.el.attr( 'id' );
+				
+				// IF no id found
+				if( !id ) {
+					id = this.el.closest( '.media-item' ).attr( 'id' );
+					this.id = id.replace( 'media-item-', '' );
+				} else {
+					this.id = id.replace( 'post-', '' );
+				}
 				
 				this.list = { 'id' : this.id, 'title' : 'titre' };
 				
 				if( this.el.find('.title em').size() == 0 )
 					this.el.find('.title strong').after('<em/>');
+				
 				this.messageZone = this.el.find('.title em');
 				
 				if( !this.el.hasClass( 'ajaxing' ) )
