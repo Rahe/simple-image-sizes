@@ -4,7 +4,7 @@ Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 2.3
+Stable tag: 2.3.1
 
 == Description ==
 
@@ -14,6 +14,8 @@ You can now get all the code to copy and paste to your function theme file.
 Now you can use the generated sizes directly into your posts and insert images at the right size !
 Now you choose if you want display the size in the post insert image.
 Now you can regenerate the images one by one in the 'Medias' general pane.
+Now you can regenerate the images by bulk action in the 'Medias' general pane.
+Now you can regenerate the image sizes on single attachment edit page.
 
 I have added a timer so when you regeneration your thumbnails, you can know approximately when the regeneration will be ended.
 I have improved the php and javascript, you can know if the image have been regenerated or not or if there is an error and which one.
@@ -36,6 +38,9 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.3.1
+	* Add Ajax bulk actions on medias list
+	* Add ajax thumbnail rebuild on single media
 * 2.3
 	* Add the custom size name in the attachment insertion
 	* Exclude post_type wich do not support the post-thumbnail feature
