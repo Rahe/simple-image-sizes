@@ -1,16 +1,15 @@
-sis_small = true;
 // Functions for the regenerating of images
 var regenerate = {
 	post_types : '',
 	thumbnails : '',
 	list : '',
 	cur : 0,
-	timeScript: new Array,
+	timeScript: [],
 	dateScript: '',
 	percent : '' ,
 	getThumbnails : function() {
-		var _self = this;
-		var inputs = jQuery( 'input.thumbnails:checked' );
+		var _self = this,
+		inputs = jQuery( 'input.thumbnails:checked' );
 		
 		// Get the checked thumbnails inputs
 		if (inputs.length != jQuery( 'input.thumbnails[type="checkbox"]' ).length) {
@@ -20,8 +19,8 @@ var regenerate = {
 		}	
 	},
 	getPostTypes : function() {
-		var _self = this;
-		var inputs = jQuery( 'input.post_types:checked' );
+		var _self = this,
+		inputs = jQuery( 'input.post_types:checked' );
 	
 		// Get the checked post Types inputs
 		if ( inputs.length != jQuery( 'input.post_types[type="checkbox"]' ).length ) {
@@ -57,8 +56,8 @@ var regenerate = {
 		}
 	},
 	startRegenerating : function( ) {
-		var _self = this;
-		var wp_nonce = jQuery('input.getList').val();
+		var _self = this,
+		wp_nonce = jQuery('input.getList').val();
 		
 		this.dateScript = new Date();
 		
@@ -104,8 +103,8 @@ var regenerate = {
 		});
 	},
 	regenItem : function( ) {
-		var _self = this;
-		var wp_nonce = jQuery('input.regen').val();
+		var _self = this,
+		wp_nonce = jQuery('input.regen').val();
 		
 		// If the list is empty display the message of emptyness and reinitialize the form
 		if ( !this.list ) {
@@ -158,8 +157,10 @@ var regenerate = {
 						jQuery( '#time ul.messages' ).prepend( '<li>'+r.message+'</li>' );
 						
 					// Actual time
-					var dateEnd = new Date();
-					var curDate = new Date();
+					var dateEnd = new Date(),
+					curDate = new Date(),
+					num = 0
+					sum = 0;
 					
 					// Display the image
 					jQuery( "#thumb" ).show();
@@ -171,19 +172,18 @@ var regenerate = {
 					_self.timeScript.push(r.time);
 					
 					// Get the number of elements in array
-					var num = _self.timeScript.length;
-					var sum = 0;
+					num = _self.timeScript.length;
 
 					// Make the sum of the times
-					for( var i=0; i<num ;i++ ) {
+					for( var i = 0; i < num ;i++ ) {
 						sum += _self.timeScript[i];
 					}
 
 					// Make the average value of the regenerating time
-					var ave = sum/num;
+					var ave = sum/num,
 					
 					// Round the value in miliseconds and add 25% or error
-					var t = Math.round( ( ( ave *_self.list.length ) * 1000 ) );
+					t = Math.round( ( ( ave *_self.list.length ) * 1000 ) );
 
 					// Set the predicted time
 					dateEnd.setTime( _self.dateScript.getTime() + t );
@@ -203,12 +203,15 @@ var regenerate = {
 
 	},
 	s2t : function (secs) {
-		secs = secs % 86400;
-		var t = new Date(1970,0,1);
+		var secs = secs % 86400,
+		t = new Date(1970,0,1),
+		s = 0;
+		
 		t.setSeconds(secs);
-		var s = t.toTimeString().substr(0,8);
-		if(secs > 86399)
-		s = Math.floor((t - Date.parse("1/1/70")) / 3600000) + s.substr(2);
+		s = t.toTimeString().substr(0,8);
+		if( secs > 86399 ) {
+			s = Math.floor( ( t - Date.parse( "1/1/70" ) ) / 3600000 ) + s.substr( 2 );
+		}
 		return s;
 	}
 	,
@@ -225,26 +228,10 @@ var sizes = {
 		e.preventDefault();
 		
 		// Create the template
-		var elTr = jQuery( '<tr />' ).attr( 'valign', 'top' ).addClass( 'new_size_' + this.i+' new_size' );
-		jQuery( '<th />' ).attr( 'scope', 'row' ).append( 
-								jQuery( '<input />' )
-									.attr( { 	
-										type: 'text',
-										id: 'new_size_'+this.i
-									}
-								 )
-								 .val( 'thumbnail-name' )
-							).appendTo( elTr );
-		
-		jQuery( '<td />' ).append( jQuery( '<input />' )
-									.attr( { 	
-										type: 'button',
-										id: 'validate_'+this.i
-									}
-								 )
-								 .val( sis.validate )
-								 .addClass('button-secondary action add_size_name')
-							).appendTo( elTr );
+		var elTr = _.template( document.getElementById( 'sis-new_size' ).text, {
+			size_id : this.i,
+			validate : sis.validate,
+		} );
 
 		// Add the form for editing
 		jQuery(el).closest( 'tr' ).before( elTr );
@@ -257,11 +244,11 @@ var sizes = {
 		e.preventDefault();
 		
 		// Get name and id
-		var name = jQuery(el).closest('tr').children( 'th' ).find( 'input' ).val();
-		var id = jQuery(el).closest('tr').children('th').find( 'input' ).attr( 'id' );
+		var name = jQuery(el).closest('tr').children( 'th' ).find( 'input' ).val(),
+		id = jQuery(el).closest('tr').children('th').find( 'input' ).attr( 'id' ),
 		
 		// Get the number of elements with this name
-		var checkPresent = jQuery( el ).closest('tbody').find( 'input[value="'+name+'"]' ).length;
+		checkPresent = jQuery( el ).closest('tbody').find( 'input[value="'+name+'"]' ).length;
 		
 		// Check if not basic size or already present, display message
 		if( name == 'thumbnail' || name == "medium" || name == "large" ) {
@@ -272,105 +259,23 @@ var sizes = {
 			return false;
 		}
 		
-		// Create td and th elements fo the row
-		var thEl = jQuery( '<th />' ).attr( 'scope', 'row' ).text( sis.size + ' ' + name );
-		var tdEl = jQuery( '<td />' );
-		
-		jQuery( '<input />' ).attr( { type: 'hidden', name: 'image_name' } ).val( name ).appendTo( tdEl ) ;
-		jQuery( '<input />' ).attr( { type :'hidden', name : 'custom_image_sizes[' + name + '][custom]' } ).val( "1" ).appendTo( tdEl );
-		
-		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][w]' ).addClass( 'sis-label' ).text(sis.maximumWidth).append( 
-			jQuery( '<input />' ).attr( { 	type: 'number', 
-											name: 'custom_image_sizes[' + name + '][w]',
-											step: 1,
-											min: 0,
-											id: 'custom_image_sizes[' + name + '][w]',
-											base_w:0
-										}
-										).val( "0" ).addClass( "w small-text" )
-		).appendTo( tdEl );
-		
-		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][h]' ).addClass( 'sis-label' ).text(sis.maximumHeight).append( 
-			jQuery( '<input />' ).attr( { 	type: 'number', 
-											name: 'custom_image_sizes[' + name + '][h]',
-											step: 1,
-											min: 0,
-											id: 'custom_image_sizes[' + name + '][h]',
-											base_h:0
-										}
-										).val( "0" ).addClass( "h small-text" )
-		).appendTo( tdEl );
-		
-		
-		jQuery( '<label />' ).attr( 'for', 'custom_image_sizes[' + name + '][n]' ).addClass( 'sis-label' ).text(sis.customName).append( 
-			jQuery( '<input />' ).attr( { 	type: 'text', 
-											name: 'custom_image_sizes[' + name + '][n]',
-											id: 'custom_image_sizes[' + name + '][n]',
-											base_n:name
-										}
-										).val( name ).addClass( "n small-text" )
-		).appendTo( tdEl );
-		
-		els = jQuery( '<span />' )
-			.addClass( 'size_options' )
-				.append(
-					jQuery( '<input />' )
-						.attr( { 	
-									type: 'checkbox', 
-									name: 'custom_image_sizes[' + name + '][c]',
-									id: 'custom_image_sizes[' + name + '][c]',
-									base_c:0
-								} )
-						.val( "1" )
-						.addClass( 'c crop' )
-				)
-				.append(
-					jQuery( '<label />' )
-						.attr( { 	
-									'for': 'custom_image_sizes[' + name + '][c]',
-									id: 'custom_image_sizes[' + name + '][c]',
-									'class': 'c',
-									title:sis.crop
-								} )
-						.text( sis.crop ) 
-				)
-				.append(
-					jQuery( '<input />' )
-						.attr( { 	
-									type: 'checkbox', 
-									name: 'custom_image_sizes[' + name + '][s]',
-									id: 'custom_image_sizes[' + name + '][s]',
-									base_s:0
-								} )
-						.val( "1" )
-						.addClass( 's show' )
-				)
-				.append(
-					jQuery( '<label />' )
-						.attr( { 	
-									'for': 'custom_image_sizes[' + name + '][s]',
-									id: 'custom_image_sizes[' + name + '][s]',
-									'class': 's',
-									title:sis.show
-								} )
-						.text( sis.show ) 
-				);
-				
-		els.appendTo(tdEl);
-		
-		jQuery( '<div />' ).text( sis.deleteImage ).addClass('delete_size').appendTo( tdEl );
-		jQuery( '<div />' ).text( sis.validateButton ).addClass('add_size validate_size').appendTo( tdEl );
+		var row = _.template( document.getElementById( 'sis-new_size_row' ).text, {
+			size : sis.size,
+			size_name : name,
+			maximumWidth : sis.maximumWidth,
+			maximumHeight : sis.maximumHeight,
+			customName : sis.customName,
+			crop : sis.crop,
+			show : sis.show,
+			deleteImage : sis.deleteImage,
+			validateButton : sis.validateButton
+		} );
 		
 		// Add the row to the current list
-		jQuery('#' + id).closest( 'tr' ).html( thEl.after( tdEl ) );
+		jQuery('#' + id).closest( 'tr' ).html( row );
 		
-		if( sis_small == true ){
-			// Refresh the buttons
-			this.setButtonsSmall();
-		} else {
-			// Refresh the buttons
-			this.setButtons();
-		}
+		// Refresh the buttons
+		this.setButtons();
 	},
 	deleteSize: function( e, el ) {
 		e.preventDefault();
@@ -409,30 +314,23 @@ var sizes = {
 		e.preventDefault();
 		
 		// Get the vars
-		var _self = this;
-		var parentTable = jQuery( el ).closest( 'table' );
-		var timer;
-		var wp_nonce = jQuery( '.addSize' ).val();
-		var parent = jQuery( el ).closest( 'tr' );
-		var n = parent.find( 'input[name="image_name"]' ).val();
-		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
-		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
-		var cn = parent.find( 'input.n' ).val();
-
-		if( c == false || c == undefined ) {
-			c = false;
-		} else {
-			c = true;
-		}
+		var _self = this,
+		parentTable = jQuery( el ).closest( 'table' ),
+		timer,
+		wp_nonce = jQuery( '.addSize' ).val(),
+		parent = jQuery( el ).closest( 'tr' ),
+		n = parent.find( 'input[name="image_name"]' ).val(),
+		c = parent.find( 'label.c' ).hasClass( 'ui-state-active' ),
+		s = parent.find( 'label.s' ).hasClass( 'ui-state-active' ),
+		cn = parent.find( 'input.n' ).val()
+		h = 0,
+		w = 0;
 		
-		if( s == false || s == undefined ) {
-			s = false;
-		} else {
-			s = true;
-		}
 		
-		var w = parseInt( parent.find( 'input.w' ).val() );
-		var h = parseInt( parent.find( 'input.h' ).val() );
+		c = ( c == false || c == undefined ) ? false : true ;
+		s = ( s == false || s == undefined ) ? false : true ;
+		w = parseInt( parent.find( 'input.w' ).val() );
+		h = parseInt( parent.find( 'input.h' ).val() );
 		
 		if( !parentTable.hasClass( 'ajaxing' ) ) {
 			jQuery.ajax({
@@ -491,9 +389,9 @@ var sizes = {
 	},
 	ajaxUnregister: function( el ) {
 		// Get name and _self object
-		var _self = this;
-		var n =  jQuery( el ).closest('tr').find( 'input[name="image_name"]' ).val();
-		var wp_nonce = jQuery( el ).closest('tr').find( 'input.deleteSize' ).val();
+		var _self = this,
+		n =  jQuery( el ).closest('tr').find( 'input[name="image_name"]' ).val(),
+		wp_nonce = jQuery( el ).closest('tr').find( 'input.deleteSize' ).val();
 		
 		// Make the ajax call
 		jQuery.ajax({
@@ -507,25 +405,24 @@ var sizes = {
 	},
 	addToArray: function( n, w, h, c, s ) {
 		// Get the row for editing or updating
-		var testRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' );
-		var newRow = '';
-		var timer;
+		var testRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' ),
+		newRow = '',
+		timer;
 		
 		// Get the right newRow, updating or adding ?
-		if( testRow.length != 0 )
+		if( testRow.length != 0 ) {
 			newRow = testRow.closest( 'tr' );
-		else
+		} else {
 			newRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody > tr:first' ).clone();
+		}
 		
-		if( c == true )
-			c = sis.tr;
-		else
-			c = sis.fl;
+		c = c == true ? sis.tr : sis.fl ;
 		
 		// Set the datas with the given datas
 		newRow.find( 'th > label' ).attr( 'for', n )
 		.end()
-		.find( 'input.thumbnails' ).val( n ).attr( 'id', n ).end()
+		.find( 'input.thumbnails' ).val( n ).attr( 'id', n )
+		.end()
 		.find( 'th:nth-child(2) > label' ).text( n )
 		.end()
 		.find( 'th:nth-child(3) > label' ).text( w+'px' )
@@ -535,8 +432,9 @@ var sizes = {
 		.find( 'th:nth-child(5) > label' ).text( c );
 		
 		// If new then add the row
-		if( testRow.length == 0 )
+		if( testRow.length == 0 ) {
 			newRow.appendTo( '#sis-regen .wrapper > table#sis_sizes > tbody' );
+		}
 		
 		// Remove the previous status classes and add the status class
 		newRow.removeClass( 'errorAdding notChangedAdding successAdding' ).addClass( s );
@@ -582,58 +480,36 @@ var sizes = {
 		});
 		jQuery( '.size_options' ).buttonset();
 	},
-	setButtonsSmall: function() {
-		// UI for delete,crop and add buttons
-		jQuery(".delete_size").button( {icons: {
-				primary: 'ui-icon-circle-close'
-			},text: false} );
-		jQuery(".add_size").button( { icons: {
-				primary: 'ui-icon-check'
-			},text: false} );
-		jQuery(".crop").button({icons: {
-				primary: 'ui-icon-arrow-4-diag'
-			},text: false});
-		jQuery(".show").button( {icons: {
-				primary: 'ui-icon-lightbulb'
-			},text: false});
-	},
 	displayChange : function( el ) {
-		el = jQuery( el );
-		var parent = el.closest( 'tr' );
+		var el = jQuery( el ),
+		parent = el.closest( 'tr' );
 		
 		// Check not new size
-		if( parent.hasClass( 'new_size' ) )
+		if( parent.hasClass( 'new_size' ) ) {
 			return false;
+		}
 		
-		var h_el = parent.find( 'input.h' );
-		var w_el = parent.find( 'input.w' );
-		var c_el = parent.find( 'input.c' );
-		var s_el = parent.find( 'input.s' );
-		var n_el = parent.find( 'input.n' );
+		var h_el = parent.find( 'input.h' ),
+		w_el = parent.find( 'input.w' ),
+		c_el = parent.find( 'input.c' ),
+		s_el = parent.find( 'input.s' ),
+		n_el = parent.find( 'input.n' ),
 		
-		var h = h_el.val();
-		var w = w_el.val();
-		var c = parent.find( 'label.c' ).hasClass( 'ui-state-active' );
-		var s = parent.find( 'label.s' ).hasClass( 'ui-state-active' );
-		var n = n_el.val();
+		h = h_el.val(),
+		w = w_el.val(),
+		c = parent.find( 'label.c' ).hasClass( 'ui-state-active' ),
+		s = parent.find( 'label.s' ).hasClass( 'ui-state-active' ),
+		n = n_el.val(),
 		
-		var base_h = h_el.attr( 'base_h' );
-		var base_w = w_el.attr( 'base_w' );
-		var base_c = c_el.attr( 'base_c' );
-		var base_s = s_el.attr( 'base_s' );
-		var base_n = n_el.attr( 'base_n' );
+		base_h = h_el.attr( 'base_h' ),
+		base_w = w_el.attr( 'base_w' ),
+		base_c = c_el.attr( 'base_c' ),
+		base_s = s_el.attr( 'base_s' ),
+		base_n = n_el.attr( 'base_n' );
 		
-		if( base_c == '0' )
-			base_c = false;
-		else
-			base_c = true;
-			
-		if( base_s == '0' )
-			base_s = false;
-		else
-			base_s = true;
-			
 		
+		base_c = base_c == '0' ? false : true;
+		base_s = base_s == '0' ? false : true;
 		
 		if( h != base_h || w != base_w || c != base_c || s != base_s || n != base_n ) {
 			el.closest( 'td' ).addClass( 'notSaved' ).find('.add_size').css( 'display', 'inline-block' );
@@ -643,24 +519,24 @@ var sizes = {
 	}
 }
 jQuery(function() {
-	
+	var bodyContent = jQuery( '#wpbody-content');
 	// Regeneration listener
 	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { regenerate.checkStartRegenerating(); } );
 	
 	// Add size button listener
-	jQuery('#add_size').click(function( e ){ sizes.add( e, this ); });
+	bodyContent.on( 'click', '#add_size',function( e ) { sizes.add( e, this ); } )
 	
 	// Registering a new size listener
-	jQuery('.add_size_name').live( 'click',function( e ) { sizes.register( e, this ); } );
+	.on( 'click', '.add_size_name', function( e ) { sizes.register( e, this ); } )
 	
 	// Delete and Adding buttons
-	jQuery('.delete_size').live( 'click', function( e ) { sizes.deleteSize( e, this ); } );
-	jQuery('.add_size').live( 'click', function( e ) { sizes.ajaxRegister( e, this ); } );
+	.on( 'click', '.delete_size', function( e ) { sizes.deleteSize( e, this ); } )
+	.on( 'click', '.add_size', function( e ) { sizes.ajaxRegister( e, this ); } )
 	
-	jQuery( '.h,.w,.c,.s,.n' ).live( 'click skeyup change', function( e ) { sizes.displayChange( this ); } );
+	.on( 'click skeyup change', '.h,.w,.c,.s,.n', function( e ) { sizes.displayChange( this ); } )
 	
 	// Seup the getphp
-	jQuery('#get_php').click( function( e ){ sizes.getPhp( e, this ) } );
+	.on( 'click', '#get_php', function( e ){ sizes.getPhp( e, this ) } );
 	jQuery('#get_php').nextAll('code').hide();
 	
 	// Colors for the theme / custom sizes
@@ -671,7 +547,6 @@ jQuery(function() {
 		'color': '#F2A13A'
 	} );
 
-	
 	jQuery(".add_size").hide();
 
 	// Error ajax handler
@@ -681,19 +556,6 @@ jQuery(function() {
 	jQuery("#msg").ajaxError( function(event, request, settings ) {
 		jQuery( this ).find( '.msg' ).append( "<li>"+sis.ajaxErrorHandler+" " + settings.url + ", status "+request.status+" : "+request.statusText+"</li>" ).end().stop( false, false ).slideDown( 200 ).delay( 5000 ).slideUp( 200 );
 	});
-	
-	// Check resizing of the window
-	jQuery(window).bind('resize', sisCheckWindowSize );
-	
-	function sisCheckWindowSize() {
-		if( window.innerWidth <= 820 && sis_small == false ) {
-			sizes.setButtonsSmall();
-			sis_small = true;
-		} else if( window.innerWidth > 820 && sis_small == true ){
-			sizes.setButtons();
-			sis_small = false;
-		}
-	}
 	
 	// Set the buttons
 	sizes.setButtons();

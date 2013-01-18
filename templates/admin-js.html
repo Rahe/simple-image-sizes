@@ -1,0 +1,41 @@
+<script type="text/html" id="sis-new_size">
+<tr valign="top" class="new_size_<%= size_id %> new_size">
+	<th scope="row">
+		<input type="text" id="new_size_<%= size_id %>" value="thumbnail-name">
+	</th>
+	<td>
+		<input type="button" id="validate_<%= size_id %>" value="<%= validate %>" class="button-secondary action add_size_name">
+	</td>
+</tr>
+</script>
+<script type="text/html" id="sis-new_size_row">
+	<th scope="row"><%= size %><%= size_name %></th>
+	<td>
+		<input type="hidden" name="image_name" value="<%= size_name %>">
+		<input type="hidden" name="custom_image_sizes[<%= size_name %>][custom]" value="1">
+		<label for="custom_image_sizes[<%= size_name %>][w]" class="sis-label">
+			<%= maximumWidth %>
+			<input type="number" name="custom_image_sizes[<%= size_name %>][w]" value="1" step="1" min="0" id="custom_image_sizes[<%= size_name %>][w]" base_w="0" class="w small-text">
+		</label>
+		<label for="custom_image_sizes[<%= size_name %>][h]" class="sis-label">
+			<%= maximumHeight %>
+			<input type="number" name="custom_image_sizes[<%= size_name %>][h]" value="1" step="1" min="0" id="custom_image_sizes[<%= size_name %>][h]" base_h="0" class="h small-text">
+		</label>
+		<label for="custom_image_sizes[<%= size_name %>][n]" class="sis-label">
+			<%= customName %>
+			<input type="text" name="custom_image_sizes[<%= size_name %>][n]" id="custom_image_sizes[<%= size_name %>][n]" base_n="<%= size_name %>" class="n">
+		</label>
+		<span class="size_options">
+			<input type="checkbox" name="custom_image_sizes[<%= size_name %>][c]" id="custom_image_sizes[<%= size_name %>][c]" base_c="0" value="1" class="c crop">
+			<label for="custom_image_sizes[<%= size_name %>][c]" id="custom_image_sizes[<%= size_name %>][c]" class="c" title="<%= crop %>">
+				<%= crop %>
+			</label>
+			<input type="checkbox" name="custom_image_sizes[<%= size_name %>][s]" id="custom_image_sizes[<%= size_name %>][s]" base_s="0" value="1" class="s show">
+			<label for="custom_image_sizes[<%= size_name %>][s]" id="custom_image_sizes[<%= size_name %>][s]" class="s" title="<%= show %>">
+				<%= show %>
+			</label>
+		</span>
+		<div class="delete_size"><%= deleteImage %></div>
+		<div class="add_size"><%= validateButton %></div>
+	</td>
+</script>
