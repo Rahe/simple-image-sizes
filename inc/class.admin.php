@@ -46,18 +46,17 @@ Class SISAdmin {
 		
 		if( $hook_suffix == 'options-media.php' ) {
 			// Add javascript
-			wp_enqueue_script( 'sis-jquery-ui-sis',  SIS_URL.'js/jquery-ui-1.8.16.custom.min.js', array('jquery'), '1.8.16' );
-			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis.min.js', array('jquery','sis-jquery-ui-sis'), SIS_VERSION );
+			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar' ), SIS_VERSION );
 			
 			// Add javascript translation
 			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
 			
 			// Add CSS
-			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
-			wp_enqueue_style( 'sis_css', SIS_URL.'css/sis-style.css', array(), SIS_VERSION );
+			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'/css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
+			wp_enqueue_style( 'sis_css', SIS_URL.'/css/sis-style.css', array(), SIS_VERSION );
 		} elseif( $hook_suffix == 'upload.php' || ( $hook_suffix == 'media.php' && isset( $_GET['attachment_id'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) ) {
 			// Add javascript
-			wp_enqueue_script( 'sis_js', SIS_URL.'js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
+			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
 			
 			// Add javascript translation
 			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
