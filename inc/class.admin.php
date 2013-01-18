@@ -50,7 +50,8 @@ Class SISAdmin {
 		
 		if( $hook_suffix == 'options-media.php' ) {
 			// Add javascript
-			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar', 'underscore' ), time() );
+			wp_enqueue_script( 'underscore', 'http//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js' , array(), '1.4.3' );
+			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar', 'underscore' ), SIS_VERSION );
 			
 			// Add javascript translation
 			wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
