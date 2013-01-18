@@ -1,5 +1,18 @@
 // Functions for the regenerating of images
-var regenerate = {
+var rahe;
+if( !rahe ) {
+	rahe = {};
+} else if( typeof rahe !== "object" ) {
+	throw new Error( 'rahe already exists and not an object' );
+}
+
+if( !rahe.sis ) {
+	rahe.sis = {};
+} else if( typeof rahe.sis !== "object" ) {
+	throw new Error( 'rahe.sis already exists and not an object' );
+}
+
+rahe.sis.regenerate = {
 	post_types : '',
 	thumbnails : '',
 	list : '',
@@ -222,7 +235,7 @@ var regenerate = {
 	}
 }
 
-var sizes = {
+rahe.sis.sizes = {
 	i: 0,
 	add: function(e,el) {
 		e.preventDefault();
@@ -230,7 +243,7 @@ var sizes = {
 		// Create the template
 		var elTr = _.template( document.getElementById( 'sis-new_size' ).text, {
 			size_id : this.i,
-			validate : sis.validate,
+			validate : sis.validate
 		} );
 
 		// Add the form for editing
@@ -521,22 +534,22 @@ var sizes = {
 jQuery(function() {
 	var bodyContent = jQuery( '#wpbody-content');
 	// Regeneration listener
-	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { regenerate.checkStartRegenerating(); } );
+	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { rahe.sis.regenerate.checkStartRegenerating(); } );
 	
 	// Add size button listener
-	bodyContent.on( 'click', '#add_size',function( e ) { sizes.add( e, this ); } )
+	bodyContent.on( 'click', '#add_size',function( e ) { rahe.sis.sizes.add( e, this ); } )
 	
 	// Registering a new size listener
-	.on( 'click', '.add_size_name', function( e ) { sizes.register( e, this ); } )
+	.on( 'click', '.add_size_name', function( e ) { rahe.sis.sizes.register( e, this ); } )
 	
 	// Delete and Adding buttons
-	.on( 'click', '.delete_size', function( e ) { sizes.deleteSize( e, this ); } )
-	.on( 'click', '.add_size', function( e ) { sizes.ajaxRegister( e, this ); } )
+	.on( 'click', '.delete_size', function( e ) { rahe.sis.sizes.deleteSize( e, this ); } )
+	.on( 'click', '.add_size', function( e ) { rahe.sis.sizes.ajaxRegister( e, this ); } )
 	
-	.on( 'click skeyup change', '.h,.w,.c,.s,.n', function( e ) { sizes.displayChange( this ); } )
+	.on( 'click skeyup change', '.h,.w,.c,.s,.n', function( e ) { rahe.sis.sizes.displayChange( this ); } )
 	
 	// Seup the getphp
-	.on( 'click', '#get_php', function( e ){ sizes.getPhp( e, this ) } );
+	.on( 'click', '#get_php', function( e ){ rahe.sis.sizes.getPhp( e, this ) } );
 	jQuery('#get_php').nextAll('code').hide();
 	
 	// Colors for the theme / custom sizes
@@ -558,5 +571,5 @@ jQuery(function() {
 	});
 	
 	// Set the buttons
-	sizes.setButtons();
+	rahe.sis.sizes.setButtons();
 });

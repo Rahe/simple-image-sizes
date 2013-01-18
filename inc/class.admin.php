@@ -2,34 +2,37 @@
 Class SISAdmin {
 	
 	// Original sizes
-	public $original = array( 'thumbnail', 'medium', 'large' );
+	public static $original = array( 'thumbnail', 'medium', 'large' );
 
 	public function __construct(){
 		// Init
 		add_action ( 'admin_menu', array( &$this, 'init' ) );
-		add_action ( 'admin_enqueue_scripts', array( &$this, 'registerScripts' ), 11 );
+		add_action ( 'admin_enqueue_scripts', array( __CLASS__, 'registerScripts' ), 11 );
+		
+		// Add underscore template
+		add_action( 'admin_footer', array( __CLASS__, 'addTemplate' ) );
 		
 		// Add ajax action
-		add_action( 'wp_ajax_'.'sis_ajax_thumbnail_rebuild', array( &$this, 'ajaxThumbnailRebuildAjax' ) );
-		add_action( 'wp_ajax_'.'get_sizes', array( &$this, 'ajaxGetSizes' ) );
-		add_action( 'wp_ajax_'.'add_size', array( &$this, 'ajaxAddSize' ) );
-		add_action( 'wp_ajax_'.'remove_size', array( &$this, 'ajaxRemoveSize' ) );
+		add_action( 'wp_ajax_'.'sis_ajax_thumbnail_rebuild', array( __CLASS__, 'ajaxThumbnailRebuildAjax' ) );
+		add_action( 'wp_ajax_'.'get_sizes', array( __CLASS__, 'ajaxGetSizes' ) );
+		add_action( 'wp_ajax_'.'add_size', array( __CLASS__, 'ajaxAddSize' ) );
+		add_action( 'wp_ajax_'.'remove_size', array( __CLASS__, 'ajaxRemoveSize' ) );
 		
 		// Add image sizes in the form, check if 3.3 is installed or not
 		if( !function_exists( 'is_main_query' ) ) {
-			add_filter( 'attachment_fields_to_edit', array( &$this, 'sizesInForm' ), 11, 2 ); // Add our sizes to media forms
+			add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'sizesInForm' ), 11, 2 ); // Add our sizes to media forms
 		} else {
-			add_filter( 'image_size_names_choose', array( &$this, 'AddThumbnailName' ) );
+			add_filter( 'image_size_names_choose', array( __CLASS__, 'AddThumbnailName' ) );
 		}
 		
 		// Add link in plugins list
-		add_filter( 'plugin_action_links', array( &$this,'addSettingsLink' ), 10, 2 );
+		add_filter( 'plugin_action_links', array( __CLASS__,'addSettingsLink' ), 10, 2 );
 		
 		// Add action in media row quick actions
-		add_filter( 'media_row_actions', array(&$this, 'addActionsList' ), 10, 2 );
+		add_filter( 'media_row_actions', array( __CLASS__, 'addActionsList' ), 10, 2 );
 		
 		// Add filter for the Media single
-		add_filter( 'attachment_fields_to_edit', array( &$this, 'addFieldRegenerate' ), 9, 2 );
+		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'addFieldRegenerate' ), 9, 2 );
 		
 	}
 	
@@ -40,16 +43,17 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function registerScripts($hook_suffix = '' ) {
-		if( !isset( $hook_suffix ) || empty( $hook_suffix ) )
+	public static function registerScripts( $hook_suffix = '' ) {
+		if( !isset( $hook_suffix ) || empty( $hook_suffix ) ) {
 			return false;
+		}
 		
 		if( $hook_suffix == 'options-media.php' ) {
 			// Add javascript
-			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar' ), SIS_VERSION );
+			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar', 'underscore' ), time() );
 			
 			// Add javascript translation
-			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
+			wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
 			
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'/css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
@@ -59,7 +63,7 @@ Class SISAdmin {
 			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
 			
 			// Add javascript translation
-			wp_localize_script( 'sis_js', 'sis', $this->localizeVars() );
+			wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
 		}
 	}
 	
@@ -70,7 +74,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function localizeVars() {
+	public static function localizeVars() {
 		return array(
 			'ajaxUrl' 			=>  admin_url( '/admin-ajax.php' ),
 			'reading' 			=> __( 'Reading attachments...', 'sis' ),
@@ -105,6 +109,18 @@ Class SISAdmin {
 			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'sis' ),
 		);
 	}
+
+	public static function addTemplate() {
+		global $pagenow;
+		if( $pagenow != 'options-media.php' ) {
+			return false;
+		}
+		if( is_file( SIS_DIR.'/templates/admin-js.html' ) ) {
+			include( SIS_DIR.'/templates/admin-js.html' );
+		}
+
+		return true;
+	}
 	
 	/**
 	 * Add action in media row
@@ -114,7 +130,7 @@ Class SISAdmin {
 	 * @return $actions : array of actions and content to display
 	 * @author Nicolas Juen
 	 */
-	function addActionsList( $actions, $object ) {
+	public static function addActionsList( $actions, $object ) {
 		
 		// Add action for regeneration
 		$actions['sis-regenerate'] = "<a href='#' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>".'<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />';
@@ -132,13 +148,14 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function addSettingsLink( $links, $file ) {
+	public static function addSettingsLink( $links, $file ) {
 	
-		if( $file != 'simple-image-sizes/simple_image_sizes.php' )
+		if( $file != 'simple-image-sizes/simple_image_sizes.php' ) {
 			return $links;
+		}
 			
 		$settings_link = '<a href="'.admin_url('options-media.php').'"> '.__( 'Settings', 'sis' ).' </a>';
-		array_unshift($links, $settings_link);
+		array_unshift( $links, $settings_link );
 		
 		return $links;
 	}
@@ -152,8 +169,9 @@ Class SISAdmin {
 	 */
 	function init() {
 		// Check if admin
-		if( !is_admin() )
+		if( !is_admin() ) {
 			return false;
+		}
 		
 		// Get the image sizes
 		global $_wp_additional_image_sizes;
@@ -162,28 +180,18 @@ Class SISAdmin {
 		// Get the sizes and add the settings
 		foreach ( get_intermediate_image_sizes() as $s ) {
 			// Don't make the original sizes or numeric sizes that appear
-			if( in_array( $s, $this->original ) || is_integer( $s ) )
+			if( in_array( $s, self::$original ) || is_integer( $s ) ) {
 				continue;
+			}
 			
 			// Set width
-			if ( isset( $_wp_additional_image_sizes[$s]['width'] ) ) // For theme-added sizes
-				$width = intval( $_wp_additional_image_sizes[$s]['width'] );
-			else                                                     // For default sizes set in options
-				$width = get_option( "{$s}_size_w" );
+			$width = isset( $_wp_additional_image_sizes[$s]['width'] ) ? intval( $_wp_additional_image_sizes[$s]['width'] ) : get_option( "{$s}_size_w" ) ;
 			
 			// Set height
-			if ( isset( $_wp_additional_image_sizes[$s]['height'] ) ) // For theme-added sizes
-				$height = intval( $_wp_additional_image_sizes[$s]['height'] );
-			else                                                      // For default sizes set in options
-				$height = get_option( "{$s}_size_h" );
+			$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
 			
 			//Set crop
-			if ( isset( $_wp_additional_image_sizes[$s]['crop'] ) ) {   // For theme-added sizes
-				$crop = intval( $_wp_additional_image_sizes[$s]['crop'] );
-			} else {
-				// For default sizes set in options
-				$crop = get_option( "{$s}_crop" );
-			}
+			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
 			
 			// Add the setting field for this size
 			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'sis' ), $s ), array( &$this, 'imageSizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
@@ -331,47 +339,35 @@ Class SISAdmin {
 						// Display the sizes in the array
 						foreach ( get_intermediate_image_sizes() as $s ):
 							// Don't make or numeric sizes that appear
-							if( is_integer( $s ) )
+							if( is_integer( $s ) ) {
 								continue;
-	
-							if ( isset( $_wp_additional_image_sizes[$s]['width'] ) ) // For theme-added sizes
-								$width = intval( $_wp_additional_image_sizes[$s]['width'] );
-							else                                                     // For default sizes set in options
-								$width = get_option( "{$s}_size_w" );
-			
-							if ( isset( $_wp_additional_image_sizes[$s]['height'] ) ) // For theme-added sizes
-								$height = intval( $_wp_additional_image_sizes[$s]['height'] );
-							else                                                      // For default sizes set in options
-								$height = get_option( "{$s}_size_h" );
-			
-							if ( isset( $_wp_additional_image_sizes[$s]['crop'] ) )   // For theme-added sizes
-								$crop = intval( $_wp_additional_image_sizes[$s]['crop'] );
-							else                                                      // For default sizes set in options
-								$crop = get_option( "{$s}_crop" );
+							}
+							
+							// Set width
+							$width = isset( $_wp_additional_image_sizes[$s]['width'] ) ? intval( $_wp_additional_image_sizes[$s]['width'] ) : get_option( "{$s}_size_w" ) ;
+							
+							// Set height
+							$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
+							
+							//Set crop
+							$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
+							
 							?>
 							<tr>
 								<th  class="check-column">
 									<input type="checkbox" class="thumbnails" id="<?php echo esc_attr( $s ) ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php echo esc_html( $s ); ?>
-									</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $s ); ?></label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php echo esc_html( $width); ?> px
-									</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $width); ?> px</label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php echo esc_html( $height ); ?> px
-									</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>">
-										<?php echo ( $crop == 1 )? __( 'yes', 'sis' ):__( 'no', 'sis' ); ?>
-									</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo ( $crop == 1 )? __( 'Yes', 'sis' ):__( 'No', 'sis' ); ?>	</label>
 								</th>
 							</tr>
 						<?php endforeach;?>
@@ -400,8 +396,9 @@ Class SISAdmin {
 						// Diplay the post types table
 						foreach ( get_post_types( array( 'public' => true, '_builtin' => false ), 'objects', 'or' ) as $ptype ):
 							// Avoid the post_types without post thumbnails feature
-							if( !array_key_exists( 'thumbnail' , $_wp_post_type_features[$ptype->name] ) || $_wp_post_type_features[$ptype->name] == false )
+							if( !array_key_exists( 'thumbnail' , $_wp_post_type_features[$ptype->name] ) || $_wp_post_type_features[$ptype->name] == false ) {
 								continue;
+							}
 							?>
 							<tr>
 								<th class="check-column">
@@ -410,9 +407,7 @@ Class SISAdmin {
 									</label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $ptype->name ); ?>">
-										<em><?php echo esc_html( $ptype->labels->name ); ?></em>
-									</label>
+									<label for="<?php esc_attr_e( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
 								</th>
 							</tr>
 						<?php endforeach;?>
@@ -442,7 +437,7 @@ Class SISAdmin {
 				<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
 					<p>
 						<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em;"></span> 
-						<span><strong><?php _e( 'End time calculated :', 'sis' ); ?></strong> <span class='time_message'>Calculating...</span> </span>
+						<span><strong><?php _e( 'End time calculated :', 'sis' ); ?></strong> <span class='time_message'><?php _e( 'Calculating...', 'sis' ) ?></span> </span>
 					</p>
 					<ul class="messages"></ul>
 				</div>
@@ -466,7 +461,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function ajaxAddSize() {
+	public static function ajaxAddSize() {
 		
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
@@ -484,8 +479,7 @@ Class SISAdmin {
 		
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'add_size' ) ) {
-			echo 0;
-			die();
+			die(0);
 		}
 		
 		// If no name given do not save
@@ -499,8 +493,7 @@ Class SISAdmin {
 
 		// If the size have not changed return 2
 		if( isset( $sizes[$name] ) && $sizes[$name] === $values ) {
-			echo 2;
-			die();
+			die(2);
 		}
 		
 		// Put the new values
@@ -518,7 +511,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function ajaxRemoveSize() {
+	public static function ajaxRemoveSize() {
 		
 		// Get old options
 		$sizes = (array)get_option( SIS_OPTION );
@@ -529,8 +522,7 @@ Class SISAdmin {
 		
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'delete_'.$name ) ) {
-			echo 0;
-			die();
+			die(0);
 		}
 		
 		// Remove the size
@@ -548,34 +540,29 @@ Class SISAdmin {
 	 * @access public
 	 * @return void
 	 */
-	public function ajaxGetSizes() {
+	public static function ajaxGetSizes() {
 		global $_wp_additional_image_sizes;
 
-		foreach ( get_intermediate_image_sizes() as $s ):
-
-		// Don't make the original sizes
-		if( in_array( $s, $this->original ) )
-			continue;
+		foreach ( get_intermediate_image_sizes() as $s ) {
+			// Don't make the original sizes
+			if( in_array( $s, self::$original ) ) {
+				continue;
+			}
 			
-		if ( isset( $_wp_additional_image_sizes[$s]['width'] ) ) // For theme-added sizes
-			$width = intval( $_wp_additional_image_sizes[$s]['width'] );
-		else                                                     // For default sizes set in options
-			$width = get_option( "{$s}_size_w" );
-
-		if ( isset( $_wp_additional_image_sizes[$s]['height'] ) ) // For theme-added sizes
-			$height = intval( $_wp_additional_image_sizes[$s]['height'] );
-		else                                                      // For default sizes set in options
-			$height = get_option( "{$s}_size_h" );
-
-		if ( isset( $_wp_additional_image_sizes[$s]['crop'] ) )   // For theme-added sizes
-			$crop = intval( $_wp_additional_image_sizes[$s]['crop'] );
-		else                                                      // For default sizes set in options
-			$crop = get_option( "{$s}_crop" );
-		
-		$crop = ( $crop == 0 )? 'false' : 'true' ;
-		?>
-			add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop ?> );<br />
-		<?php endforeach;
+			// Set width
+			$width = isset( $_wp_additional_image_sizes[$s]['width'] ) ? intval( $_wp_additional_image_sizes[$s]['width'] ) : get_option( "{$s}_size_w" ) ;
+			
+			// Set height
+			$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
+			
+			//Set crop
+			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
+			
+			$crop = ( $crop == 0 )? 'false' : 'true' ;
+			?>
+				add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop ?> );<br />
+			<?php 
+		}
 		
 		die();
 	}
@@ -587,7 +574,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function ajaxThumbnailRebuildAjax() {
+	public static function ajaxThumbnailRebuildAjax() {
 		global $wpdb;
 		
 		// Get the nonce
@@ -665,7 +652,7 @@ Class SISAdmin {
 			// Regen the attachment
 			if ( FALSE !== $fullsizepath && @file_exists( $fullsizepath ) ) {
 				set_time_limit( 30 );
-				if( wp_update_attachment_metadata( $id, $this->wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false )
+				if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false )
 					die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ) ,'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
 			} else {
 				die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ), 'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
@@ -684,7 +671,7 @@ Class SISAdmin {
 	 * @param string $file Filepath of the Attached image.
 	 * @return mixed Metadata for attachment.
 	 */
-	public function wp_generate_attachment_metadata_custom( $attachment_id, $file, $thumbnails = NULL ) {
+	public static function wp_generate_attachment_metadata_custom( $attachment_id, $file, $thumbnails = NULL ) {
 		$attachment = get_post( $attachment_id );
 		
 		$meta_datas = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
@@ -734,8 +721,9 @@ Class SISAdmin {
 					unset( $meta_datas['size'][$size] );
 				}
 				
-				if ( $resized )
+				if ( $resized ) {
 					$metadata['sizes'][$size] = $resized;
+				}
 			}
 			
 			// Only if not all sizes
@@ -748,8 +736,9 @@ Class SISAdmin {
 			
 			// fetch additional metadata from exif/iptc
 			$image_meta = wp_read_image_metadata( $file );
-			if ( $image_meta )
+			if ( $image_meta ) {
 				$metadata['image_meta'] = $image_meta;
+			}
 		}
 
 		return apply_filters( 'wp_generate_attachment_metadata', $metadata, $attachment_id );
@@ -765,7 +754,7 @@ Class SISAdmin {
 	 * @author Nicolas Juen
 	 * @author Additional Image Sizes (zui)
 	 */
-	public function sizesInForm( $form_fields, $post ) {
+	public static function sizesInForm( $form_fields, $post ) {
 		// Protect from being view in Media editor where there are no sizes
 		if ( isset( $form_fields['image-size'] ) ) {
 			$out = NULL;
@@ -783,12 +772,11 @@ Class SISAdmin {
 				$downsize = image_downsize( $post->ID, $size );
 		
 				// is this size selectable?
-			$enabled = ( $downsize[3] || 'full' == $size );
-			$css_id = "image-size-{$size}-{$post->ID}";
+				$enabled = ( $downsize[3] || 'full' == $size );
+				$css_id = "image-size-{$size}-{$post->ID}";
 
-			// We must do a clumsy search of the existing html to determine is something has been checked yet
-			if ( FALSE === strpos( 'checked="checked"', $form_fields['image-size']['html'] ) ) {
-
+				// We must do a clumsy search of the existing html to determine is something has been checked yet
+				if ( FALSE === strpos( 'checked="checked"', $form_fields['image-size']['html'] ) ) {
 					if ( empty($check) )
 						$check = get_user_setting( 'imgsize' ); // See if they checked a custom size last time
 
@@ -817,7 +805,7 @@ Class SISAdmin {
 
 				$out .= $html;
 			}
-			$form_fields['image-size']['html'] .= $out;
+				$form_fields['image-size']['html'] .= $out;
 		} // End protect from Media editor
 		
 		return $form_fields;
@@ -833,7 +821,7 @@ Class SISAdmin {
 	 * @author Nicolas Juen
 	 * @author radeno based on this post : http://www.wpmayor.com/wordpress-hacks/how-to-add-custom-image-sizes-to-wordpress-uploader/
 	 */
-	function AddThumbnailName($sizes) {
+	public static function AddThumbnailName($sizes) {
 		// Get options
 		$sizes_custom = get_option( SIS_OPTION );
 		// init size array
@@ -843,8 +831,9 @@ Class SISAdmin {
 		if ( is_array( $sizes_custom ) && !empty( $sizes_custom ) ) {
 			foreach( $sizes_custom as $key => $value ) {
 				// If we show this size in the admin
-				if( isset( $value['s'] ) && $value['s'] == 1 )
+				if( isset( $value['s'] ) && $value['s'] == 1 ) {
 					$addsizes[$key] = $this->_getThumbnailName( $key );
+				}
 			}
 		}
 		
@@ -893,10 +882,11 @@ Class SISAdmin {
 	 * @since 2.3.1
 	 * @author Nicolas Juen
 	 */
-	function addFieldRegenerate( $fields, $post ) {
+	public static function addFieldRegenerate( $fields, $post ) {
 		// Check this is an image
-		if( strpos( $post->post_mime_type, 'image' ) === false )
+		if( strpos( $post->post_mime_type, 'image' ) === false ) {
 			return $fields;
+		}
 		
 		$fields['sis-regenerate'] = array(
 			'label'	=> __( 'Regenerate Thumbnails', 'sis' ),
