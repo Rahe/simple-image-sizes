@@ -337,7 +337,7 @@ Class SISAdmin {
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
 		
 		// Get old options
-		$sizes = (array)get_option( SIS_OPTION );
+		$sizes = (array)get_option( SIS_OPTION, array() );
 		
 		// Check entries
 		$name = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ): '' ;
@@ -383,7 +383,7 @@ Class SISAdmin {
 	public static function a_RemoveSize() {
 		
 		// Get old options
-		$sizes = (array)get_option( SIS_OPTION );
+		$sizes = (array)get_option( SIS_OPTION, array() );
 		
 		// Get the nonce and name
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
@@ -656,7 +656,7 @@ Class SISAdmin {
 		if ( isset( $form_fields['image-size'] ) ) {
 			$out = NULL;
 			$size_names = array();
-			$sizes_custom = get_option( SIS_OPTION );
+			$sizes_custom = get_option( SIS_OPTION, array() );
 			
 			if ( is_array( $sizes_custom ) ) {
 				foreach( $sizes_custom as $key => $value ) {
@@ -720,7 +720,7 @@ Class SISAdmin {
 	 */
 	public static function AddThumbnailName($sizes) {
 		// Get options
-		$sizes_custom = get_option( SIS_OPTION );
+		$sizes_custom = get_option( SIS_OPTION, array() );
 		// init size array
 		$addsizes = array();
 		
