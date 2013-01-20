@@ -305,7 +305,7 @@ Class SISAdmin {
 		if( is_file( SIS_DIR.'/templates/options-media.php' ) ) {
 			include( SIS_DIR.'/templates/options-media.php' );
 		} else {
-			echo _esc_html_e( 'Admin option-media template missing' );
+			esc_html_e( 'Admin option-media template missing' );
 		}
 	}
 		

@@ -4,7 +4,7 @@ Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 2.4
+Stable tag: 2.4.1
 
 == Description ==
 
@@ -38,6 +38,8 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.4.1
+	* Remove function not working on admin file
 * 2.4
 	* Made for 3.5 and up
 	* Refactoring PHP/Javascript code
