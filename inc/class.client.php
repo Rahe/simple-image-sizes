@@ -17,7 +17,7 @@ Class SISClient {
 	 */
 	public static function init() {
 		// Get inital options
-		$sizes = get_option( 'custom_image_sizes' );
+		$sizes = get_option( SIS_OPTION, array() );
 		
 		// Return flase if empty
 		if( empty( $sizes ) || !is_array( $sizes ) ) {
