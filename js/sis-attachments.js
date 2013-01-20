@@ -1,20 +1,30 @@
+// Functions for the regenerating of images
+var sis;
+if( !sis ) {
+	sis = {};
+} else if( typeof sis !== "object" ) {
+	throw new Error( 'sis already exists and not an object' );
+}
+
 jQuery( function() {
+	'use strict';
+	var bdy = jQuery( document.body ), SISAttachRegenerate = null, sis_obj = null;
 	// Add action dinamycally
-	jQuery( 'select[name="action"]' ).append( 
+	jQuery( 'select[name="action"], select[name="action2"]' ).append( 
 		jQuery( '<option/>' ).attr( 'value', 'sis-regenerate' ).text( sis.regenerate )
 	);
-	
+
 	// Regenerate one element
-	jQuery( '.sis-regenerate-one' ).click( function( e ) {
+	bdy.on( 'click', '.sis-regenerate-one', function( e ) {
 		e.preventDefault();
-		new SISAttachRegenerate( this );
+		sis_obj = new SISAttachRegenerate( this );
 	});
-	
+
 	// On bulk actions
-	jQuery( '#doaction' ).click( function( e ) {
-		if( jQuery( this ).parent().find( 'select' ).val() == 'sis-regenerate' ) {
+	jQuery( '#doaction, #doaction2' ).on( 'click', function( e ) {
+		if( jQuery( this ).parent().find( 'select' ).val() === 'sis-regenerate' ) {
 			// Get checked checkbocxes
-			var els = jQuery( '.wp-list-table.media #the-list tr input[type="checkbox"]:checked' );
+			var els = jQuery( '#the-list .check-column input[type="checkbox"]:checked' ).closest( 'tr' ).find( '.sis-regenerate-one' );
 			
 			// Check there is any elements selected
 			if( els.length > 0 ) {
@@ -24,77 +34,74 @@ jQuery( function() {
 				
 				// Make all the selected elements
 				els.each( function( i,el ) {
-					new SISAttachRegenerate( jQuery( this ) );
-				} )
+					sis_obj = new SISAttachRegenerate( this );
+				} );
 			}
 		}
 	} );
-	
+
 	// Function for regenerating the elements
-	var SISAttachRegenerate = function( el ) {
+	SISAttachRegenerate = function( el ) {
 		var regenerate = {
-			list : '',
-			percent : '' ,
-			el : '',
-			id : '',
+			list : {},
+			parent : null,
+			el : null,
+			id : null,
 			messageZone : '',
 			init: function( el ) {
-				this.el = jQuery( el );
-				id = this.el.attr( 'id' );
+				this.el = el;
+				this.parent = el.closest( 'tr' );
+				this.id = this.el.data( 'id' );
+				this.list = { 'id' : this.id, 'title' : '' };
+				this.messageZone = this.parent.find( '.title em' );
 				
-				// IF no id found
-				if( !id ) {
-					id = this.el.closest( '.media-item' ).attr( 'id' );
-					this.id = id.replace( 'media-item-', '' );
-				} else {
-					this.id = id.replace( 'post-', '' );
+				if( this.parent.find( '.title em' ).length === 0 ) {
+					this.parent.find( '.title strong' ).after( '<em/>' );
 				}
 				
-				this.list = { 'id' : this.id, 'title' : 'titre' };
+				this.messageZone = this.parent.find( '.title em' );
 				
-				if( this.el.find('.title em').size() == 0 )
-					this.el.find('.title strong').after('<em/>');
-				
-				this.messageZone = this.el.find('.title em');
-				
-				if( !this.el.hasClass( 'ajaxing' ) )
+				if( !this.parent.hasClass( 'ajaxing' ) ) {
 					this.regenItem();
+				}
 			},
 			setMessage : function( msg ) {
 				// Display the message
 				this.messageZone.html( ' - '+ msg ).addClass( 'updated' ).addClass( 'fade' ).show();
 			},
 			regenItem : function( ) {
-				var _self = this;
-				var wp_nonce = jQuery('input.regen').val();
-		
+				var self = this;
+
 				jQuery.ajax( {
 					url: sis.ajaxUrl,
 					type: "POST",
 					dataType: 'json',
-					data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list.id+'&nonce='+wp_nonce,
+					cache: false,
+					data: {
+						action : 'sis_ajax_thumbnail_rebuild',
+						'do' : 'regen',
+						id : this.list.id,
+						nonce : sis.regen_one
+					},
 					beforeSend : function() {
-						_self.el.fadeTo( 'fast' ,'0.2' ).addClass('ajaxing');
+						self.parent.fadeTo( 'fast' ,'0.2' ).addClass( 'ajaxing' );
 					},
 					success: function( r ) {
 						var message ='';
 						// Check if error or a message in response
 						if( ( !r.src || !r.time ) || r.error || typeof r !== 'object' ) {
-							if( typeof r !== 'object' )
-								message = sis.phpError;
-							else 
-								message = r.error
+							message = typeof r !== 'object' ? message = sis.phpError : r.error ;
 						} else {
 							message = sis.soloRegenerated.replace( '%s', r.time );
 						}
-						_self.setMessage( message );
-						_self.el.fadeTo( 'fast' ,'1' ).removeClass('ajaxing');
+						self.setMessage( message );
+						self.parent.fadeTo( 'fast' ,'1' ).removeClass( 'ajaxing' );
 					}
 				});
 			}
-		}
-		
+		};
+
 		// Launch regeneration
-		regenerate.init( jQuery( el ).closest( 'tr' ) );
-	}
+		regenerate.init( jQuery( el ) );
+	};
 } );

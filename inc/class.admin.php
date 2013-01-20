@@ -59,7 +59,7 @@ Class SISAdmin {
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'/css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
 			wp_enqueue_style( 'sis_css', SIS_URL.'/css/sis-style.css', array(), SIS_VERSION );
-		} elseif( $hook_suffix == 'upload.php' || ( $hook_suffix == 'media.php' && isset( $_GET['attachment_id'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) ) {
+		} elseif( $hook_suffix == 'upload.php' || ( $hook_suffix == 'post.php' && isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
 			
@@ -108,6 +108,7 @@ Class SISAdmin {
 			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'sis' ),
 			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'sis' ),
 			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'sis' ),
+			'regen_one'			=> wp_create_nonce( 'regen' )
 		);
 	}
 
@@ -116,6 +117,7 @@ Class SISAdmin {
 		if( $pagenow != 'options-media.php' ) {
 			return false;
 		}
+		
 		if( is_file( SIS_DIR.'/templates/admin-js.html' ) ) {
 			include( SIS_DIR.'/templates/admin-js.html' );
 		}
@@ -134,7 +136,7 @@ Class SISAdmin {
 	public static function addActionsList( $actions, $object ) {
 		
 		// Add action for regeneration
-		$actions['sis-regenerate'] = "<a href='#' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>".'<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />';
+		$actions['sis-regenerate'] = "<a href='#' data-id='".$object->ID."' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>";
 		
 		// Return actions
 		return $actions;
@@ -593,8 +595,7 @@ Class SISAdmin {
 		if ( $action == "getlist" ) {
 			// Check the nonce
 			if( !wp_verify_nonce( $nonce , 'getList' ) ) {
-				echo json_encode( array( ) );
-				die();
+				self::displayJson();
 			}
 			
 			if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
@@ -630,13 +631,12 @@ Class SISAdmin {
 				$res[] = array('id' => $attachment->ID, 'title' => $attachment->post_title);
 			}
 			// Return the Id's and Title of medias
-			die( json_encode( $res ) );
+			self::displayJson( $res );
 		} else if ( $action == "regen" ) {
 			
 			// Check the nonce
 			if( !wp_verify_nonce( $nonce , 'regen' ) ) {
-				echo json_encode( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
-				die();
+				self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
 			}
 			
 			// Get the id
@@ -644,7 +644,12 @@ Class SISAdmin {
 			
 			// Check Id
 			if( (int)$id == 0 ) {
-				die( json_encode( array( 'time' => round( microtime( true ) - $start_time, 4 ), 'error' => __( 'No id given in POST datas.', 'sis' ) ) ) );
+				self::displayJson( 
+					array( 
+						'time' => round( microtime( true ) - $start_time, 4 ), 
+						'error' => __( 'No id given in POST datas.', 'sis' ) 
+					) 
+				);
 			}
 			
 			// Get the path
@@ -652,14 +657,33 @@ Class SISAdmin {
 
 			// Regen the attachment
 			if ( FALSE !== $fullsizepath && @file_exists( $fullsizepath ) ) {
-				set_time_limit( 30 );
-				if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false )
-					die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ) ,'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
+				set_time_limit( 60 );
+				if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false ) {
+					self::displayJson( 
+						array( 
+							'src' => wp_get_attachment_thumb_url( $id ), 
+							'time' => round( microtime( true ) - $start_time, 4 ), 
+							'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+						) 
+					);
+				}
 			} else {
-				die( json_encode( array( 'src' => wp_get_attachment_thumb_url( $id ), 'time' => round( microtime( true ) - $start_time, 4 ), 'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) ) ) );
+				self::displayJson(
+					array( 
+						'src' => wp_get_attachment_thumb_url( $id ), 
+						'time' => round( microtime( true ) - $start_time, 4 ), 
+						'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+					)
+				);
 			}
 			// Display the attachment url for feedback 
-			die( json_encode( array( 'time' => round( microtime( true ) - $start_time, 4 ) , 'src' => wp_get_attachment_thumb_url( $id ), 'title' => get_the_title( $id ) ) ) );
+			self::displayJson( 
+				array( 
+					'time' => round( microtime( true ) - $start_time, 4 ) , 
+					'src' => wp_get_attachment_thumb_url( $id ), 
+					'title' => get_the_title( $id ) 
+				) 
+			);
 		}
 	}
 
@@ -765,7 +789,7 @@ Class SISAdmin {
 			if ( is_array( $sizes_custom ) ) {
 				foreach( $sizes_custom as $key => $value ) {
 					if( isset( $value['s'] ) && $value['s'] == 1 ) {
-						$size_names[$key] = $this->_getThumbnailName( $key );;
+						$size_names[$key] = self::_getThumbnailName( $key );;
 					}
 				}
 			}
@@ -833,7 +857,7 @@ Class SISAdmin {
 			foreach( $sizes_custom as $key => $value ) {
 				// If we show this size in the admin
 				if( isset( $value['s'] ) && $value['s'] == 1 ) {
-					$addsizes[$key] = $this->_getThumbnailName( $key );
+					$addsizes[$key] = self::_getThumbnailName( $key );
 				}
 			}
 		}
@@ -854,7 +878,7 @@ Class SISAdmin {
 	 * @since 2.3
 	 * @author Nicolas Juen
 	 */
-	private function _getThumbnailName( $thumbnailSlug = '' ) {
+	private static function _getThumbnailName( $thumbnailSlug = '' ) {
 		
 		// get the options
 		$sizes_custom = get_option( SIS_OPTION );
@@ -893,12 +917,20 @@ Class SISAdmin {
 			'label'	=> __( 'Regenerate Thumbnails', 'sis' ),
 			'input'	=> 'html',
 			'html'	=> '
-			<input type="button" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'sis' ).'" />
+			<input type="button" data-id="'.$post->ID.'" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'sis' ).'" />
 			<span class="title"><em></em></span>
-			<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />
-			'
+			<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />',
+			'show_in_edit' => true,
+			'show_in_modal' => false,
 		);
 		return $fields;
 	}
+	
+	private static function displayJson( $data = array() ) {
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+		header('Content-type: application/json');
+		echo json_encode( $data );
+		die();
+	}
 }
-?>
