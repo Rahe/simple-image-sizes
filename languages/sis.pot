@@ -4,251 +4,254 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-20 14:56+0100\n"
-"PO-Revision-Date: 2012-01-20 14:56+0100\n"
-"Last-Translator: Nicolas <njuen@beapi.fr>\n"
+"POT-Creation-Date: 2013-01-20 02:55+0100\n"
+"PO-Revision-Date: 2013-01-20 02:55+0100\n"
+"Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: esc_attr_e;esc_html_e;esc_attr__;esc_html__;_e;__\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../inc/class.admin.php:74
+#: ../inc/class.admin.php:80
 msgid "Reading attachments..."
 msgstr ""
 
-#: ../inc/class.admin.php:75
-#: ../inc/class.admin.php:237
+#: ../inc/class.admin.php:81 ../inc/class.admin.php:247
 msgid "Maximum width"
 msgstr ""
 
-#: ../inc/class.admin.php:76
-#: ../inc/class.admin.php:241
+#: ../inc/class.admin.php:82 ../inc/class.admin.php:251
 msgid "Maximum height"
 msgstr ""
 
-#: ../inc/class.admin.php:77
-#: ../inc/class.admin.php:250
-#: ../inc/class.admin.php:323
-#: ../inc/class.admin.php:382
+#: ../inc/class.admin.php:83 ../inc/class.admin.php:260
+#: ../templates/options-media.php:18 ../templates/options-media.php:65
 msgid "Crop ?"
 msgstr ""
 
-#: ../inc/class.admin.php:78
-#: ../inc/class.admin.php:370
+#: ../inc/class.admin.php:84
 msgid "yes"
 msgstr ""
 
-#: ../inc/class.admin.php:79
-#: ../inc/class.admin.php:370
+#: ../inc/class.admin.php:85
 msgid "no"
 msgstr ""
 
-#: ../inc/class.admin.php:80
-#: ../inc/class.admin.php:253
+#: ../inc/class.admin.php:86 ../inc/class.admin.php:263
 msgid "Show in post insertion ?"
 msgstr ""
 
-#: ../inc/class.admin.php:81
+#: ../inc/class.admin.php:87
 msgid " of "
 msgstr ""
 
-#: ../inc/class.admin.php:82
+#: ../inc/class.admin.php:88
 msgid " or "
 msgstr ""
 
-#: ../inc/class.admin.php:83
+#: ../inc/class.admin.php:89
 msgid " before the end."
 msgstr ""
 
-#: ../inc/class.admin.php:84
-#: ../inc/class.admin.php:255
+#: ../inc/class.admin.php:90 ../inc/class.admin.php:265
 msgid "Delete"
 msgstr ""
 
-#: ../inc/class.admin.php:85
+#: ../inc/class.admin.php:91
 msgid "No media in your site to regenerate !"
 msgstr ""
 
-#: ../inc/class.admin.php:86
+#: ../inc/class.admin.php:92
 msgid "Regenerating "
 msgstr ""
 
-#: ../inc/class.admin.php:87
-msgid "Validate image size name"
-msgstr ""
-
-#: ../inc/class.admin.php:88
-msgid "Done."
-msgstr ""
-
-#: ../inc/class.admin.php:89
-msgid "Size"
-msgstr ""
-
-#: ../inc/class.admin.php:90
-msgid "Don't use the basic Wordpress thumbnail size name, use the form above to edit them"
-msgstr ""
-
-#: ../inc/class.admin.php:91
-msgid "This size is already registered, edit it instead of recreating it."
-msgstr ""
-
-#: ../inc/class.admin.php:92
-msgid "Do you really want to delete these size ?"
-msgstr ""
-
 #: ../inc/class.admin.php:93
-#: ../inc/class.admin.php:256
-msgid "Update"
+msgid "Regenerate "
 msgstr ""
 
 #: ../inc/class.admin.php:94
-msgid "Error requesting page"
+msgid "Validate image size name"
 msgstr ""
 
 #: ../inc/class.admin.php:95
-msgid "images have been regenerated !"
+msgid "Done."
 msgstr ""
 
 #: ../inc/class.admin.php:96
-msgid "Validate"
+msgid "Size"
 msgstr ""
 
 #: ../inc/class.admin.php:97
-msgid " started at"
+msgid ""
+"Don't use the basic Wordpress thumbnail size name, use the form above to "
+"edit them"
 msgstr ""
 
 #: ../inc/class.admin.php:98
-#: ../inc/class.admin.php:245
-msgid "Public name"
+msgid "This size is already registered, edit it instead of recreating it."
 msgstr ""
 
 #: ../inc/class.admin.php:99
-msgid " finished at :"
+msgid "Do you really want to delete these size ?"
 msgstr ""
 
-#: ../inc/class.admin.php:100
-msgid "Error during the php treatment, be sure to not have php errors in your page"
+#: ../inc/class.admin.php:100 ../inc/class.admin.php:266
+msgid "Update"
 msgstr ""
 
 #: ../inc/class.admin.php:101
-msgid "All the sizes you have modifed are not saved, continue anyway ?"
+msgid "Error requesting page"
 msgstr ""
 
 #: ../inc/class.admin.php:102
+msgid "images have been regenerated !"
+msgstr ""
+
+#: ../inc/class.admin.php:103
+msgid "Validate"
+msgstr ""
+
+#: ../inc/class.admin.php:104
+msgid " started at"
+msgstr ""
+
+#: ../inc/class.admin.php:105 ../inc/class.admin.php:255
+msgid "Public name"
+msgstr ""
+
+#: ../inc/class.admin.php:106
+msgid " finished at :"
+msgstr ""
+
+#: ../inc/class.admin.php:107
+msgid ""
+"Error during the php treatment, be sure to not have php errors in your page"
+msgstr ""
+
+#: ../inc/class.admin.php:108
+msgid "All the sizes you have modifed are not saved, continue anyway ?"
+msgstr ""
+
+#: ../inc/class.admin.php:109
 #, php-format
 msgid "This image has been regenerated in %s seconds"
 msgstr ""
 
-#: ../inc/class.admin.php:117
+#: ../inc/class.admin.php:138
 msgid "Regenerate thumbnails"
 msgstr ""
 
-#: ../inc/class.admin.php:137
+#: ../inc/class.admin.php:159
 msgid "Settings"
 msgstr ""
 
-#: ../inc/class.admin.php:186
+#: ../inc/class.admin.php:199
 #, php-format
 msgid "%s size"
 msgstr ""
 
-#: ../inc/class.admin.php:193
+#: ../inc/class.admin.php:206
 msgid "Add a new size"
 msgstr ""
 
-#: ../inc/class.admin.php:196
-msgid "Legend of the sizes"
-msgstr ""
-
-#: ../inc/class.admin.php:199
+#: ../inc/class.admin.php:209
 msgid "Get php for theme"
 msgstr ""
 
-#: ../inc/class.admin.php:202
+#: ../inc/class.admin.php:212
 msgid "Thumbnail regeneration"
 msgstr ""
 
-#: ../inc/class.admin.php:238
-#: ../inc/class.admin.php:240
-#: ../inc/class.admin.php:242
+#: ../inc/class.admin.php:248 ../inc/class.admin.php:250
+#: ../inc/class.admin.php:252
 msgid "custom_image_sizes["
 msgstr ""
 
-#: ../inc/class.admin.php:269
+#: ../inc/class.admin.php:279
 msgid "Add a new size of thumbnail"
 msgstr ""
 
-#: ../inc/class.admin.php:281
+#: ../inc/class.admin.php:291
 msgid "Get the PHP for the theme"
 msgstr ""
 
-#: ../inc/class.admin.php:282
-msgid "Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin."
+#: ../inc/class.admin.php:292
+msgid ""
+"Copy and paste the code below into your Wordpress theme function file if you "
+"wanted to save them and deactivate the plugin."
 msgstr ""
 
-#: ../inc/class.admin.php:295
-msgid "The images created on your theme are <span style=\"color:#F2A13A\">orange</span> and your custom size are <span style=\"color:#89D76A\"> green </span>."
-msgstr ""
-
-#: ../inc/class.admin.php:315
-msgid "Select which thumbnails you want to rebuild:"
-msgstr ""
-
-#: ../inc/class.admin.php:320
-#: ../inc/class.admin.php:379
-msgid "Size name"
-msgstr ""
-
-#: ../inc/class.admin.php:321
-#: ../inc/class.admin.php:380
-msgid "Width"
-msgstr ""
-
-#: ../inc/class.admin.php:322
-#: ../inc/class.admin.php:381
-msgid "Height"
-msgstr ""
-
-#: ../inc/class.admin.php:387
-msgid "Select which post type source thumbnails you want to rebuild:"
-msgstr ""
-
-#: ../inc/class.admin.php:392
-#: ../inc/class.admin.php:420
-msgid "Post type"
-msgstr ""
-
-#: ../inc/class.admin.php:442
-msgid "End time calculated :"
-msgstr ""
-
-#: ../inc/class.admin.php:453
-msgid "Last image:"
-msgstr ""
-
-#: ../inc/class.admin.php:454
-msgid "Regenerate Thumbnails"
-msgstr ""
-
-#: ../inc/class.admin.php:647
+#: ../inc/class.admin.php:508
 msgid "Trying to cheat ?"
 msgstr ""
 
-#: ../inc/class.admin.php:656
+#: ../inc/class.admin.php:519
 msgid "No id given in POST datas."
 msgstr ""
 
-#: ../inc/class.admin.php:666
+#: ../inc/class.admin.php:535
 #, php-format
-msgid "This file already exists in this size and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgid ""
+"This file already exists in this size and have not been regenerated :<br/><a "
+"target=\"_blank\" href=\"%1$s\" >%2$s</a>"
 msgstr ""
 
-#: ../inc/class.admin.php:668
+#: ../inc/class.admin.php:544
 #, php-format
-msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgid ""
+"This file does not exists and have not been regenerated :<br/><a target="
+"\"_blank\" href=\"%1$s\" >%2$s</a>"
 msgstr ""
 
+#: ../inc/class.admin.php:785 ../inc/class.admin.php:788
+#: ../templates/options-media.php:128
+msgid "Regenerate Thumbnails"
+msgstr ""
+
+#: ../templates/options-media.php:10
+msgid "Select which thumbnails you want to rebuild:"
+msgstr ""
+
+#: ../templates/options-media.php:15 ../templates/options-media.php:62
+msgid "Size name"
+msgstr ""
+
+#: ../templates/options-media.php:16 ../templates/options-media.php:63
+msgid "Width"
+msgstr ""
+
+#: ../templates/options-media.php:17 ../templates/options-media.php:64
+msgid "Height"
+msgstr ""
+
+#: ../templates/options-media.php:54
+msgid "Yes"
+msgstr ""
+
+#: ../templates/options-media.php:54
+msgid "No"
+msgstr ""
+
+#: ../templates/options-media.php:70
+msgid "Select which post type source thumbnails you want to rebuild:"
+msgstr ""
+
+#: ../templates/options-media.php:75 ../templates/options-media.php:102
+msgid "Post type"
+msgstr ""
+
+#: ../templates/options-media.php:116
+msgid "End time calculated :"
+msgstr ""
+
+#: ../templates/options-media.php:116
+msgid "Calculating..."
+msgstr ""
+
+#: ../templates/options-media.php:127
+msgid "Last image:"
+msgstr ""

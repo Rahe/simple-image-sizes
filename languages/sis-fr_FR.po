@@ -4,248 +4,272 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Simple image sizes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-31 01:51+0100\n"
-"PO-Revision-Date: 2012-03-31 01:52+0100\n"
+"POT-Creation-Date: 2013-01-20 02:54+0100\n"
+"PO-Revision-Date: 2013-01-20 02:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: Beapi <njuen@beapi.fr>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: French\n"
-"X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__\n"
 "X-Poedit-Basepath: ../\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: inc/class.admin.php:77
+#: inc/class.admin.php:80
 msgid "Reading attachments..."
 msgstr "Chargement des médias..."
 
-#: inc/class.admin.php:78
-#: inc/class.admin.php:241
+#: inc/class.admin.php:81 inc/class.admin.php:247
 msgid "Maximum width"
 msgstr "Largeur maximum"
 
-#: inc/class.admin.php:79
-#: inc/class.admin.php:245
+#: inc/class.admin.php:82 inc/class.admin.php:251
 msgid "Maximum height"
 msgstr "Hauteur maximum"
 
-#: inc/class.admin.php:80
-#: inc/class.admin.php:254
-#: inc/class.admin.php:327
-#: inc/class.admin.php:386
+#: inc/class.admin.php:83 inc/class.admin.php:260
+#: templates/options-media.php:18 templates/options-media.php:65
 msgid "Crop ?"
 msgstr "Rogner ?"
 
-#: inc/class.admin.php:81
-#: inc/class.admin.php:374
+#: inc/class.admin.php:84
 msgid "yes"
 msgstr "oui"
 
-#: inc/class.admin.php:82
-#: inc/class.admin.php:374
+#: inc/class.admin.php:85
 msgid "no"
 msgstr "non"
 
-#: inc/class.admin.php:83
-#: inc/class.admin.php:257
+#: inc/class.admin.php:86 inc/class.admin.php:263
 msgid "Show in post insertion ?"
 msgstr "Afficher dans l'insertion ?"
 
-#: inc/class.admin.php:84
+#: inc/class.admin.php:87
 msgid " of "
 msgstr " de "
 
-#: inc/class.admin.php:85
+#: inc/class.admin.php:88
 msgid " or "
 msgstr " ou "
 
-#: inc/class.admin.php:86
+#: inc/class.admin.php:89
 msgid " before the end."
 msgstr " avant la fin."
 
-#: inc/class.admin.php:87
-#: inc/class.admin.php:259
+#: inc/class.admin.php:90 inc/class.admin.php:265
 msgid "Delete"
 msgstr "Supprimer"
 
-#: inc/class.admin.php:88
+#: inc/class.admin.php:91
 msgid "No media in your site to regenerate !"
 msgstr "Pas de médias à regénérer !"
 
-#: inc/class.admin.php:89
+#: inc/class.admin.php:92
 msgid "Regenerating "
 msgstr "Regénération "
 
-#: inc/class.admin.php:90
+#: inc/class.admin.php:93
 msgid "Regenerate "
 msgstr "Regénérer "
 
-#: inc/class.admin.php:91
+#: inc/class.admin.php:94
 msgid "Validate image size name"
 msgstr "Valider le nom de la taille d'image"
 
-#: inc/class.admin.php:92
+#: inc/class.admin.php:95
 msgid "Done."
 msgstr "Fini."
 
-#: inc/class.admin.php:93
+#: inc/class.admin.php:96
 msgid "Size"
 msgstr "Taille "
 
-#: inc/class.admin.php:94
-msgid "Don't use the basic Wordpress thumbnail size name, use the form above to edit them"
-msgstr "N'utilisez pas les tailles par défaut de WordPress comme nom de taille, éditez leurs valeurs avec le formulaire ci-dessus."
+#: inc/class.admin.php:97
+msgid ""
+"Don't use the basic Wordpress thumbnail size name, use the form above to "
+"edit them"
+msgstr ""
+"N'utilisez pas les tailles par défaut de WordPress comme nom de taille, "
+"éditez leurs valeurs avec le formulaire ci-dessus."
 
-#: inc/class.admin.php:95
+#: inc/class.admin.php:98
 msgid "This size is already registered, edit it instead of recreating it."
 msgstr "Cette taille existe déjà, éditez la au lieu de la recréer."
 
-#: inc/class.admin.php:96
+#: inc/class.admin.php:99
 msgid "Do you really want to delete these size ?"
 msgstr "Voulez-vous réellement supprimer cette taille ?"
 
-#: inc/class.admin.php:97
-#: inc/class.admin.php:260
+#: inc/class.admin.php:100 inc/class.admin.php:266
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: inc/class.admin.php:98
+#: inc/class.admin.php:101
 msgid "Error requesting page"
 msgstr "Erreur lors de la requête vers la page"
 
-#: inc/class.admin.php:99
+#: inc/class.admin.php:102
 msgid "images have been regenerated !"
 msgstr "images ont été regénérées !"
 
-#: inc/class.admin.php:100
+#: inc/class.admin.php:103
 msgid "Validate"
 msgstr "Valider"
 
-#: inc/class.admin.php:101
+#: inc/class.admin.php:104
 msgid " started at"
 msgstr " commencé à "
 
-#: inc/class.admin.php:102
-#: inc/class.admin.php:249
+#: inc/class.admin.php:105 inc/class.admin.php:255
 msgid "Public name"
 msgstr "Nom public"
 
-#: inc/class.admin.php:103
+#: inc/class.admin.php:106
 msgid " finished at :"
 msgstr " terminé à :"
 
-#: inc/class.admin.php:104
-msgid "Error during the php treatment, be sure to not have php errors in your page"
-msgstr "Erreur durant le traitement, soyez sûr de ne pas avoir d'erreurs php dans votre page"
+#: inc/class.admin.php:107
+msgid ""
+"Error during the php treatment, be sure to not have php errors in your page"
+msgstr ""
+"Erreur durant le traitement, soyez sûr de ne pas avoir d'erreurs php dans "
+"votre page"
 
-#: inc/class.admin.php:105
+#: inc/class.admin.php:108
 msgid "All the sizes you have modifed are not saved, continue anyway ?"
-msgstr "Toutes les tailles qui ont été modifiée n'ont pas été sauvées, continuer tout de même ?"
+msgstr ""
+"Toutes les tailles qui ont été modifiée n'ont pas été sauvées, continuer "
+"tout de même ?"
 
-#: inc/class.admin.php:106
+#: inc/class.admin.php:109
 #, php-format
 msgid "This image has been regenerated in %s seconds"
 msgstr "Cette image a été regénérée en %s secondes"
 
-#: inc/class.admin.php:121
+#: inc/class.admin.php:138
 msgid "Regenerate thumbnails"
 msgstr "Régénérer les vignettes"
 
-#: inc/class.admin.php:141
+#: inc/class.admin.php:159
 msgid "Settings"
 msgstr "Paramètres"
 
-#: inc/class.admin.php:190
+#: inc/class.admin.php:199
 #, php-format
 msgid "%s size"
 msgstr "Taille %s"
 
-#: inc/class.admin.php:197
+#: inc/class.admin.php:206
 msgid "Add a new size"
 msgstr "Ajouter une nouvelle taille"
 
-#: inc/class.admin.php:200
-msgid "Legend of the sizes"
-msgstr "Légende des tailles"
-
-#: inc/class.admin.php:203
+#: inc/class.admin.php:209
 msgid "Get php for theme"
 msgstr "Récupérer le PHP pour le thème"
 
-#: inc/class.admin.php:206
+#: inc/class.admin.php:212
 msgid "Thumbnail regeneration"
 msgstr "Régénération des vignettes"
 
-#: inc/class.admin.php:286
-msgid "Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin."
-msgstr "Copiez et collez le code ci-dessous dans votre fichier de fonctions de votre thème WordPress si vous voulez les conserver et désactiver ce plugin."
+#: inc/class.admin.php:292
+msgid ""
+"Copy and paste the code below into your Wordpress theme function file if you "
+"wanted to save them and deactivate the plugin."
+msgstr ""
+"Copiez et collez le code ci-dessous dans votre fichier de fonctions de votre "
+"thème WordPress si vous voulez les conserver et désactiver ce plugin."
 
-#: inc/class.admin.php:299
-msgid "The images created on your theme are <span style=\"color:#F2A13A\">orange</span> and your custom size are <span style=\"color:#89D76A\"> green </span>."
-msgstr "Les tailles d'images crées par votre thème sont en <span style=\"color:#F2A13A\">orange</span> et vos tailles personnalisées sont en <span style=\"color:#89D76A\"> vert </span>."
-
-#: inc/class.admin.php:319
-msgid "Select which thumbnails you want to rebuild:"
-msgstr "Sélectionnez les tailles de vignettes à régénérer"
-
-#: inc/class.admin.php:324
-#: inc/class.admin.php:383
-msgid "Size name"
-msgstr "Nom de la taille"
-
-#: inc/class.admin.php:325
-#: inc/class.admin.php:384
-msgid "Width"
-msgstr "Largeur"
-
-#: inc/class.admin.php:326
-#: inc/class.admin.php:385
-msgid "Height"
-msgstr "Hauteur"
-
-#: inc/class.admin.php:391
-msgid "Select which post type source thumbnails you want to rebuild:"
-msgstr "Sélectionnez quelles vignettes de quel type de contenu vous souhaitez régénérer : "
-
-#: inc/class.admin.php:396
-#: inc/class.admin.php:424
-msgid "Post type"
-msgstr "Type de contenu"
-
-#: inc/class.admin.php:446
-msgid "End time calculated :"
-msgstr "Fin du traitement calculé :"
-
-#: inc/class.admin.php:457
-msgid "Last image:"
-msgstr "Dernière image :"
-
-#: inc/class.admin.php:458
-#: inc/class.admin.php:903
-#: inc/class.admin.php:906
-msgid "Regenerate Thumbnails"
-msgstr "Régénérer les vignettes"
-
-#: inc/class.admin.php:651
+#: inc/class.admin.php:508
 msgid "Trying to cheat ?"
 msgstr "Cheater ?"
 
-#: inc/class.admin.php:660
+#: inc/class.admin.php:519
 msgid "No id given in POST datas."
 msgstr "Pas d'id donné dans les données du POST."
 
-#: inc/class.admin.php:670
+#: inc/class.admin.php:535
 #, php-format
-msgid "This file already exists in this size and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
-msgstr "Ce fichier existe déjà dans cette ces tailles d'image et n'a pas été regénéré :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgid ""
+"This file already exists in this size and have not been regenerated :<br/><a "
+"target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgstr ""
+"Ce fichier existe déjà dans cette ces tailles d'image et n'a pas été "
+"regénéré :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
 
-#: inc/class.admin.php:672
+#: inc/class.admin.php:544
 #, php-format
-msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
-msgstr "Ce fichier existe déjà dans cette ces tailles d'image et n'a pas été regénéré :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgid ""
+"This file does not exists and have not been regenerated :<br/><a target="
+"\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgstr ""
+"Ce fichier existe déjà dans cette ces tailles d'image et n'a pas été "
+"regénéré :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+
+#: inc/class.admin.php:785 inc/class.admin.php:788
+#: templates/options-media.php:128
+msgid "Regenerate Thumbnails"
+msgstr "Régénérer les vignettes"
+
+#: templates/options-media.php:10
+msgid "Select which thumbnails you want to rebuild:"
+msgstr "Sélectionnez les tailles de vignettes à régénérer"
+
+#: templates/options-media.php:15 templates/options-media.php:62
+msgid "Size name"
+msgstr "Nom de la taille"
+
+#: templates/options-media.php:16 templates/options-media.php:63
+msgid "Width"
+msgstr "Largeur"
+
+#: templates/options-media.php:17 templates/options-media.php:64
+msgid "Height"
+msgstr "Hauteur"
+
+#: templates/options-media.php:54
+msgid "Yes"
+msgstr "Oui"
+
+#: templates/options-media.php:54
+msgid "No"
+msgstr "Non"
+
+#: templates/options-media.php:70
+msgid "Select which post type source thumbnails you want to rebuild:"
+msgstr ""
+"Sélectionnez quelles vignettes de quel type de contenu vous souhaitez "
+"régénérer : "
+
+#: templates/options-media.php:75 templates/options-media.php:102
+msgid "Post type"
+msgstr "Type de contenu"
+
+#: templates/options-media.php:116
+msgid "End time calculated :"
+msgstr "Fin du traitement calculé :"
+
+#: templates/options-media.php:116
+msgid "Calculating..."
+msgstr "Calcul en cours..."
+
+#: templates/options-media.php:127
+msgid "Last image:"
+msgstr "Dernière image :"
+
+#~ msgid "Legend of the sizes"
+#~ msgstr "Légende des tailles"
+
+#~ msgid ""
+#~ "The images created on your theme are <span style=\"color:#F2A13A"
+#~ "\">orange</span> and your custom size are <span style=\"color:#89D76A\"> "
+#~ "green </span>."
+#~ msgstr ""
+#~ "Les tailles d'images crées par votre thème sont en <span style=\"color:"
+#~ "#F2A13A\">orange</span> et vos tailles personnalisées sont en <span style="
+#~ "\"color:#89D76A\"> vert </span>."
 
 #~ msgid "Size "
 #~ msgstr "Taille "
