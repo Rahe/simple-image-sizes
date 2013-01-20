@@ -55,19 +55,16 @@ Class SISAdmin {
 			wp_enqueue_script( 'underscore', 'http//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js' , array(), '1.4.3' );
 			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar', 'underscore' ), SIS_VERSION );
 			
-			// Add javascript translation
-			wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
-			
 			// Add CSS
 			wp_enqueue_style( 'jquery-ui-sis', SIS_URL.'/css/Aristo/jquery-ui-1.8.7.custom.css', array(), '1.8.7' );
 			wp_enqueue_style( 'sis_css', SIS_URL.'/css/sis-style.css', array(), SIS_VERSION );
 		} elseif( $hook_suffix == 'upload.php' || ( $hook_suffix == 'post.php' && isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis-attachments.min.js', array( 'jquery' ), SIS_VERSION );
-			
-			// Add javascript translation
-			wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
 		}
+		
+		// Add javascript translation
+		wp_localize_script( 'sis_js', 'sis', self::localizeVars() );
 	}
 	
 	/**
