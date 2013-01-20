@@ -2,9 +2,9 @@
 Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
-Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 2.3.1
+Requires at least: 3.5
+Tested up to: 3.5
+Stable tag: 2.4
 
 == Description ==
 
@@ -38,6 +38,13 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.4
+	* Made for 3.5 and up
+	* Refactoring PHP/Javascript code
+	* Javascript improvements
+	* Remove useless UI
+	* UI improvements
+	* Global PHP performance improvements
 * 2.3.1
 	* Add Ajax bulk actions on medias list
 	* Add ajax thumbnail rebuild on single media
