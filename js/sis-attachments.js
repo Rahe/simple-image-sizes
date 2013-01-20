@@ -78,8 +78,7 @@ jQuery( function() {
 					dataType: 'json',
 					cache: false,
 					data: {
-						action : 'sis_ajax_thumbnail_rebuild',
-						'do' : 'regen',
+						action : 'sis_rebuild_image',
 						id : this.list.id,
 						nonce : sis.regen_one
 					},

@@ -45,4 +45,3 @@ function initSIS() {
 	
 	load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 }
-?>

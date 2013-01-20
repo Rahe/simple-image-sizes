@@ -30,7 +30,6 @@ Class SISClient {
 
 			// Add the images sizes
 			add_image_size( $name, $size['w'], $size['h'], $crop );
-		}		
+		}
 	}
 }
-?>

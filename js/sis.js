@@ -79,7 +79,7 @@ rahe.sis.regenerate = {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_ajax_thumbnail_rebuild&do=getlist" + _self.post_types+'&nonce='+wp_nonce,
+			data: "action=sis_get_list&" + _self.post_types+'&nonce='+wp_nonce,
 			beforeSend: function() {
 				
 				// Disable the button
@@ -141,7 +141,7 @@ rahe.sis.regenerate = {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_ajax_thumbnail_rebuild&do=regen&id=" + this.list[this.curr].id + this.thumbnails + '&nonce='+wp_nonce,
+			data: "action=sis_rebuild_image&id=" + this.list[this.curr].id + this.thumbnails + '&nonce='+wp_nonce,
 			beforeSend : function() {
 				// Calculate the percentage of regeneration
 				_self.percent = ( _self.curr / _self.list.length ) * 100;
@@ -310,7 +310,7 @@ rahe.sis.sizes = {
 		jQuery.ajax( {
 			url: sis.ajaxUrl,
 			type: "POST",
-			data: { action : "get_sizes" },
+			data: { action : "sis_get_sizes" },
 			beforeSend: function() {
 				// Remove classes of status
 				parent.removeClass( 'addPending' );
@@ -350,7 +350,7 @@ rahe.sis.sizes = {
 				url: sis.ajaxUrl,
 				type: "POST",
 				dataType :'json',
-				data: { action : "add_size", width: w, height: h, crop: c, name: n, show: s, customName : cn , nonce : wp_nonce },
+				data: { action : "sis_add_size", width: w, height: h, crop: c, name: n, show: s, customName : cn , nonce : wp_nonce },
 				beforeSend: function() {
 					// Remove status and set pending
 					parent.removeClass();
@@ -410,7 +410,7 @@ rahe.sis.sizes = {
 		jQuery.ajax({
 			url: sis.ajaxUrl,
 			type: "POST",
-			data: { action : "remove_size", name: n, nonce : wp_nonce },
+			data: { action : "sis_remove_size", name: n, nonce : wp_nonce },
 			success: function(result) {
 				_self.removeFromArray( el );
 			}

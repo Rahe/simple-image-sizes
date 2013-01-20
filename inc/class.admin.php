@@ -13,10 +13,12 @@ Class SISAdmin {
 		add_action( 'admin_footer', array( __CLASS__, 'addTemplate' ) );
 		
 		// Add ajax action
-		add_action( 'wp_ajax_'.'sis_ajax_thumbnail_rebuild', array( __CLASS__, 'ajaxThumbnailRebuildAjax' ) );
-		add_action( 'wp_ajax_'.'get_sizes', array( __CLASS__, 'ajaxGetSizes' ) );
-		add_action( 'wp_ajax_'.'add_size', array( __CLASS__, 'ajaxAddSize' ) );
-		add_action( 'wp_ajax_'.'remove_size', array( __CLASS__, 'ajaxRemoveSize' ) );
+		// Option page
+		add_action( 'wp_ajax_'.'sis_get_list', array( __CLASS__, 'a_GetList' ) );
+		add_action( 'wp_ajax_'.'sis_rebuild_image', array( __CLASS__, 'a_ThumbnailRebuild' ) );
+		add_action( 'wp_ajax_'.'sis_get_sizes', array( __CLASS__, 'ajaxGetSizes' ) );
+		add_action( 'wp_ajax_'.'sis_add_size', array( __CLASS__, 'ajaxAddSize' ) );
+		add_action( 'wp_ajax_'.'sis_remove_size', array( __CLASS__, 'ajaxRemoveSize' ) );
 		
 		// Add image sizes in the form, check if 3.3 is installed or not
 		if( !function_exists( 'is_main_query' ) ) {
@@ -318,143 +320,11 @@ Class SISAdmin {
 	 * @author Nicolas Juen
 	 */
 	public function thumbnailRegenerate() {
-		// Get the sizes
-		global $_wp_additional_image_sizes,$_wp_post_type_features;
-?>
-		<input type="hidden" class="addSize" value='<?php echo wp_create_nonce( 'add_size' ); ?>' />
-		<input type="hidden" class="regen" value='<?php echo wp_create_nonce( 'regen' ); ?>' />
-		<input type="hidden" class="getList" value='<?php echo wp_create_nonce( 'getList' ); ?>' />
-		<div id="sis-regen">
-			<div class="wrapper" style="">
-				<h4> <?php _e( 'Select which thumbnails you want to rebuild:', 'sis'); ?> </h4>
-				<table cellspacing="0" id="sis_sizes" class="widefat page fixed sis">
-					<thead>
-						<tr>
-							<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
-							<th class="manage-column" scope="col"><?php _e( 'Size name', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Width', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Height', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Crop ?', 'sis'); ?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						// Display the sizes in the array
-						foreach ( get_intermediate_image_sizes() as $s ):
-							// Don't make or numeric sizes that appear
-							if( is_integer( $s ) ) {
-								continue;
-							}
-							
-							// Set width
-							$width = isset( $_wp_additional_image_sizes[$s]['width'] ) ? intval( $_wp_additional_image_sizes[$s]['width'] ) : get_option( "{$s}_size_w" ) ;
-							
-							// Set height
-							$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
-							
-							//Set crop
-							$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
-							
-							?>
-							<tr>
-								<th  class="check-column">
-									<input type="checkbox" class="thumbnails" id="<?php echo esc_attr( $s ) ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
-								</th>
-								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $s ); ?></label>
-								</th>
-								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $width); ?> px</label>
-								</th>
-								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
-								</th>
-								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo ( $crop == 1 )? __( 'Yes', 'sis' ):__( 'No', 'sis' ); ?>	</label>
-								</th>
-							</tr>
-						<?php endforeach;?>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
-							<th class="manage-column" scope="col"><?php _e( 'Size name', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Width', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Height', 'sis'); ?></th>
-							<th class="manage-column" scope="col"><?php _e( 'Crop ?', 'sis'); ?></th>
-						</tr>
-					</tfoot>
-				</table>
-				
-				<h4><?php _e( 'Select which post type source thumbnails you want to rebuild:', 'sis'); ?></h4>
-				<table cellspacing="0" class="widefat page fixed sis">
-						<thead>
-							<tr>
-								<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked" type="checkbox"></th>
-								<th class="manage-column" scope="col"><?php _e( 'Post type', 'sis'); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-						<?php
-						// Diplay the post types table
-						foreach ( get_post_types( array( 'public' => true, '_builtin' => false ), 'objects', 'or' ) as $ptype ):
-							// Avoid the post_types without post thumbnails feature
-							if( !array_key_exists( 'thumbnail' , $_wp_post_type_features[$ptype->name] ) || $_wp_post_type_features[$ptype->name] == false ) {
-								continue;
-							}
-							?>
-							<tr>
-								<th class="check-column">
-									<label for="<?php esc_attr_e( $ptype->name ); ?>">
-										<input type="checkbox" class="post_types" name="post_types[]" checked="checked" id="<?php echo esc_attr( $ptype->name ); ?>" value="<?php echo esc_attr( $ptype->name ); ?>" />
-									</label>
-								</th>
-								<th>
-									<label for="<?php esc_attr_e( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
-								</th>
-							</tr>
-						<?php endforeach;?>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th scope="col" id="cb" class="manage-column column-cb check-column"><input checked="checked" type="checkbox"></th>
-							<th class="manage-column" scope="col"><?php _e( 'Post type', 'sis'); ?></th>
-						</tr>
-					</tfoot>
-				</table>
-			</div>
-		</div>
-		<div >
-			<div id="regenerate_message"></div>
-			<div class="progress">
-				<div class=" progress-percent ui-widget">
-					<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
-						<p>
-							<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em;"></span>
-							<span class="text">0%</span>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="ui-widget" id="time">
-				<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
-					<p>
-						<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em;"></span> 
-						<span><strong><?php _e( 'End time calculated :', 'sis' ); ?></strong> <span class='time_message'><?php _e( 'Calculating...', 'sis' ) ?></span> </span>
-					</p>
-					<ul class="messages"></ul>
-				</div>
-			</div>
-			<div id="error_messages">
-				<p>
-					<ol class="messages">
-					</ol>
-				</p>
-			</div>
-			<div id="thumb"><h4><?php _e( 'Last image:', 'sis'); ?></h4><img id="thumb-img" /></div>
-			<input type="button" class="button" name="ajax_thumbnail_rebuild" id="ajax_thumbnail_rebuild" value="<?php _e( 'Regenerate Thumbnails', 'sis' ) ?>" />
-		</div>
-		<?php
+		if( is_file( SIS_DIR.'/templates/options-media.php' ) ) {
+			include( SIS_DIR.'/templates/options-media.php' );
+		} else {
+			echo _esc_html_e( 'Admin option-media template missing' );
+		}
 	}
 		
 	/**
@@ -569,7 +439,53 @@ Class SISAdmin {
 		
 		die();
 	}
-
+	
+	public static function a_GetList() {
+		// Basic vars
+		$res = array();
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
+		
+		// Check the nonce
+		if( !wp_verify_nonce( $nonce , 'getList' ) ) {
+			self::displayJson();
+		}
+		
+		if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
+			
+			// Get image medias
+			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
+			
+			// Get all parent from post type
+			$attachments = $wpdb->get_results( "SELECT *
+				FROM $wpdb->posts 
+				WHERE 1 = 1
+				AND post_type = 'attachment'
+				$whichmimetype
+				AND post_parent IN (
+					SELECT DISTINCT ID 
+					FROM $wpdb->posts 
+					WHERE post_type IN ('".implode( "', '", $_POST['post_types'] )."')
+				)" );
+				
+		} else {
+			$attachments =& get_children( array(
+				'post_type' => 'attachment',
+				'post_mime_type' => 'image',
+				'numberposts' => -1,
+				'post_status' => null,
+				'post_parent' => null, // any parent
+				'output' => 'object',
+			) );
+		}
+		
+		// Get the attachments
+		foreach ( $attachments as $attachment ) {
+			$res[] = array( 'id' => $attachment->ID, 'title' => $attachment->post_title );
+		}
+		// Return the Id's and Title of medias
+		self::displayJson( $res );
+	}
+	
 	/**
 	 * Rebuild the image
 	 * 
@@ -577,114 +493,68 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function ajaxThumbnailRebuildAjax() {
+	public static function a_ThumbnailRebuild() {
 		global $wpdb;
 		
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
 		
 		// Time a the begining
-		$start_time = microtime(true);
-		
-		// Get the action
-		$action = $_POST["do"];
+		$start_time = microtime( true );
 		
 		// Get the thumbnails
 		$thumbnails = isset( $_POST['thumbnails'] )? $_POST['thumbnails'] : NULL;
+			
+		// Check the nonce
+		if( !wp_verify_nonce( $nonce , 'regen' ) ) {
+			self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
+		}
 		
-		if ( $action == "getlist" ) {
-			// Check the nonce
-			if( !wp_verify_nonce( $nonce , 'getList' ) ) {
-				self::displayJson();
-			}
-			
-			if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
-				
-				// Get image medias
-				$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
-				
-				// Get all parent from post type
-				$attachments = $wpdb->get_results( "SELECT *
-					FROM $wpdb->posts 
-					WHERE 1 = 1
-					AND post_type = 'attachment'
-					$whichmimetype
-					AND post_parent IN (
-						SELECT DISTINCT ID 
-						FROM $wpdb->posts 
-						WHERE post_type IN ('".implode( "', '", $_POST['post_types'] )."')
-					)" );
-					
-			} else {
-				$attachments =& get_children( array(
-					'post_type' => 'attachment',
-					'post_mime_type' => 'image',
-					'numberposts' => -1,
-					'post_status' => null,
-					'post_parent' => null, // any parent
-					'output' => 'object',
-				) );
-			}
-			
-			// Get the attachments
-			foreach ( $attachments as $attachment ) {
-				$res[] = array('id' => $attachment->ID, 'title' => $attachment->post_title);
-			}
-			// Return the Id's and Title of medias
-			self::displayJson( $res );
-		} else if ( $action == "regen" ) {
-			
-			// Check the nonce
-			if( !wp_verify_nonce( $nonce , 'regen' ) ) {
-				self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
-			}
-			
-			// Get the id
-			$id = $_POST["id"];
-			
-			// Check Id
-			if( (int)$id == 0 ) {
-				self::displayJson( 
-					array( 
-						'time' => round( microtime( true ) - $start_time, 4 ), 
-						'error' => __( 'No id given in POST datas.', 'sis' ) 
-					) 
-				);
-			}
-			
-			// Get the path
-			$fullsizepath = get_attached_file( $id );
-
-			// Regen the attachment
-			if ( FALSE !== $fullsizepath && @file_exists( $fullsizepath ) ) {
-				set_time_limit( 60 );
-				if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false ) {
-					self::displayJson( 
-						array( 
-							'src' => wp_get_attachment_thumb_url( $id ), 
-							'time' => round( microtime( true ) - $start_time, 4 ), 
-							'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
-						) 
-					);
-				}
-			} else {
-				self::displayJson(
-					array( 
-						'src' => wp_get_attachment_thumb_url( $id ), 
-						'time' => round( microtime( true ) - $start_time, 4 ), 
-						'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
-					)
-				);
-			}
-			// Display the attachment url for feedback 
+		// Get the id
+		$id = isset( $_POST["id"] ) ? $_POST["id"] : 0 ;
+		
+		// Check Id
+		if( (int)$id <= 0 ) {
 			self::displayJson( 
 				array( 
-					'time' => round( microtime( true ) - $start_time, 4 ) , 
-					'src' => wp_get_attachment_thumb_url( $id ), 
-					'title' => get_the_title( $id ) 
+					'time' => round( microtime( true ) - $start_time, 4 ), 
+					'error' => __( 'No id given in POST datas.', 'sis' ) 
 				) 
 			);
 		}
+		
+		// Get the path
+		$fullsizepath = get_attached_file( $id );
+
+		// Regen the attachment
+		if ( false !== $fullsizepath && @file_exists( $fullsizepath ) ) {
+			set_time_limit( 60 );
+			if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false ) {
+				self::displayJson( 
+					array( 
+						'src' => wp_get_attachment_thumb_url( $id ), 
+						'time' => round( microtime( true ) - $start_time, 4 ), 
+						'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+					) 
+				);
+			}
+		} else {
+			self::displayJson(
+				array( 
+					'src' => wp_get_attachment_thumb_url( $id ), 
+					'time' => round( microtime( true ) - $start_time, 4 ), 
+					'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+				)
+			);
+		}
+		// Display the attachment url for feedback 
+		self::displayJson( 
+			array( 
+				'time' => round( microtime( true ) - $start_time, 4 ) , 
+				'src' => wp_get_attachment_thumb_url( $id ), 
+				'title' => get_the_title( $id ) 
+			) 
+		);
 	}
 
 	/**
