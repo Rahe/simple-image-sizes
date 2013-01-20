@@ -16,9 +16,9 @@ Class SISAdmin {
 		// Option page
 		add_action( 'wp_ajax_'.'sis_get_list', array( __CLASS__, 'a_GetList' ) );
 		add_action( 'wp_ajax_'.'sis_rebuild_image', array( __CLASS__, 'a_ThumbnailRebuild' ) );
-		add_action( 'wp_ajax_'.'sis_get_sizes', array( __CLASS__, 'ajaxGetSizes' ) );
-		add_action( 'wp_ajax_'.'sis_add_size', array( __CLASS__, 'ajaxAddSize' ) );
-		add_action( 'wp_ajax_'.'sis_remove_size', array( __CLASS__, 'ajaxRemoveSize' ) );
+		add_action( 'wp_ajax_'.'sis_get_sizes', array( __CLASS__, 'a_GetSizes' ) );
+		add_action( 'wp_ajax_'.'sis_add_size', array( __CLASS__, 'a_AddSize' ) );
+		add_action( 'wp_ajax_'.'sis_remove_size', array( __CLASS__, 'a_RemoveSize' ) );
 		
 		// Add image sizes in the form, check if 3.3 is installed or not
 		if( !function_exists( 'is_main_query' ) ) {
@@ -229,7 +229,7 @@ Class SISAdmin {
 			return false;
 		
  		// Get the options
-		$sizes = (array)get_option( SIS_OPTION );
+		$sizes = (array)get_option( SIS_OPTION, array() );
 		
 		// Get the vars
 		$height 	=	isset( $sizes[$args['name']]['h'] )? $sizes[$args['name']]['h'] : $args['height'] ;
@@ -331,7 +331,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function ajaxAddSize() {
+	public static function a_AddSize() {
 		
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
@@ -354,8 +354,7 @@ Class SISAdmin {
 		
 		// If no name given do not save
 		if( empty( $name ) ) {
-			echo 0;
-			die();
+			die(0);
 		}
 
 		// Make values
@@ -381,7 +380,7 @@ Class SISAdmin {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function ajaxRemoveSize() {
+	public static function a_RemoveSize() {
 		
 		// Get old options
 		$sizes = (array)get_option( SIS_OPTION );
@@ -410,7 +409,7 @@ Class SISAdmin {
 	 * @access public
 	 * @return void
 	 */
-	public static function ajaxGetSizes() {
+	public static function a_GetSizes() {
 		global $_wp_additional_image_sizes;
 
 		foreach ( get_intermediate_image_sizes() as $s ) {
@@ -436,7 +435,13 @@ Class SISAdmin {
 		
 		die();
 	}
-	
+	/**
+	 * 
+	 * Get the media list to regenerate
+	 * 
+	 * @param : void
+	 * @return oid
+	 */
 	public static function a_GetList() {
 		// Basic vars
 		$res = array();
@@ -793,6 +798,13 @@ Class SISAdmin {
 		return $fields;
 	}
 	
+	/**
+	 * Display a json encoded element with right headers
+	 * 
+	 * @param $data(optional) : the element to display ( if needed )
+	 * @return void
+	 * @author Nicolas Juen
+	 */
 	private static function displayJson( $data = array() ) {
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
