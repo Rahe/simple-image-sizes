@@ -1,24 +1,24 @@
 .progress {
-	position:relative;
-	height:13px;
+	position: relative;
+	height: 13px;
 	margin-bottom: 43px;
 	margin-top: 60px;
-	color:#FFFFFF;
-	display:none;
+	color: #FFFFFF;
+	display: none;
 }
 
-	.progress .progress-percent {
-		position: absolute;
-		left: 0%;
-		top: -63px;
-		width: 82px;
-		height: 49px;
-		margin-top: -9px;
-		font-weight: bold;
-		line-height: 39px;
-		text-align: center;
-	}
-input.h,input.w{
+.progress .progress-percent {
+	position: absolute;
+	left: 0%;
+	top: -63px;
+	width: 82px;
+	height: 49px;
+	margin-top: -9px;
+	font-weight: bold;
+	line-height: 39px;
+	text-align: center;
+}
+input.h, input.w {
 	border-color: #DFDFDF;
 	background-color: white;
 	border-width: 1px;
@@ -28,43 +28,35 @@ input.h,input.w{
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
-tr{	
+tr {
 	-webkit-transition: all .5s ease-in-out;
-    -moz-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-    transition: all .5s ease-in-out;
+	-moz-transition: all .5s ease-in-out;
+	-o-transition: all .5s ease-in-out;
+	transition: all .5s ease-in-out;
 }
 table.sis tr:nth-child(even) {
-	background-color:#FCFCFC ;
+	background-color: #FCFCFC;
 }
 table.sis tr:nth-child(odd) {
-	background-color:transparent ;
+	background-color: transparent;
 }
 tr.addPending {
-	background-color:#6CA1D7;
+	background-color: #6CA1D7;
 }
 tr.successAdding {
-	background-color:#89D76A;
+	background-color: #89D76A;
 }
 tr.errorAdding {
-	background-color:#C45858;
+	background-color: #C45858;
 }
 tr.notChangedAdding {
-	background-color:#F2A13A;	
+	background-color: #F2A13A;
 }
 
-#regenerate_message,#time,#thumb {
-	display:none;
+#regenerate_message, #time, #thumb {
+	display: none;
 }
 
 #ajax_thumbnail_rebuild {
-	margin-top:40px;
-}
-@media screen and (max-width: 820px) {
-	.sis-label {
-		display:block;
-	}
-	.size_options label{
-		margin-top: -5px;
-	}
+	margin-top: 40px;
 }
