@@ -5,7 +5,7 @@ Class SISClient {
 	var $original = array( 'thumbnail', 'medium', 'large' );
 
 	function __construct() {
-		add_action ( 'init', array( &$this, 'init' ) );
+		add_action ( 'init', array( __CLASS__, 'init' ) );
 	}
 	
 	/**
@@ -15,21 +15,19 @@ Class SISClient {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	function init() {
+	public static function init() {
 		// Get inital options
 		$sizes = get_option( 'custom_image_sizes' );
 		
 		// Return flase if empty
-		if( empty( $sizes ) || !is_array( $sizes ) )
+		if( empty( $sizes ) || !is_array( $sizes ) ) {
 			return false;
+		}
 		
 		// Set the new sizes
-		foreach( $sizes as $name => $size ){
-			// Get cropping
-			$crop = ( isset( $size['c'] ) && !empty( $size['c'] ) )? $size['c'] : 0 ;
-
+		foreach( $sizes as $name => $size ) {
 			// Add the images sizes
-			add_image_size( $name, $size['w'], $size['h'], $crop );
+			add_image_size( $name, $size['w'], $size['h'], ( isset( $size['c'] ) && !empty( $size['c'] ) )? $size['c'] : 0 );
 		}
 	}
 }
