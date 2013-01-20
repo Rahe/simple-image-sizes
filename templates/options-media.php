@@ -37,7 +37,7 @@
 							$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
 							
 							?>
-							<tr>
+							<tr id="sis-<?php echo esc_attr( $s ) ?>">
 								<th  class="check-column">
 									<input type="checkbox" class="thumbnails" id="<?php echo esc_attr( $s ) ?>" name="thumbnails[]" checked="checked" value="<?php echo esc_attr( $s ); ?>" />
 								</th>
@@ -107,20 +107,12 @@
 		</div>
 		<div >
 			<div id="regenerate_message"></div>
-			<div class="progress">
-				<div class=" progress-percent ui-widget">
-					<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
-						<p>
-							<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em;"></span>
-							<span class="text">0%</span>
-						</p>
-					</div>
-				</div>
-			</div>
+			<div class="progress"></div>
+			<div id="sis_progress-percent" class="hidden" >0%</div>
 			<div class="ui-widget" id="time">
-				<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
+				<div class="ui-state-highlight ui-corner-all"> 
 					<p>
-						<span class="ui-icon ui-icon-info" style="float: left; margin-right: .7em;"></span> 
+						<span class="ui-icon ui-icon-info"></span> 
 						<span><strong><?php _e( 'End time calculated :', 'sis' ); ?></strong> <span class='time_message'><?php _e( 'Calculating...', 'sis' ) ?></span> </span>
 					</p>
 					<ul class="messages"></ul>

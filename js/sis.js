@@ -13,46 +13,68 @@ if( !rahe.sis ) {
 }
 
 rahe.sis.regenerate = {
-	post_types : '',
-	thumbnails : '',
-	list : '',
+	post_types : [],
+	thumbnails : [],
+	list : {},
 	cur : 0,
 	timeScript: [],
 	dateScript: '',
 	percent : '' ,
+	percentText : null,
+	progress : null,
+	messageZone : null,
+	time : null,
+	timeZone : null,
+	buttonRegenerate : null,
+	errorZone : null,
+	errorMessages : null,
+	thumb : null,
+	thumbImg : null,
+	init : function() {
+		this.percentText = jQuery('#sis_progress-percent');
+		this.progress = jQuery( '.progress' );
+		this.messageZone = jQuery("#regenerate_message");
+		this.time = jQuery("#time");
+		this.timeZone = this.time.find("p span.time_message");
+		this.buttonRegenerate = jQuery( "#ajax_thumbnail_rebuild" );
+		this.errorZone = jQuery( '#error_messages' );
+		this.errorMessages = this.errorZone.find( 'ul.messages' );
+		this.thumb = jQuery( '#thumb' );
+		this.thumbImg = jQuery( '#thumb-img' );
+	},
 	getThumbnails : function() {
-		var _self = this,
+		var self = this,
 		inputs = jQuery( 'input.thumbnails:checked' );
 		
 		// Get the checked thumbnails inputs
 		if (inputs.length != jQuery( 'input.thumbnails[type="checkbox"]' ).length) {
 			inputs.each( function( i ) {
-				_self.thumbnails += '&thumbnails[]=' + jQuery( this ).val();
+				self.thumbnails.push( this.value );
 			});
 		}	
 	},
 	getPostTypes : function() {
-		var _self = this,
+		var self = this,
 		inputs = jQuery( 'input.post_types:checked' );
 	
 		// Get the checked post Types inputs
 		if ( inputs.length != jQuery( 'input.post_types[type="checkbox"]' ).length ) {
 			inputs.each( function() {
-				_self.post_types += '&post_types[]=' + jQuery( this ).val();
+				self.post_types.push( this.value );
 			} );
 		}
 	},
 	setMessage : function( msg ) {
 		// Display the message
-		jQuery("#regenerate_message").html( "<p>" + msg + "</p>" ).addClass( 'updated' ).addClass( 'fade' ).show();
+		this.messageZone.html( "<p>" + msg + "</p>" ).addClass( 'updated' ).addClass( 'fade' ).show();
 		this.refreshProgressBar();
 	},
 	setTimeMessage : function ( msg ) {
-		jQuery("#time p span.time_message").html( msg );
+		this.timeZone.html( msg );
 	},
 	refreshProgressBar: function(){
 		// Refresh the progress Bar
-		jQuery(".progress").progressbar();
+		this.progress.progressbar();
 	},
 	checkStartRegenerating : function(){
 		if( jQuery( '.notSaved' ).size() > 0 ) {
@@ -69,54 +91,58 @@ rahe.sis.regenerate = {
 		}
 	},
 	startRegenerating : function( ) {
-		var _self = this,
+		var self = this,
 		wp_nonce = jQuery('input.getList').val();
 		
-		this.dateScript = new Date();
+		// Get the humbnails and post types
+		self.getThumbnails();
+		self.getPostTypes();
 		
+		this.dateScript = new Date();
 		// Start ajax
 		jQuery.ajax( {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_get_list&" + _self.post_types+'&nonce='+wp_nonce,
+			data:  {
+				action : 'sis_get_list',
+				post_types : self.post_types,
+				nonce : wp_nonce
+			},
 			beforeSend: function() {
 				
 				// Disable the button
-				jQuery( "#ajax_thumbnail_rebuild" ).attr( "disabled", true );
+				self.buttonRegenerate.attr( "disabled", true );
 				// Display the message
-				_self.setMessage(  sis.reading );
+				self.setMessage(  sis.reading );
 				
-				// Get the humbnails and post types
-				_self.getThumbnails();
-				_self.getPostTypes();
 			},
 			success: function( r ) {
 
 				if( typeof r !== 'object' ) {
-					_self.reInit();
-					_self.setMessage( sis.phpError );
+					self.reInit();
+					self.setMessage( sis.phpError );
 					return false;
 				}
 				
-				jQuery("#time").show();
+				self.time.show();
 				
 				// Eval the response
-				_self.list = r ;
+				self.list = r ;
 				
 				// Set the current to 0
-				_self.curr = 0;
+				self.curr = 0;
 				
 				// Display the progress Bar
-				jQuery( '.progress' ).show();
+				self.progress.show();
 				
 				// Start Regenerating
-				_self.regenItem();
+				self.regenItem();
 			}
 		});
 	},
 	regenItem : function( ) {
-		var _self = this,
+		var self = this,
 		wp_nonce = jQuery('input.regen').val();
 		
 		// If the list is empty display the message of emptyness and reinitialize the form
@@ -130,7 +156,7 @@ rahe.sis.regenerate = {
 		if ( this.curr >= this.list.length ) {
 			var now = new Date();
 			this.reInit();
-			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()+sis.finishedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
+			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+' '+this.dateScript.getHours()+":"+this.dateScript.getMinutes()+":"+this.dateScript.getSeconds()+sis.finishedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
 			return;
 		}
 		
@@ -141,76 +167,84 @@ rahe.sis.regenerate = {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
-			data: "action=sis_rebuild_image&id=" + this.list[this.curr].id + this.thumbnails + '&nonce='+wp_nonce,
+			data: {
+				action : 'sis_rebuild_image',
+				id : this.list[this.curr].id,
+				thumbnails : this.thumbnails,
+				nonce : wp_nonce
+			},
 			beforeSend : function() {
 				// Calculate the percentage of regeneration
-				_self.percent = ( _self.curr / _self.list.length ) * 100;
+				self.percent = ( self.curr / self.list.length ) * 100;
 				
 				// Change the progression
-				jQuery( ".progress" ).progressbar( "value", _self.percent );
+				self.progress.progressbar( "value", self.percent );
 				
 				// Change the text of progression
-				jQuery( ".progress-percent span.text" ).html( Math.round( _self.percent ) + "%").closest( '.progress-percent' ).animate( { left: Math.round( _self.percent )-2.5 + "%" }, 500 );
+				self.percentText.removeClass( 'hidden' ).html( Math.round( self.percent ) + "%");
 			},
 			success: function( r ) {
 				// Check if error or a message in response
 				if( ( !r.src || !r.time ) || r.error || typeof r !== 'object' ) {
 					var message ='';
-					if( typeof r !== 'object' )
+					if( typeof r !== 'object' ) {
 						message = sis.phpError;
-					else 
+					} else { 
 						message = r.error
+					}
 
-					jQuery( '#error_messages' ).addClass( 'error message' );
-					jQuery( '#error_messages ul.messages' ).prepend( '<li>'+message+'</li>' );
+					self.errorZone.addClass( 'error message' );
+					self.errorMessages.prepend( '<li>'+message+'</li>' );
 				} else {
 					
 					// Append a message if needed
-					if( r.message )
-						jQuery( '#time ul.messages' ).prepend( '<li>'+r.message+'</li>' );
-						
+					if( r.message ) {
+						self.time.find( 'ul.messages' ).prepend( '<li>'+r.message+'</li>' );
+					}
+					
+					// Display the image
+					self.thumb.show();
+					
+					// Change his attribute
+					self.thumbImg.attr("src", r.src);
+					
 					// Actual time
 					var dateEnd = new Date(),
 					curDate = new Date(),
-					num = 0
-					sum = 0;
-					
-					// Display the image
-					jQuery( "#thumb" ).show();
-					
-					// Change his attribute
-					jQuery( "#thumb-img" ).attr("src", r.src);
+					num = 0,
+					sum = 0,
+					i = 0;
 					
 					// Add the regenerating time to the array
-					_self.timeScript.push(r.time);
+					self.timeScript.push(r.time);
 					
 					// Get the number of elements in array
-					num = _self.timeScript.length;
+					num = self.timeScript.length;
 
 					// Make the sum of the times
-					for( var i = 0; i < num ;i++ ) {
-						sum += _self.timeScript[i];
+					for( i; i < num ; i++ ) {
+						sum += self.timeScript[i];
 					}
 
 					// Make the average value of the regenerating time
 					var ave = sum/num,
 					
 					// Round the value in miliseconds and add 25% or error
-					t = Math.round( ( ( ave *_self.list.length ) * 1000 ) );
+					t = Math.round( ( ( ave *self.list.length ) * 1000 ) );
 
 					// Set the predicted time
-					dateEnd.setTime( _self.dateScript.getTime() + t );
+					dateEnd.setTime( self.dateScript.getTime() + t );
 					
 					// Get the difference between the two dates
-					var time = _self.s2t( ( dateEnd.getTime() - curDate.getTime() ) / 1000 );
-
+					var time = self.s2t( Math.abs( ( dateEnd.getTime() - curDate.getTime() ) ) / 1000 );
+					
 					// Set the message in the notice box
-					_self.setTimeMessage( dateEnd.getHours()+":"+dateEnd.getMinutes()+":"+dateEnd.getSeconds()+sis.or+time+sis.beforeEnd );
+					self.setTimeMessage( dateEnd.getHours()+":"+dateEnd.getMinutes()+":"+dateEnd.getSeconds()+sis.or+time+sis.beforeEnd );
 				}
 				
 				// Inscrease the counter and regene the next item
-				_self.curr++;
-				_self.regenItem();
+				self.curr++;
+				self.regenItem();
 			}
 		});
 
@@ -226,12 +260,13 @@ rahe.sis.regenerate = {
 			s = Math.floor( ( t - Date.parse( "1/1/70" ) ) / 3600000 ) + s.substr( 2 );
 		}
 		return s;
-	}
-	,
+	},
 	reInit: function() {
 		// Re initilize the form
-		jQuery( "#ajax_thumbnail_rebuild" ).removeAttr( "disabled" );
-		jQuery( ".progress, #thumb" ).hide();
+		this.buttonRegenerate.removeAttr( "disabled" );
+		this.thumb.hide();
+		this.progress.hide();
+		this.percentText.addClass( 'hidden' );
 	}
 }
 
@@ -327,7 +362,7 @@ rahe.sis.sizes = {
 		e.preventDefault();
 		
 		// Get the vars
-		var _self = this,
+		var self = this,
 		parentTable = jQuery( el ).closest( 'table' ),
 		timer,
 		wp_nonce = jQuery( '.addSize' ).val(),
@@ -370,12 +405,12 @@ rahe.sis.sizes = {
 						classTr = 'notChangedAdding';
 						
 						// add/update to the array with the status class
-						_self.addToArray( n, w, h, c, classTr );
+						self.addToArray( n, w, h, c, classTr );
 					} else {
 						classTr = 'successAdding';
 						
 						// add/update to the array with the status class
-						_self.addToArray( n, w, h, c, classTr );
+						self.addToArray( n, w, h, c, classTr );
 					}
 					
 					// Add the new sizes values for checking of changed or not
@@ -401,8 +436,8 @@ rahe.sis.sizes = {
 		}	
 	},
 	ajaxUnregister: function( el ) {
-		// Get name and _self object
-		var _self = this,
+		// Get name and self object
+		var self = this,
 		n =  jQuery( el ).closest('tr').find( 'input[name="image_name"]' ).val(),
 		wp_nonce = jQuery( el ).closest('tr').find( 'input.deleteSize' ).val();
 		
@@ -412,13 +447,13 @@ rahe.sis.sizes = {
 			type: "POST",
 			data: { action : "sis_remove_size", name: n, nonce : wp_nonce },
 			success: function(result) {
-				_self.removeFromArray( el );
+				self.removeFromArray( el );
 			}
 		});	
 	},
 	addToArray: function( n, w, h, c, s ) {
 		// Get the row for editing or updating
-		var testRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' ),
+		var testRow = jQuery( '#sis-'+n ),
 		newRow = '',
 		timer;
 		
@@ -426,7 +461,7 @@ rahe.sis.sizes = {
 		if( testRow.length != 0 ) {
 			newRow = testRow.closest( 'tr' );
 		} else {
-			newRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody > tr:first' ).clone();
+			newRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody > tr:first' ).clone().attr( 'id', 'sis-'+n );
 		}
 		
 		c = c == true ? sis.tr : sis.fl ;
@@ -463,7 +498,7 @@ rahe.sis.sizes = {
 		var n = jQuery( el ).closest( 'tr' ).find( 'input[name=image_name]' ).val();
 		
 		// Remove the given name from the array
-		jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody input[value="'+n+'"]' ).closest( 'tr' ).remove();
+		jQuery( '#sis-'+n ).remove();
 	},
 	setButtons: function() {
 		// UI for delete,crop and add buttons
@@ -532,6 +567,7 @@ rahe.sis.sizes = {
 	}
 }
 jQuery(function() {
+	rahe.sis.regenerate.init();
 	var bodyContent = jQuery( '#wpbody-content');
 	// Regeneration listener
 	jQuery( '#ajax_thumbnail_rebuild' ).click( function() { rahe.sis.regenerate.checkStartRegenerating(); } );
@@ -546,29 +582,13 @@ jQuery(function() {
 	.on( 'click', '.delete_size', function( e ) { rahe.sis.sizes.deleteSize( e, this ); } )
 	.on( 'click', '.add_size', function( e ) { rahe.sis.sizes.ajaxRegister( e, this ); } )
 	
-	.on( 'click skeyup change', '.h,.w,.c,.s,.n', function( e ) { rahe.sis.sizes.displayChange( this ); } )
+	.on( 'click keyup change', '.h,.w,.c,.s,.n', function( e ) { rahe.sis.sizes.displayChange( this ); } )
 	
 	// Seup the getphp
 	.on( 'click', '#get_php', function( e ){ rahe.sis.sizes.getPhp( e, this ) } );
 	jQuery('#get_php').nextAll('code').hide();
-	
-	// Colors for the theme / custom sizes
-	jQuery('span.custom_size').closest('tr').children('th').css( {
-		'color': '#89D76A'
-	} );
-	jQuery('span.theme_size').closest('tr').children('th').css( {
-		'color': '#F2A13A'
-	} );
 
 	jQuery(".add_size").hide();
-
-	// Error ajax handler
-	jQuery( '<div class="ui-widget" id="msg"><div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Alert:</strong> <ul class="msg" ></ul></p></div></div>').prependTo( "div#wpwrap" ).slideUp( 0 );
-	
-	// Display the errors of ajax queries
-	jQuery("#msg").ajaxError( function(event, request, settings ) {
-		jQuery( this ).find( '.msg' ).append( "<li>"+sis.ajaxErrorHandler+" " + settings.url + ", status "+request.status+" : "+request.statusText+"</li>" ).end().stop( false, false ).slideDown( 200 ).delay( 5000 ).slideUp( 200 );
-	});
 	
 	// Set the buttons
 	rahe.sis.sizes.setButtons();

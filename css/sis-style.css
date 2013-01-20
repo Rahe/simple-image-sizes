@@ -1,22 +1,10 @@
 .progress {
 	position: relative;
 	height: 13px;
-	margin-bottom: 43px;
+	margin-bottom: 13px;
 	margin-top: 60px;
 	color: #FFFFFF;
 	display: none;
-}
-
-.progress .progress-percent {
-	position: absolute;
-	left: 0%;
-	top: -63px;
-	width: 82px;
-	height: 49px;
-	margin-top: -9px;
-	font-weight: bold;
-	line-height: 39px;
-	text-align: center;
 }
 input.h, input.w {
 	border-color: #DFDFDF;
@@ -59,4 +47,19 @@ tr.notChangedAdding {
 
 #ajax_thumbnail_rebuild {
 	margin-top: 40px;
+}
+#sis_progress-percent {
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+}
+
+#time .ui-state-highlight{
+	margin-top: 20px;
+	padding: 0 .7em;
+}
+
+#time .ui-icon{
+	float: left;
+	margin-right: .7em;
 }

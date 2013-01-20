@@ -205,9 +205,6 @@ Class SISAdmin {
 		// Add the button
 		add_settings_field( 'add_size_button', __( 'Add a new size', 'sis' ), array( &$this, 'addSizeButton' ), 'media' );
 
-		// Add legend
-		add_settings_field( 'add_legend', __( 'Legend of the sizes', 'sis' ), array( &$this, 'addLegend' ), 'media' );
-
 		// Add php button
 		add_settings_field( 'get_php_button', __( 'Get php for theme', 'sis' ), array( &$this, 'getPhpButton' ), 'media' );
 
@@ -294,18 +291,6 @@ Class SISAdmin {
 		<input type="button" class="button-secondary action" id="get_php" value="<?php esc_attr_e( 'Get the PHP for the theme', 'sis'); ?>" />
 		<p> <?php _e( 'Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin.', 'sis'); ?> </p>
 		<code></code>
-	<?php
-	}	
-	
-	/**
-	 * Add the legend fo the colors
-	 * 
-	 * @access public
-	 * @return void
- 	 * @author Nicolas Juen
-	 */
-	public function addLegend() { ?>
-		<?php _e('The images created on your theme are <span style="color:#F2A13A">orange</span> and your custom size are <span style="color:#89D76A"> green </span>.', 'sis'); ?>
 	<?php
 	}
 	
@@ -443,6 +428,7 @@ Class SISAdmin {
 	 * @return oid
 	 */
 	public static function a_GetList() {
+		global $wpdb;
 		// Basic vars
 		$res = array();
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
@@ -453,6 +439,16 @@ Class SISAdmin {
 		}
 		
 		if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
+				
+			foreach( $_POST['post_types'] as $key => $type ) {
+				if( !post_type_exists( $type ) ) {
+					unset( $_POST['post_types'][$key] );
+				}
+			}
+			
+			if( empty( $_POST['post_types'][$key]) ) {
+				self::displayJson();
+			}
 			
 			// Get image medias
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
