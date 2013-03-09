@@ -602,7 +602,7 @@ Class SISAdmin {
 			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
 
 			// Only if not all sizes
-			if( is_array( $thumbnails ) ) {
+			if( isset( $thumbnails ) &&  is_array( $thumbnails ) ) {
 				// Fill the array with the other sizes not have to be done
 				foreach( $meta_datas['sizes'] as $name => $fsize ) {
 					$metadata['sizes'][$name] = $fsize;
