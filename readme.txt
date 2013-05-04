@@ -3,8 +3,10 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 2.4.2
+Tested up to: 3.5.1
+Stable tag: 2.4.3
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
@@ -30,6 +32,15 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 3. Go to Settings > Medias
 4. Configure your new image sizes and regenerate the thumbnails !
 
+== Frequently Asked Questions ==
+
+= Where can I add image sizes ? =
+Go to Settings -> Media then you can add a image size. You have to add a unique custom name without any spaces or special chars.
+The best is to use something like my-custom-size.
+Then you have several fields for configuring the image size, the widht, the height, cropping.
+And then you can choose if the image is displayed on the media insertion or not ( this will be displayed on the dropdown list ).
+
+
 == Screenshots ==
 
 1. Settings page
@@ -38,6 +49,9 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 4. Regenerating image sizes
 
 == Changelog ==
+* 2.4.3
+	* Remove some php notices
+	* Remove notice when wrong image size
 * 2.4.2
 	* Selective regeneration fix by g100g on http://wordpress.org/support/topic/regenerating-fix
 * 2.4.1

@@ -3,12 +3,13 @@
 Plugin Name: Simple Image Sizes
 Plugin URI: https://github.com/Rahe/Simple-image-sizes
 Description: Add options in media setting page for images sizes
-Version: 2.4.2
+Version: 2.4.3
 Author: Rahe
 Author URI: http://nicolas-juen.fr
 Text Domain: sis
 Domain Path: /languages/
-Network: false
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Copyright 2011 Nicolas JUEN (njuen@beapi.fr) - Be-API
 
@@ -29,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 define( 'SIS_URL', plugins_url('', __FILE__) );
 define( 'SIS_DIR', dirname(__FILE__) );
-define( 'SIS_VERSION', '2.4.2' );
+define( 'SIS_VERSION', '2.4.3' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
 require_once( SIS_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'class.admin.php'  );
@@ -45,4 +46,4 @@ function initSIS() {
 	$SIS['client'] = new SISClient();
 	
 	load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
-}
+} 

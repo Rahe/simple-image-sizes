@@ -52,7 +52,7 @@ Class SISAdmin {
 		
 		if( $hook_suffix == 'options-media.php' ) {
 			// Add javascript
-			wp_enqueue_script( 'underscore', 'http//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js' , array(), '1.4.3' );
+			wp_enqueue_script( 'underscore', 'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js' , array(), '1.4.3' );
 			wp_enqueue_script( 'sis_js', SIS_URL.'/js/sis.min.js', array( 'jquery', 'jquery-ui-button', 'jquery-ui-progressbar', 'underscore' ), SIS_VERSION );
 			
 			// Add CSS
@@ -602,7 +602,7 @@ Class SISAdmin {
 			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
 
 			// Only if not all sizes
-			if( isset( $thumbnails ) &&  is_array( $thumbnails ) ) {
+			if( isset( $thumbnails ) &&  is_array( $thumbnails ) && isset( $meta_datas['sizes'] ) && !empty( $meta_datas['sizes'] ) ) {
 				// Fill the array with the other sizes not have to be done
 				foreach( $meta_datas['sizes'] as $name => $fsize ) {
 					$metadata['sizes'][$name] = $fsize;

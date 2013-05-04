@@ -26,6 +26,9 @@ Class SISClient {
 		
 		// Set the new sizes
 		foreach( $sizes as $name => $size ) {
+			if( empty( $size ) || !isset( $size['w'] ) || !isset( $size['h'] ) ) {
+				continue;
+			}
 			// Add the images sizes
 			add_image_size( $name, $size['w'], $size['h'], ( isset( $size['c'] ) && !empty( $size['c'] ) )? $size['c'] : 0 );
 		}
