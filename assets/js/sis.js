@@ -591,5 +591,5 @@ jQuery(function() {
 	jQuery(".add_size").hide();
 	
 	// Set the buttons
-	rahe.sis.sizes.setButtons();
+	//rahe.sis.sizes.setButtons();
 });

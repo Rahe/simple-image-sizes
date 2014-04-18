@@ -1,0 +1,12 @@
+{
+	"name": "simple-image-sizes",
+	"version": "2.4.3",
+	"description": "Simple image sizes for WordPress",
+	"author": "Nicolas Juen",
+	"devDependencies": {
+		"grunt": "~0.4.4",
+		"grunt-contrib-jshint": "~0.10.0",
+		"grunt-contrib-uglify": "~0.4.0",
+		"grunt-contrib-watch":"~0.6.1"
+	}
+}

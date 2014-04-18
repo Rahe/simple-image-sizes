@@ -78,7 +78,7 @@
 						<tbody>
 						<?php
 						// Diplay the post types table
-						foreach ( get_post_types( array( 'public' => true, '_builtin' => false ), 'objects', 'or' ) as $ptype ):
+						foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $ptype ):
 							// Avoid the post_types without post thumbnails feature
 							if( !array_key_exists( 'thumbnail' , $_wp_post_type_features[$ptype->name] ) || $_wp_post_type_features[$ptype->name] == false ) {
 								continue;
