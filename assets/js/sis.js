@@ -322,9 +322,6 @@ rahe.sis.sizes = {
 		
 		// Add the row to the current list
 		jQuery('#' + id).closest( 'tr' ).html( row );
-		
-		// Refresh the buttons
-		this.setButtons();
 	},
 	deleteSize: function( e, el ) {
 		e.preventDefault();
