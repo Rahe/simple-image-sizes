@@ -83,9 +83,9 @@ Class SIS_Admin_Main {
 
 	public static function get_available_crop() {
 		$x = array(
-			'left' => __( 'left', 'simple-image-sizes' ),
-			'center' => __( 'center', 'simple-image-sizes' ),
-			'right' => __( 'right', 'simple-image-sizes' ),
+			'left' => __( 'Left', 'simple-image-sizes' ),
+			'center' => __( 'Center', 'simple-image-sizes' ),
+			'right' => __( 'Right', 'simple-image-sizes' ),
 		);
 
 		$y = array(
