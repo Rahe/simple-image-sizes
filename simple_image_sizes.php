@@ -28,22 +28,35 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-define( 'SIS_URL', plugins_url('', __FILE__) );
-define( 'SIS_DIR', dirname(__FILE__) );
+define( 'SIS_URL', plugin_dir_url ( __FILE__ ) );
+define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SIS_VERSION', '2.4.3' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
-require_once( SIS_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'class.admin.php'  );
-require_once( SIS_DIR . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'class.client.php'  );
+// Function for easy load files
+function _sis_load_files($dir, $files, $prefix = '') {
+	foreach ( $files as $file ) {
+		if ( is_file( $dir . $prefix . $file . ".php" ) ) {
+			require_once( $dir . $prefix . $file . ".php" );
+		}
+	}	
+}
+
+// Plugin client classes
+_sis_load_files( SIS_DIR . 'classes/', array( 'main' ) );
+
+// Admins classes
+_sis_load_files( SIS_DIR . 'classes/admin/', array( 'main', 'post', 'media' ) );
 
 add_action ( 'plugins_loaded', 'initSIS' );
 function initSIS() {
-	global $SIS;
 	if( is_admin() ) {
-		$SIS['admin'] = new SISAdmin();
+		new SIS_Admin_Main();
+		new SIS_Admin_Post();
+		new SIS_Admin_Media();
 	}
 	
-	$SIS['client'] = new SISClient();
+	new SIS_Client();
 	
 	load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 } 

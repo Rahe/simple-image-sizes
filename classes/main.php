@@ -1,5 +1,5 @@
 <?php
-Class SISClient {
+Class SIS_Client {
 	
 	// Set the original
 	var $original = array( 'thumbnail', 'medium', 'large' );
