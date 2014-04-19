@@ -79,4 +79,27 @@ Class SIS_Admin_Main {
 
 		return true;
 	}
+
+	public static function get_available_crop() {
+		$x = array(
+			'left' => __( 'left', 'simple-image-sizes' ),
+			'center' => __( 'center', 'simple-image-sizes' ),
+			'right' => __( 'right', 'simple-image-sizes' ),
+		);
+
+		$y = array(
+			'top' => __( 'top', 'simple-image-sizes' ),
+			'center' => __( 'center', 'simple-image-sizes' ),
+			'bottom'  => __( 'bottom', 'simple-image-sizes' ),
+		);
+
+		$crops = array();
+		foreach ( $x as $x_pos => $x_pos_label ) {
+			foreach ( $y as $y_pos => $y_pos_label ) {
+				$crops[$x_pos.'_'.$y_pos] = $x_pos_label.' '.$y_pos_label;
+			}
+		}
+
+		return $crops;
+	}
 }
