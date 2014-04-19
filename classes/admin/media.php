@@ -4,10 +4,10 @@ Class SIS_Admin_Media {
 	// Original sizes
 	public static $original = array( 'thumbnail', 'medium', 'large' );
 
-	public function __construct(){
+	public function __construct() {
 		// Init
 
-		add_action( 'admin_menu', array( &$this, 'init' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'init' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ), 11 );
 		
 		// Add ajax action
@@ -26,7 +26,6 @@ Class SIS_Admin_Media {
 		
 		// Add filter for the Media single
 		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_field_regenerate' ), 9, 2 );
-		
 	}
 	
 	/**
@@ -99,7 +98,7 @@ Class SIS_Admin_Media {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	function init() {
+	public static function init() {
 		// Check if admin
 		if( !is_admin() ) {
 			return false;
@@ -126,20 +125,20 @@ Class SIS_Admin_Media {
 			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
 			
 			// Add the setting field for this size
-			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), array( &$this, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
+			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), array( __CLASS__, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
 		}
 
 		// Register the setting for media option page
 		register_setting( 'media', SIS_OPTION );
 
 		// Add the button
-		add_settings_field( 'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), array( &$this, 'addSizeButton' ), 'media' );
+		add_settings_field( 'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), array( __CLASS__, 'addSizeButton' ), 'media' );
 
 		// Add php button
-		add_settings_field( 'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), array( &$this, 'getPhpButton' ), 'media' );
+		add_settings_field( 'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), array( __CLASS__, 'getPhpButton' ), 'media' );
 
 		// Add section for the thumbnail regeneration
-		add_settings_section( 'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), array( &$this, 'thumbnailRegenerate' ), 'media' );
+		add_settings_section( 'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), array( __CLASS__, 'thumbnailRegenerate' ), 'media' );
  	}
  	
  	/**
@@ -150,7 +149,7 @@ Class SIS_Admin_Media {
  	 * @return void
 	 * @author Nicolas Juen
  	 */
- 	public function image_sizes( $args ) {
+ 	public static function image_sizes( $args ) {
  		
 		if( is_integer( $args['name'] ) ) {
 			return false;
@@ -166,7 +165,6 @@ Class SIS_Admin_Media {
 		$show 		=	isset( $sizes[$args['name']]['s'] ) && !empty( $sizes[$args['name']]['s'] )? '1' : '0' ;
 		$custom 	=	isset( $sizes[$args['name']]['custom'] ) && !empty( $sizes[$args['name']]['custom'] )? '1' : '0' ;
 		$name 		=	isset( $sizes[$args['name']]['n'] ) && !empty( $sizes[$args['name']]['n'] )? esc_html( $sizes[$args['name']]['n'] ) : esc_html( $args['name'] ) ;
-		
 		?>
 		<input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name" />
 		<?php if( $custom ): ?>
@@ -187,7 +185,13 @@ Class SIS_Admin_Media {
 			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" />
 		</label>
 		<span class="size_options">
-			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
+			<select id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" >
+				<option value="0" <?php selected( 0, $crop ); ?>><?php esc_html_e( 'No', 'simple-image-sizes' ); ?></option>
+				<option value="1" <?php selected( 1, $crop ); ?>><?php esc_html_e( 'Yes', 'simple-image-sizes' ); ?></option>
+				<?php foreach( SIS_Admin_Main::get_available_crop() as $crop_position => $label ): ?>
+					<option <?php selected( $crop_position, $crop ); ?> value="<?php echo esc_attr( $crop_position ) ?>"><?php echo esc_html( $label ); ?></option>
+				<?php endforeach; ?>
+			</select>
 			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'simple-image-sizes'); ?></label>
 			
 			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
@@ -206,7 +210,7 @@ Class SIS_Admin_Media {
 	 * @return void
  	 * @author Nicolas Juen
 	 */
-	public function addSizeButton() { ?>
+	public static function addSizeButton() { ?>
 		<input type="button" class="button-secondary action" id="add_size" value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes'); ?>" />
 	<?php
 	}	
@@ -218,7 +222,7 @@ Class SIS_Admin_Media {
 	 * @return void
  	 * @author Nicolas Juen
 	 */
-	public function getPhpButton() { ?>
+	public static function getPhpButton() { ?>
 		<input type="button" class="button-secondary action" id="get_php" value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes'); ?>" />
 		<p> <?php _e( 'Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes'); ?> </p>
 		<code></code>
@@ -232,7 +236,7 @@ Class SIS_Admin_Media {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public function thumbnailRegenerate() {
+	public static function thumbnailRegenerate() {
 		if( is_file( SIS_DIR.'/templates/options-media.php' ) ) {
 			include( SIS_DIR.'/templates/options-media.php' );
 		} else {
@@ -254,12 +258,15 @@ Class SIS_Admin_Media {
 		
 		// Get old options
 		$sizes = (array)get_option( SIS_OPTION, array() );
+		$croppings = SIS_Admin_Main::get_available_crop();
+		$croppings[true] = '';
+		$croppings[false] = '';
 		
 		// Check entries
 		$name = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ): '' ;
 		$height = !isset( $_POST['height'] )? 0 : absint( $_POST['height'] );
 		$width =  !isset( $_POST['width'] )? 0 : absint( $_POST['width'] );
-		$crop = isset( $_POST['crop'] ) &&  $_POST['crop'] == 'false' ? false : true;
+		$crop = isset( $_POST['crop'] ) && isset( $croppings[$_POST['crop']] ) ? $_POST['crop'] : false;
 		$show = isset( $_POST['show'] ) &&  $_POST['show'] == 'false' ? false : true;
 		$cn = isset( $_POST['customName'] ) && !empty( $_POST['customName'] ) ? sanitize_text_field( $_POST['customName'] ): $name ;
 		
@@ -341,11 +348,20 @@ Class SIS_Admin_Media {
 			$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
 			
 			//Set crop
-			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
+			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? $_wp_additional_image_sizes[$s]['crop'] : get_option( "{$s}_crop" ) ;
 			
-			$crop = ( $crop == 0 )? 'false' : 'true' ;
+			if( is_bool( $crop ) || is_numeric( $crop ) ) {
+				$crop = ( absint( $crop ) == 0 )? 'false' : 'true' ;
+			} else {
+				if( !Sis_Admin_Main::is_crop_position( $crop ) ){
+					$crop = "false";
+				} else {
+					$crop = explode( '_', $crop );
+					$crop = 'array( "'.$crop[0].'", "'.$crop[1].'")';
+				}
+			}
 			?>
-				add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop ?> );<br />
+				add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop; ?> );<br />
 			<?php 
 		}
 		
