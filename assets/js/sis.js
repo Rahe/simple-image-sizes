@@ -368,14 +368,11 @@ rahe.sis.sizes = {
 		wp_nonce = jQuery( '.addSize' ).val(),
 		parent = jQuery( el ).closest( 'tr' ),
 		n = parent.find( 'input[name="image_name"]' ).val(),
-		c = parent.find( 'label.c' ).hasClass( 'ui-state-active' ),
-		s = parent.find( 'label.s' ).hasClass( 'ui-state-active' ),
-		cn = parent.find( 'input.n' ).val()
+		c = parent.find( 'select.crop' ).val(),
+		s = parent.find( 'input.show' ).val(),
+		cn = parent.find( 'input.n' ).val(),
 		h = 0,
 		w = 0;
-		
-		
-		c = ( c == false || c == undefined ) ? false : true ;
 		s = ( s == false || s == undefined ) ? false : true ;
 		w = parseInt( parent.find( 'input.w' ).val() );
 		h = parseInt( parent.find( 'input.h' ).val() );
@@ -416,7 +413,7 @@ rahe.sis.sizes = {
 					// Add the new sizes values for checking of changed or not
 					parent.find( 'input.h' ).attr( { base_h : h } );
 					parent.find( 'input.w' ).attr( { base_w : w } );
-					parent.find( 'input.c' ).attr( { base_c : c } );
+					parent.find( 'select.c' ).attr( { base_c : c } );
 					parent.find( 'input.s' ).attr( { base_s : s } );
 					
 					// Add the generated class
@@ -430,7 +427,7 @@ rahe.sis.sizes = {
 					// Remove classes after 3 seconds
 					timer = setTimeout(function() {
 						parent.removeClass( 'errorAdding notChangedAdding successAdding' );
-					}, 3 * 1000  );
+					}, 2 * 1000  );
 				}
 			});
 		}	
