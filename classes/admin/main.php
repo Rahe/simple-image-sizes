@@ -108,4 +108,12 @@ Class SIS_Admin_Main {
 		$crops = self::get_available_crop();
 		return isset( $crops[$crop_position] );
 	}
+
+	public static function get_crop_position_label( $crop_position = '' ) {
+		if( !self::is_crop_position( $crop_position ) ) {
+			return '';
+		}
+		$crops = self::get_available_crop();
+		return $crops[$crop_position];
+	}
 }

@@ -34,7 +34,12 @@
 							$height = isset( $_wp_additional_image_sizes[$s]['height'] ) ? intval( $_wp_additional_image_sizes[$s]['height'] ) : get_option( "{$s}_size_h" ) ;
 							
 							//Set crop
-							$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
+							$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? $_wp_additional_image_sizes[$s]['crop'] : get_option( "{$s}_crop" ) ;
+							if( is_numeric( $crop ) || is_bool( $crop ) ) {
+								$crop = absint( $crop ) > 0 ? __( 'Yes', 'simple-image-sizes' ) : __( 'No', 'simple-image-sizes' ) ;
+							} else {
+								$crop = Sis_Admin_Main::get_crop_position_label( $crop );
+							}
 							
 							?>
 							<tr id="sis-<?php echo esc_attr( $s ) ?>">
@@ -45,13 +50,13 @@
 									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $s ); ?></label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $width); ?> px</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $width ); ?> px</label>
 								</th>
 								<th>
 									<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
 								</th>
 								<th>
-									<label for="<?php esc_attr_e( $s ); ?>"><?php echo ( $crop == 1 )? __( 'Yes', 'simple-image-sizes' ):__( 'No', 'simple-image-sizes' ); ?>	</label>
+									<label for="<?php esc_attr_e( $s ); ?>"><?php echo $crop; ?> </label>
 								</th>
 							</tr>
 						<?php endforeach;?>
