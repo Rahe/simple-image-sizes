@@ -314,6 +314,7 @@ rahe.sis.sizes = {
 			maximumHeight : sis.maximumHeight,
 			customName : sis.customName,
 			crop : sis.crop,
+			crop_positions :sis.crop_positions,
 			show : sis.show,
 			deleteImage : sis.deleteImage,
 			validateButton : sis.validateButton
@@ -461,7 +462,7 @@ rahe.sis.sizes = {
 			newRow = jQuery( '#sis-regen .wrapper > table#sis_sizes > tbody > tr:first' ).clone().attr( 'id', 'sis-'+n );
 		}
 		
-		c = c == true ? sis.tr : sis.fl ;
+		c = !_.isUndefined( sis.crop_positions[c] ) ? sis.crop_positions[c] : sis.fl ;
 		
 		// Set the datas with the given datas
 		newRow.find( 'th > label' ).attr( 'for', n )
@@ -497,34 +498,6 @@ rahe.sis.sizes = {
 		// Remove the given name from the array
 		jQuery( '#sis-'+n ).remove();
 	},
-	setButtons: function() {
-		// UI for delete,crop and add buttons
-		jQuery(".delete_size").button( {
-			icons: {
-				primary: 'ui-icon-circle-close'
-			},
-			text: true
-		} );
-		jQuery(".add_size").button( {
-			icons: {
-				primary: 'ui-icon-check'
-			},
-			text: true
-		} );
-		jQuery(".crop").button({
-			icons: {
-				primary: 'ui-icon-arrow-4-diag'
-			},
-			text: true
-		});
-		jQuery(".show").button({
-			icons: {
-				primary: 'ui-icon-lightbulb'
-			},
-			text: true
-		});
-		jQuery( '.size_options' ).buttonset();
-	},
 	displayChange : function( el ) {
 		var el = jQuery( el ),
 		parent = el.closest( 'tr' );
@@ -536,14 +509,14 @@ rahe.sis.sizes = {
 		
 		var h_el = parent.find( 'input.h' ),
 		w_el = parent.find( 'input.w' ),
-		c_el = parent.find( 'input.c' ),
+		c_el = parent.find( 'select.c' ),
 		s_el = parent.find( 'input.s' ),
 		n_el = parent.find( 'input.n' ),
 		
 		h = h_el.val(),
 		w = w_el.val(),
-		c = parent.find( 'label.c' ).hasClass( 'ui-state-active' ),
-		s = parent.find( 'label.s' ).hasClass( 'ui-state-active' ),
+		c = c_el.val(),
+		s = s_el.val(),
 		n = n_el.val(),
 		
 		base_h = h_el.attr( 'base_h' ),
@@ -586,7 +559,4 @@ jQuery(function() {
 	jQuery('#get_php').nextAll('code').hide();
 
 	jQuery(".add_size").hide();
-	
-	// Set the buttons
-	//rahe.sis.sizes.setButtons();
 });
