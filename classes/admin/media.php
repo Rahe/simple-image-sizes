@@ -236,7 +236,7 @@ Class SIS_Admin_Media {
 		if( is_file( SIS_DIR.'/templates/options-media.php' ) ) {
 			include( SIS_DIR.'/templates/options-media.php' );
 		} else {
-			esc_html_e( 'Admin option-media template missing' );
+			esc_html_e( 'Admin option-media template missing', 'simple-image-sizes' );
 		}
 	}
 		

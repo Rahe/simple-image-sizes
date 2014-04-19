@@ -5,8 +5,6 @@ Class SIS_Admin_Main {
 		add_action( 'admin_init', array( __CLASS__, 'register_assets' ) );
 	}
 
-
-
 	public static function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min' ;
 		// Add javascript
