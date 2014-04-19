@@ -63,6 +63,7 @@ Class SIS_Admin_Main {
 			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'simple-image-sizes' ),
 			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'simple-image-sizes' ),
 			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
+			'crop_positions'	=>  self::get_available_crop(),
 			'regen_one'			=> wp_create_nonce( 'regen' )
 		);
 	}
@@ -101,5 +102,10 @@ Class SIS_Admin_Main {
 		}
 
 		return $crops;
+	}
+
+	public static function is_crop_position( $crop_position = '' ) {
+		$crops = self::get_available_crop();
+		return isset( $crops[$crop_position] );
 	}
 }
