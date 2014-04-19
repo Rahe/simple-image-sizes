@@ -47,7 +47,7 @@ Class SIS_Admin_Media {
 			
 			// Add CSS
 			wp_enqueue_style( 'sis_css' );
-			
+
 			// Add underscore template
 			add_action( 'admin_footer', array( 'SIS_Admin_Main', 'add_template' ) );
 		}
@@ -65,7 +65,7 @@ Class SIS_Admin_Media {
 	public static function add_actions_list( $actions, $object ) {
 		
 		// Add action for regeneration
-		$actions['sis-regenerate'] = "<a href='#' data-id='".$object->ID."' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'sis' )."</a>";
+		$actions['sis-regenerate'] = "<a href='#' data-id='".$object->ID."' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'simple-image-sizes' )."</a>";
 		
 		// Return actions
 		return $actions;
@@ -86,7 +86,7 @@ Class SIS_Admin_Media {
 			return $links;
 		}
 			
-		$settings_link = '<a href="'.admin_url('options-media.php').'"> '.__( 'Settings', 'sis' ).' </a>';
+		$settings_link = '<a href="'.admin_url('options-media.php').'"> '.__( 'Settings', 'simple-image-sizes' ).' </a>';
 		array_unshift( $links, $settings_link );
 		
 		return $links;
@@ -126,20 +126,20 @@ Class SIS_Admin_Media {
 			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
 			
 			// Add the setting field for this size
-			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'sis' ), $s ), array( &$this, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
+			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), array( &$this, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
 		}
 
 		// Register the setting for media option page
 		register_setting( 'media', SIS_OPTION );
 
 		// Add the button
-		add_settings_field( 'add_size_button', __( 'Add a new size', 'sis' ), array( &$this, 'addSizeButton' ), 'media' );
+		add_settings_field( 'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), array( &$this, 'addSizeButton' ), 'media' );
 
 		// Add php button
-		add_settings_field( 'get_php_button', __( 'Get php for theme', 'sis' ), array( &$this, 'getPhpButton' ), 'media' );
+		add_settings_field( 'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), array( &$this, 'getPhpButton' ), 'media' );
 
 		// Add section for the thumbnail regeneration
-		add_settings_section( 'thumbnail_regenerate', __( 'Thumbnail regeneration', 'sis' ), array( &$this, 'thumbnailRegenerate' ), 'media' );
+		add_settings_section( 'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), array( &$this, 'thumbnailRegenerate' ), 'media' );
  	}
  	
  	/**
@@ -175,26 +175,26 @@ Class SIS_Admin_Media {
 			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
 		<?php endif; ?>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
-			<?php _e( 'Maximum width', 'sis'); ?> 
+			<?php _e( 'Maximum width', 'simple-image-sizes'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>" />
 		</label>
 		<label class="sis-label" for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
-			<?php _e( 'Maximum height', 'sis'); ?> 
+			<?php _e( 'Maximum height', 'simple-image-sizes'); ?> 
 			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>" />
 		</label>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>">
-			<?php _e( 'Public name', 'sis'); ?> 
+			<?php _e( 'Public name', 'simple-image-sizes'); ?> 
 			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" />
 		</label>
 		<span class="size_options">
 			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php checked( $crop, 1 ) ?> class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" value="1" />
-			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'sis'); ?></label>
+			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'simple-image-sizes'); ?></label>
 			
 			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
-			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'sis'); ?></label>
+			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes'); ?></label>
 		</span>
-		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'sis'); ?></span>
-		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'sis'); ?></span>
+		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes'); ?></span>
+		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes'); ?></span>
 		
 		<input type="hidden" class="deleteSize button-primary" value='<?php echo wp_create_nonce( 'delete_'.$args['name'] ); ?>' />
 	<?php }
@@ -207,7 +207,7 @@ Class SIS_Admin_Media {
  	 * @author Nicolas Juen
 	 */
 	public function addSizeButton() { ?>
-		<input type="button" class="button-secondary action" id="add_size" value="<?php esc_attr_e( 'Add a new size of thumbnail', 'sis'); ?>" />
+		<input type="button" class="button-secondary action" id="add_size" value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes'); ?>" />
 	<?php
 	}	
 	
@@ -219,8 +219,8 @@ Class SIS_Admin_Media {
  	 * @author Nicolas Juen
 	 */
 	public function getPhpButton() { ?>
-		<input type="button" class="button-secondary action" id="get_php" value="<?php esc_attr_e( 'Get the PHP for the theme', 'sis'); ?>" />
-		<p> <?php _e( 'Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin.', 'sis'); ?> </p>
+		<input type="button" class="button-secondary action" id="get_php" value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes'); ?>" />
+		<p> <?php _e( 'Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes'); ?> </p>
 		<code></code>
 	<?php
 	}
@@ -429,14 +429,14 @@ Class SIS_Admin_Media {
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
 		
 		// Time a the begining
-		$start_time = microtime( true );
+		timer_start();
 		
 		// Get the thumbnails
 		$thumbnails = isset( $_POST['thumbnails'] )? $_POST['thumbnails'] : NULL;
 			
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'regen' ) ) {
-			self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'sis' ) ) );
+			self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 		
 		// Get the id
@@ -446,8 +446,8 @@ Class SIS_Admin_Media {
 		if( (int)$id <= 0 ) {
 			self::displayJson( 
 				array( 
-					'time' => round( microtime( true ) - $start_time, 4 ), 
-					'error' => __( 'No id given in POST datas.', 'sis' ) 
+					'time' => timer_stop( false, 4 ), 
+					'error' => __( 'No id given in POST datas.', 'simple-image-sizes' ) 
 				) 
 			);
 		}
@@ -456,14 +456,13 @@ Class SIS_Admin_Media {
 		$fullsizepath = get_attached_file( $id );
 
 		// Regen the attachment
-		if ( false !== $fullsizepath && @file_exists( $fullsizepath ) ) {
-			set_time_limit( 60 );
+		if ( false !== $fullsizepath && file_exists( $fullsizepath ) ) {
 			if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false ) {
 				self::displayJson( 
 					array( 
 						'src' => wp_get_attachment_thumb_url( $id ), 
-						'time' => round( microtime( true ) - $start_time, 4 ), 
-						'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+						'time' => timer_stop( false, 4 ), 
+						'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes'), get_edit_post_link( $id ), get_the_title( $id ) ) 
 					) 
 				);
 			}
@@ -471,15 +470,15 @@ Class SIS_Admin_Media {
 			self::displayJson(
 				array( 
 					'src' => wp_get_attachment_thumb_url( $id ), 
-					'time' => round( microtime( true ) - $start_time, 4 ), 
-					'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'sis'), get_edit_post_link( $id ), get_the_title( $id ) ) 
+					'time' => timer_stop( false, 4 ), 
+					'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes'), get_edit_post_link( $id ), get_the_title( $id ) ) 
 				)
 			);
 		}
 		// Display the attachment url for feedback 
 		self::displayJson( 
 			array( 
-				'time' => round( microtime( true ) - $start_time, 4 ) , 
+				'time' => timer_stop( false, 4 ), 
 				'src' => wp_get_attachment_thumb_url( $id ), 
 				'title' => get_the_title( $id ) 
 			) 
@@ -585,10 +584,10 @@ Class SIS_Admin_Media {
 		}
 		
 		$fields['sis-regenerate'] = array(
-			'label'	=> __( 'Regenerate Thumbnails', 'sis' ),
+			'label'	=> __( 'Regenerate Thumbnails', 'simple-image-sizes' ),
 			'input'	=> 'html',
 			'html'	=> '
-			<input type="button" data-id="'.$post->ID.'" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'sis' ).'" />
+			<input type="button" data-id="'.$post->ID.'" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'simple-image-sizes' ).'" />
 			<span class="title"><em></em></span>
 			<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />',
 			'show_in_edit' => true,

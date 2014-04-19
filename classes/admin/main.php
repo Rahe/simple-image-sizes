@@ -21,7 +21,7 @@ Class SIS_Admin_Main {
 		wp_localize_script( 'sis_js_attachments', 'sis', self::localize_vars() );
 			
 		// Add CSS
-		wp_enqueue_style( 'sis_css', SIS_URL.'/assets/css/sis-style.css', array( 'jquery-ui-sis' ), SIS_VERSION );
+		wp_enqueue_style( 'sis_css', SIS_URL.'/assets/css/sis-style.css', array(), SIS_VERSION );
 	}
 
 
@@ -35,36 +35,36 @@ Class SIS_Admin_Main {
 	public static function localize_vars() {
 		return array(
 			'ajaxUrl' 			=>  admin_url( '/admin-ajax.php' ),
-			'reading' 			=> __( 'Reading attachments...', 'sis' ),
-			'maximumWidth' 		=> __( 'Maximum width', 'sis' ),
-			'maximumHeight' 	=> __( 'Maximum height', 'sis' ),
-			'crop' 				=> __( 'Crop ?', 'sis' ),
-			'tr' 				=> __( 'yes', 'sis' ),
-			'fl'				=> __( 'no', 'sis' ),
-			'show'				=> __( 'Show in post insertion ?', 'sis' ),
-			'of' 				=> __( ' of ', 'sis' ),
-			'or' 				=> __( ' or ', 'sis' ),
-			'beforeEnd' 		=> __( ' before the end.', 'sis' ),
-			'deleteImage' 		=> __( 'Delete', 'sis' ),
-			'noMedia' 			=> __( 'No media in your site to regenerate !', 'sis' ),
-			'regenerating' 		=> __( 'Regenerating ', 'sis'),
-			'regenerate' 		=> __( 'Regenerate ', 'sis'),
-			'validate' 			=> __( 'Validate image size name', 'sis' ),
-			'done' 				=> __( 'Done.', 'sis' ),
-			'size' 				=> __( 'Size', 'sis' ),	
-			'notOriginal' 		=> __( 'Don\'t use the basic Wordpress thumbnail size name, use the form above to edit them', 'sis' ),
-			'alreadyPresent' 	=> __( 'This size is already registered, edit it instead of recreating it.', 'sis' ),
-			'confirmDelete' 	=> __( 'Do you really want to delete these size ?', 'sis' ),
-			'update' 			=> __( 'Update', 'sis' ),
-			'ajaxErrorHandler' 	=> __( 'Error requesting page', 'sis' ),
-			'messageRegenerated' => __( 'images have been regenerated !', 'sis' ),
-			'validateButton' 	=> __( 'Validate', 'sis' ),
-			'startedAt' 		=> __( ' started at', 'sis' ),
-			'customName'		=> __( 'Public name', 'sis' ),
-			'finishedAt' 		=> __( ' finished at :', 'sis' ),
-			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'sis' ),
-			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'sis' ),
-			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'sis' ),
+			'reading' 			=> __( 'Reading attachments...', 'simple-image-sizes' ),
+			'maximumWidth' 		=> __( 'Maximum width', 'simple-image-sizes' ),
+			'maximumHeight' 	=> __( 'Maximum height', 'simple-image-sizes' ),
+			'crop' 				=> __( 'Crop ?', 'simple-image-sizes' ),
+			'tr' 				=> __( 'yes', 'simple-image-sizes' ),
+			'fl'				=> __( 'no', 'simple-image-sizes' ),
+			'show'				=> __( 'Show in post insertion ?', 'simple-image-sizes' ),
+			'of' 				=> __( ' of ', 'simple-image-sizes' ),
+			'or' 				=> __( ' or ', 'simple-image-sizes' ),
+			'beforeEnd' 		=> __( ' before the end.', 'simple-image-sizes' ),
+			'deleteImage' 		=> __( 'Delete', 'simple-image-sizes' ),
+			'noMedia' 			=> __( 'No media in your site to regenerate !', 'simple-image-sizes' ),
+			'regenerating' 		=> __( 'Regenerating ', 'simple-image-sizes'),
+			'regenerate' 		=> __( 'Regenerate ', 'simple-image-sizes'),
+			'validate' 			=> __( 'Validate image size name', 'simple-image-sizes' ),
+			'done' 				=> __( 'Done.', 'simple-image-sizes' ),
+			'size' 				=> __( 'Size', 'simple-image-sizes' ),	
+			'notOriginal' 		=> __( 'Don\'t use the basic Wordpress thumbnail size name, use the form above to edit them', 'simple-image-sizes' ),
+			'alreadyPresent' 	=> __( 'This size is already registered, edit it instead of recreating it.', 'simple-image-sizes' ),
+			'confirmDelete' 	=> __( 'Do you really want to delete these size ?', 'simple-image-sizes' ),
+			'update' 			=> __( 'Update', 'simple-image-sizes' ),
+			'ajaxErrorHandler' 	=> __( 'Error requesting page', 'simple-image-sizes' ),
+			'messageRegenerated' => __( 'images have been regenerated !', 'simple-image-sizes' ),
+			'validateButton' 	=> __( 'Validate', 'simple-image-sizes' ),
+			'startedAt' 		=> __( ' started at', 'simple-image-sizes' ),
+			'customName'		=> __( 'Public name', 'simple-image-sizes' ),
+			'finishedAt' 		=> __( ' finished at :', 'simple-image-sizes' ),
+			'phpError' 			=> __( 'Error during the php treatment, be sure to not have php errors in your page', 'simple-image-sizes' ),
+			'notSaved' 			=> __( 'All the sizes you have modifed are not saved, continue anyway ?', 'simple-image-sizes' ),
+			'soloRegenerated'	=> __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
 			'regen_one'			=> wp_create_nonce( 'regen' )
 		);
 	}

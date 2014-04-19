@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Simple Image Sizes
-Plugin URI: https://github.com/Rahe/Simple-image-sizes
+Plugin URI: https://github.com/Rahe/'simple-image-sizes'
 Description: Add options in media setting page for images sizes
 Version: 2.4.3
 Author: Rahe
 Author URI: http://nicolas-juen.fr
-Text Domain: sis
-Domain Path: /languages/
+Text Domain: 'simple-image-sizes'
+Domain Path: /languages
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,4 @@ function initSIS() {
 	}
 	
 	new SIS_Client();
-	
-	load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 } 

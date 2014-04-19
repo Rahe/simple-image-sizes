@@ -5,7 +5,12 @@ Class SIS_Client {
 	var $original = array( 'thumbnail', 'medium', 'large' );
 
 	function __construct() {
-		add_action ( 'init', array( __CLASS__, 'init' ) );
+
+		// Make new image sizes
+		add_action ( 'init', array( __CLASS__, 'init' ), 1 );
+
+		// Add translation
+		add_action ( 'init', array( __CLASS__, 'init_translation' ), 2 );
 	}
 	
 	/**
@@ -32,5 +37,9 @@ Class SIS_Client {
 			// Add the images sizes
 			add_image_size( $name, $size['w'], $size['h'], ( isset( $size['c'] ) && !empty( $size['c'] ) )? $size['c'] : 0 );
 		}
+	}
+
+	public static function init_translation() {
+		load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 	}
 }
