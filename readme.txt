@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 3.5.1
-Stable tag: 2.4.3
+Tested up to: 3.9
+Stable tag: 3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,10 +45,15 @@ And then you can choose if the image is displayed on the media insertion or not 
 
 1. Settings page
 2. Get PHP for the theme
-3. Choose the sizes to regenerate
-4. Regenerating image sizes
+3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0
+	* Revamping all the code, change classes and structure
+	* Use grunt for compiling files
+	* Handle the 3.9 new cropping position
+	* Remove aristo css
+	* Use UI from WordPress
 * 2.4.3
 	* Remove some php notices
 	* Remove notice when wrong image size
