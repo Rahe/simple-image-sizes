@@ -47,6 +47,6 @@ Class SIS_Client {
 	 * @author Nicolas Juen
 	 */
 	public static function init_translation() {
-		load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
+		load_plugin_textdomain ( 'simple-image-sizes', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 	}
 }
