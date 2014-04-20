@@ -34,14 +34,24 @@ module.exports = function(grunt) {
           ]
         }
       }
+    },
+    cssmin : {
+       minify: {
+        expand: true,
+        cwd: 'assets/css/',
+        src: ['*.css', '!*.min.css'],
+        dest: 'assets/css/',
+        ext: '.min.css'
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   grunt.registerTask('default', ['watch:scripts'] );
 
-  grunt.registerTask('dist', ['uglify:dist'] );
+  grunt.registerTask('dist', ['uglify:dist', 'cssmin'] );
 };
