@@ -15,7 +15,7 @@ if( !rahe.sis ) {
 rahe.sis.regenerate = {
 	post_types : [],
 	thumbnails : [],
-	list : {},
+	total : 0,
 	cur : 0,
 	timeScript: [],
 	dateScript: '',
@@ -67,14 +67,9 @@ rahe.sis.regenerate = {
 	setMessage : function( msg ) {
 		// Display the message
 		this.messageZone.html( "<p>" + msg + "</p>" ).addClass( 'updated' ).addClass( 'fade' ).show();
-		this.refreshProgressBar();
 	},
 	setTimeMessage : function ( msg ) {
 		this.timeZone.html( msg );
-	},
-	refreshProgressBar: function(){
-		// Refresh the progress Bar
-		this.progress.progressbar();
 	},
 	checkStartRegenerating : function(){
 		if( jQuery( '.notSaved' ).size() > 0 ) {
@@ -128,13 +123,13 @@ rahe.sis.regenerate = {
 				self.time.show();
 				
 				// Eval the response
-				self.list = r ;
+				self.total = r.total ;
 				
 				// Set the current to 0
 				self.curr = 0;
 				
 				// Display the progress Bar
-				self.progress.show();
+				self.progress.show().parent().show();
 				
 				// Start Regenerating
 				self.regenItem();
@@ -144,16 +139,16 @@ rahe.sis.regenerate = {
 	regenItem : function( ) {
 		var self = this,
 		wp_nonce = jQuery('input.regen').val();
-		
+
 		// If the list is empty display the message of emptyness and reinitialize the form
-		if ( !this.list ) {
+		if ( this.total == 0 || _.isUndefined( this.total ) ) {
 			this.reInit();
 			this.setMessage( sis.noMedia );
 			return false;
 		}
 		
 		// If we have finished the regeneration display message and init again
-		if ( this.curr >= this.list.length ) {
+		if ( this.curr >= this.total ) {
 			var now = new Date();
 			this.reInit();
 			this.setMessage( sis.done+this.curr+' '+sis.messageRegenerated+sis.startedAt+' '+this.dateScript.getHours()+":"+this.dateScript.getMinutes()+":"+this.dateScript.getSeconds()+sis.finishedAt+' '+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds() );
@@ -161,24 +156,25 @@ rahe.sis.regenerate = {
 		}
 		
 		// Set the message of current image regenerating
-		this.setMessage( sis.regenerating + ( this.curr + 1 ) + sis.of + this.list.length + " (" + this.list[this.curr].title + ")...");
+		this.setMessage( sis.regenerating + ( this.curr + 1 ) + sis.of + this.total );
 
 		jQuery.ajax( {
 			url: sis.ajaxUrl,
 			type: "POST",
 			dataType: 'json',
 			data: {
-				action : 'sis_rebuild_image',
-				id : this.list[this.curr].id,
+				action : 'sis_rebuild_images',
+				offset : this.curr,
 				thumbnails : this.thumbnails,
 				nonce : wp_nonce
 			},
 			beforeSend : function() {
 				// Calculate the percentage of regeneration
-				self.percent = ( self.curr / self.list.length ) * 100;
+				self.percent = ( self.curr / self.total ) * 100;
 				
 				// Change the progression
-				self.progress.progressbar( "value", self.percent );
+				self.progress.find( '.bar' ).width( self.percent+'%' )
+				.find('.percent').html( self.percent + '%' );
 				
 				// Change the text of progression
 				self.percentText.removeClass( 'hidden' ).html( Math.round( self.percent ) + "%");
@@ -213,10 +209,12 @@ rahe.sis.regenerate = {
 					curDate = new Date(),
 					num = 0,
 					sum = 0,
-					i = 0;
+					i = 0,
+					ave = 0,
+					time = '';
 					
 					// Add the regenerating time to the array
-					self.timeScript.push(r.time);
+					self.timeScript.push( parseFloat( r.time.replace(  ',', '.' ), 10 ) );
 					
 					// Get the number of elements in array
 					num = self.timeScript.length;
@@ -227,16 +225,16 @@ rahe.sis.regenerate = {
 					}
 
 					// Make the average value of the regenerating time
-					var ave = sum/num,
+					ave = sum/num,
 					
 					// Round the value in miliseconds and add 25% or error
-					t = Math.round( ( ( ave *self.list.length ) * 1000 ) );
+					t = Math.round( ( ( ave * self.total ) * 1000 ) );
 
 					// Set the predicted time
 					dateEnd.setTime( self.dateScript.getTime() + t );
 					
 					// Get the difference between the two dates
-					var time = self.s2t( Math.abs( ( dateEnd.getTime() - curDate.getTime() ) ) / 1000 );
+					time = self.s2t( Math.abs( ( dateEnd.getTime() - curDate.getTime() ) ) / 1000 );
 					
 					// Set the message in the notice box
 					self.setTimeMessage( dateEnd.getHours()+":"+dateEnd.getMinutes()+":"+dateEnd.getSeconds()+sis.or+time+sis.beforeEnd );

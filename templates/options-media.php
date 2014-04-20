@@ -112,8 +112,13 @@
 		</div>
 		<div >
 			<div id="regenerate_message"></div>
-			<div class="progress"></div>
-			<div id="sis_progress-percent" class="hidden" >0%</div>
+			<div class="media-item sis">
+				<div class="progress">
+					<div id="sis_progress-percent" class="percent">100%</div>
+					<div class="bar"></div>
+				</div>
+			</div>
+			
 			<div class="ui-widget" id="time">
 				<div class="ui-state-highlight ui-corner-all"> 
 					<p>

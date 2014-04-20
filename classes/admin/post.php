@@ -9,6 +9,9 @@ Class SIS_Admin_Post {
 		}
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ), 11 );
+
+		// Rebuilt the image
+		add_action( 'wp_ajax_'.'sis_rebuild_image', array( __CLASS__, 'a_thumbnail_rebuild' ) );
 	}
 
 	/**
@@ -30,6 +33,35 @@ Class SIS_Admin_Post {
 			// Add underscore template
 			add_action( 'admin_footer', array( 'SIS_Admin_Main', 'add_template' ) );
 		}
+	}
+
+	/**
+	 * Rebuild the image
+	 * 
+	 * @access public
+	 * @return void
+	 * @author Nicolas Juen
+	 */
+	public static function a_thumbnail_rebuild() {
+		global $wpdb;
+		
+		// Get the nonce
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
+		
+		// Time a the begining
+		timer_start();
+		
+		// Get the thumbnails
+		$thumbnails = isset( $_POST['thumbnails'] )? $_POST['thumbnails'] : NULL;
+			
+		// Check the nonce
+		if( !wp_verify_nonce( $nonce , 'regen' ) ) {
+			SIS_Admin_Main::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+		}
+		
+		// Get the id
+		$id = isset( $_POST["id"] ) ? $_POST["id"] : 0 ;
+		SIS_Admin_Main::displayJson( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
 	}
 
 	/**

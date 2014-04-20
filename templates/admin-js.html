@@ -26,6 +26,9 @@
 			<input type="text" name="custom_image_sizes[<%= size_name %>][n]" id="custom_image_sizes[<%= size_name %>][n]" base_n="<%= size_name %>" class="n">
 		</label>
 		<span class="size_options">
+			<label for="custom_image_sizes[<%= size_name %>][c]" id="custom_image_sizes[<%= size_name %>][c]" class="c" title="<%= crop %>">
+				<%= crop %>
+			</label>
 			<select type="checkbox" name="custom_image_sizes[<%= size_name %>][c]" id="custom_image_sizes[<%= size_name %>][c]" base_c="0" class="c crop">
 				<option value="0"> <%- sis.fl %> </option>
 				<option value="1"> <%- sis.tr %> </option>
@@ -33,9 +36,6 @@
 					<option value="<%- name %>"> <%- label %> </option>
 				<% }); %>
 			</select>
-			<label for="custom_image_sizes[<%= size_name %>][c]" id="custom_image_sizes[<%= size_name %>][c]" class="c" title="<%= crop %>">
-				<%= crop %>
-			</label>
 			<input type="checkbox" name="custom_image_sizes[<%= size_name %>][s]" id="custom_image_sizes[<%= size_name %>][s]" base_s="0" value="1" class="s show">
 			<label for="custom_image_sizes[<%= size_name %>][s]" id="custom_image_sizes[<%= size_name %>][s]" class="s" title="<%= show %>">
 				<%= show %>

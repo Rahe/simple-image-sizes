@@ -13,7 +13,7 @@ Class SIS_Admin_Media {
 		// Add ajax action
 		// Option page
 		add_action( 'wp_ajax_'.'sis_get_list', array( __CLASS__, 'a_get_list' ) );
-		add_action( 'wp_ajax_'.'sis_rebuild_image', array( __CLASS__, 'a_thumbnail_rebuild' ) );
+		add_action( 'wp_ajax_'.'sis_rebuild_images', array( __CLASS__, 'a_thumbnails_rebuild' ) );
 		add_action( 'wp_ajax_'.'sis_get_sizes', array( __CLASS__, 'a_get_sizes' ) );
 		add_action( 'wp_ajax_'.'sis_add_size', array( __CLASS__, 'a_add_size' ) );
 		add_action( 'wp_ajax_'.'sis_remove_size', array( __CLASS__, 'a_remove_size' ) );
@@ -185,6 +185,7 @@ Class SIS_Admin_Media {
 			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" />
 		</label>
 		<span class="size_options">
+			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes'); ?></label>
 			<select id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" >
 				<option value="0" <?php selected( 0, $crop ); ?>><?php esc_html_e( 'No', 'simple-image-sizes' ); ?></option>
 				<option value="1" <?php selected( 1, $crop ); ?>><?php esc_html_e( 'Yes', 'simple-image-sizes' ); ?></option>
@@ -192,7 +193,6 @@ Class SIS_Admin_Media {
 					<option <?php selected( $crop_position, $crop ); ?> value="<?php echo esc_attr( $crop_position ) ?>"><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Crop ?', 'simple-image-sizes'); ?></label>
 			
 			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
 			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes'); ?></label>
@@ -382,7 +382,7 @@ Class SIS_Admin_Media {
 		
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'getList' ) ) {
-			self::displayJson();
+			SIS_Admin_Main::displayJson();
 		}
 		
 		if ( isset( $_POST['post_types'] ) && !empty( $_POST['post_types'] ) ) {
@@ -394,14 +394,14 @@ Class SIS_Admin_Media {
 			}
 			
 			if( empty( $_POST['post_types'][$key]) ) {
-				self::displayJson();
+				SIS_Admin_Main::displayJson();
 			}
 			
 			// Get image medias
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
 			
 			// Get all parent from post type
-			$attachments = $wpdb->get_results( "SELECT *
+			$attachments = $wpdb->get_var( "SELECT COUNT( ID )
 				FROM $wpdb->posts 
 				WHERE 1 = 1
 				AND post_type = 'attachment'
@@ -419,168 +419,74 @@ Class SIS_Admin_Media {
 				'numberposts' => -1,
 				'post_status' => null,
 				'post_parent' => null, // any parent
-				'output' => 'object',
+				'output' => 'ids',
 			) );
 		}
-		
-		// Get the attachments
-		foreach ( $attachments as $attachment ) {
-			$res[] = array( 'id' => $attachment->ID, 'title' => $attachment->post_title );
-		}
+
 		// Return the Id's and Title of medias
-		self::displayJson( $res );
+		SIS_Admin_Main::displayJson( array( 'total' => count( $attachments ) ) );
 	}
-	
-	/**
-	 * Rebuild the image
-	 * 
-	 * @access public
-	 * @return void
-	 * @author Nicolas Juen
-	 */
-	public static function a_thumbnail_rebuild() {
-		global $wpdb;
-		
+
+	public static function a_thumbnails_rebuild() {
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
-		
-		// Time a the begining
-		timer_start();
-		
-		// Get the thumbnails
+		$offset = isset( $_POST['offset'] ) ? absint( $_POST['offset'] ) : 0 ;
+		$post_types = isset( $_POST['post_types'] ) ? $_POST['post_types'] : 'any' ;
 		$thumbnails = isset( $_POST['thumbnails'] )? $_POST['thumbnails'] : NULL;
-			
+
 		// Check the nonce
 		if( !wp_verify_nonce( $nonce , 'regen' ) ) {
-			self::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+			SIS_Admin_Main::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
-		
-		// Get the id
-		$id = isset( $_POST["id"] ) ? $_POST["id"] : 0 ;
-		
-		// Check Id
-		if( (int)$id <= 0 ) {
-			self::displayJson( 
-				array( 
-					'time' => timer_stop( false, 4 ), 
-					'error' => __( 'No id given in POST datas.', 'simple-image-sizes' ) 
-				) 
-			);
-		}
-		
-		// Get the path
-		$fullsizepath = get_attached_file( $id );
 
-		// Regen the attachment
-		if ( false !== $fullsizepath && file_exists( $fullsizepath ) ) {
-			if( wp_update_attachment_metadata( $id, self::wp_generate_attachment_metadata_custom( $id, $fullsizepath, $thumbnails ) ) == false ) {
-				self::displayJson( 
-					array( 
-						'src' => wp_get_attachment_thumb_url( $id ), 
-						'time' => timer_stop( false, 4 ), 
-						'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes'), get_edit_post_link( $id ), get_the_title( $id ) ) 
-					) 
-				);
-			}
-		} else {
-			self::displayJson(
-				array( 
-					'src' => wp_get_attachment_thumb_url( $id ), 
-					'time' => timer_stop( false, 4 ), 
-					'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes'), get_edit_post_link( $id ), get_the_title( $id ) ) 
-				)
-			);
-		}
-		// Display the attachment url for feedback 
-		self::displayJson( 
-			array( 
-				'time' => timer_stop( false, 4 ), 
-				'src' => wp_get_attachment_thumb_url( $id ), 
-				'title' => get_the_title( $id ) 
-			) 
-		);
-	}
-
-	/**
-	 * Generate post thumbnail attachment meta data.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param int $attachment_id Attachment Id to process.
-	 * @param string $file Filepath of the Attached image.
-	 * @return mixed Metadata for attachment.
-	 */
-	public static function wp_generate_attachment_metadata_custom( $attachment_id, $file, $thumbnails = NULL ) {
-		$attachment = get_post( $attachment_id );
-		
-		$meta_datas = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
-
-		$metadata = array();
-		if ( preg_match('!^image/!', get_post_mime_type( $attachment )) && file_is_displayable_image($file) ) {
-			$imagesize = getimagesize( $file );
-			$metadata['width'] = $imagesize[0];
-			$metadata['height'] = $imagesize[1];
-			list($uwidth, $uheight) = wp_constrain_dimensions($metadata['width'], $metadata['height'], 128, 96);
-			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-
-			// Make the file path relative to the upload dir
-			$metadata['file'] = _wp_relative_upload_path($file);
-
-			// make thumbnails and other intermediate sizes
-			global $_wp_additional_image_sizes;
-
-			foreach ( get_intermediate_image_sizes() as $s ) {
-				$sizes[$s] = array( 'width' => '', 'height' => '', 'crop' => FALSE );
-				if ( isset( $_wp_additional_image_sizes[$s]['width'] ) )
-					$sizes[$s]['width'] = intval( $_wp_additional_image_sizes[$s]['width'] ); // For theme-added sizes
-				else
-					$sizes[$s]['width'] = get_option( "{$s}_size_w" ); // For default sizes set in options
-				if ( isset( $_wp_additional_image_sizes[$s]['height'] ) )
-					$sizes[$s]['height'] = intval( $_wp_additional_image_sizes[$s]['height'] ); // For theme-added sizes
-				else
-					$sizes[$s]['height'] = get_option( "{$s}_size_h" ); // For default sizes set in options
-				if ( isset( $_wp_additional_image_sizes[$s]['crop'] ) )
-					$sizes[$s]['crop'] = intval( $_wp_additional_image_sizes[$s]['crop'] ); // For theme-added sizes
-				else
-					$sizes[$s]['crop'] = get_option( "{$s}_crop" ); // For default sizes set in options
-			}
-
-			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
-
-			// Only if not all sizes
-			if( isset( $thumbnails ) &&  is_array( $thumbnails ) && isset( $meta_datas['sizes'] ) && !empty( $meta_datas['sizes'] ) ) {
-				// Fill the array with the other sizes not have to be done
-				foreach( $meta_datas['sizes'] as $name => $fsize ) {
-					$metadata['sizes'][$name] = $fsize;
-				}
-			}
-
-			foreach ( $sizes as $size => $size_data ) {
-				if( isset( $thumbnails ) )
-					if( !in_array( $size, $thumbnails ) ) {
-						continue;
-					}
-
-				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
+		if ( $post_types !== 'any' ) {
 				
-				if( isset( $meta_datas['size'][$size] ) ) {
-					// Remove the size from the orignal sizes for after work
-					unset( $meta_datas['size'][$size] );
-				}
-				
-				if ( $resized ) {
-					$metadata['sizes'][$size] = $resized;
+			foreach( $_POST['post_types'] as $key => $type ) {
+				if( !post_type_exists( $type ) ) {
+					unset( $_POST['post_types'][$key] );
 				}
 			}
 			
-			// fetch additional metadata from exif/iptc
-			$image_meta = wp_read_image_metadata( $file );
-			if ( $image_meta ) {
-				$metadata['image_meta'] = $image_meta;
+			if( empty( $_POST['post_types'][$key]) ) {
+				SIS_Admin_Main::displayJson();
 			}
+			
+			// Get image medias
+			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
+			
+			// Get all parent from post type
+			$attachment = $wpdb->get_var( $wpdb->prepare( "SELECT ID
+				FROM $wpdb->posts 
+				WHERE 1 = 1
+				AND post_type = 'attachment'
+				$whichmimetype
+				AND post_parent IN (
+					SELECT DISTINCT ID 
+					FROM $wpdb->posts 
+					WHERE post_type IN ('".implode( "', '", $_POST['post_types'] )."')
+				)
+				LIMIT %d,1 
+			", $offset ) );
+				
+		} else {
+			$attachment = get_posts( array(
+				'post_type' => 'attachment',
+				'post_mime_type' => 'image',
+				'numberposts' => 1,
+				'post_status' => 'any',
+				'output' => 'object',
+				'offset' => $offset
+			) );
+
+			$attachment = !empty( $attachment ) ? $attachment[0]->ID : 0 ;
 		}
 
-		return apply_filters( 'wp_generate_attachment_metadata', $metadata, $attachment_id );
+		if( empty( $attachment ) ) {
+			return array( 
+					'message' => __( 'Regeneration ended', 'simple-image-sizes')
+				);
+		}
+		SIS_Admin_Main::displayJson( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
 	}
 	
 	/**
@@ -610,24 +516,5 @@ Class SIS_Admin_Media {
 			'show_in_modal' => false,
 		);
 		return $fields;
-	}
-	
-	/**
-	 * Display a json encoded element with right headers
-	 * 
-	 * @param $data(optional) : the element to display ( if needed )
-	 * @return void
-	 * @author Nicolas Juen
-	 */
-	private static function displayJson( $data = array() ) {
-		if( function_exists( 'wp_send_json' ) ) {
-			wp_send_json( $data );
-		}
-
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-		header('Content-type: application/json');
-		echo json_encode( $data );
-		die();
 	}
 }
