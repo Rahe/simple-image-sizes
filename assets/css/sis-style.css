@@ -56,3 +56,6 @@ tr.notChangedAdding {
 	margin-top: 20px;
 	padding: 0 .7em;
 }
+#post-body .sis-regenerate-one{
+	float:left;
+}

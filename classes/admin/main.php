@@ -19,7 +19,7 @@ Class SIS_Admin_Main {
 		wp_localize_script( 'sis_js_attachments', 'sis', self::localize_vars() );
 			
 		// Add CSS
-		wp_enqueue_style( 'sis_css', SIS_URL.'/assets/css/sis-style.css', array(), SIS_VERSION );
+		wp_enqueue_style( 'sis_css', SIS_URL.'/assets/css/sis-style'.$suffix.'.css', array(), SIS_VERSION );
 	}
 
 

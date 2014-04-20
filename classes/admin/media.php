@@ -20,12 +20,6 @@ Class SIS_Admin_Media {
 
 		// Add link in plugins list
 		add_filter( 'plugin_action_links', array( __CLASS__,'add_settings_link' ), 10, 2 );
-		
-		// Add action in media row quick actions
-		add_filter( 'media_row_actions', array( __CLASS__, 'add_actions_list' ), 10, 2 );
-		
-		// Add filter for the Media single
-		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_field_regenerate' ), 9, 2 );
 	}
 	
 	/**
@@ -52,23 +46,7 @@ Class SIS_Admin_Media {
 		}
 	}
 
-	
-	/**
-	 * Add action in media row
-	 * 
-	 * @since 2.2
-	 * @access public
-	 * @return $actions : array of actions and content to display
-	 * @author Nicolas Juen
-	 */
-	public static function add_actions_list( $actions, $object ) {
-		
-		// Add action for regeneration
-		$actions['sis-regenerate'] = "<a href='#' data-id='".$object->ID."' class='sis-regenerate-one'>".__( 'Regenerate thumbnails', 'simple-image-sizes' )."</a>";
-		
-		// Return actions
-		return $actions;
-	}
+
 	
 	/**
 	 * Add a link to the setting option page
@@ -487,34 +465,5 @@ Class SIS_Admin_Media {
 				);
 		}
 		SIS_Admin_Main::displayJson( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
-	}
-	
-	/**
-	 * Get a thumbnail name from its slug
-	 * 
-	 * @access public
- 	 * @param array $fields : the fields of the media
-	 * @param object $post : the post object
-	 * @return array
-	 * @since 2.3.1
-	 * @author Nicolas Juen
-	 */
-	public static function add_field_regenerate( $fields, $post ) {
-		// Check this is an image
-		if( strpos( $post->post_mime_type, 'image' ) === false ) {
-			return $fields;
-		}
-		
-		$fields['sis-regenerate'] = array(
-			'label'	=> __( 'Regenerate Thumbnails', 'simple-image-sizes' ),
-			'input'	=> 'html',
-			'html'	=> '
-			<input type="button" data-id="'.$post->ID.'" class="button title sis-regenerate-one" value="'.__( 'Regenerate Thumbnails', 'simple-image-sizes' ).'" />
-			<span class="title"><em></em></span>
-			<input type="hidden" class="regen" value="'.wp_create_nonce( 'regen' ).'" />',
-			'show_in_edit' => true,
-			'show_in_modal' => false,
-		);
-		return $fields;
 	}
 }
