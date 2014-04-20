@@ -5,6 +5,9 @@ Class SIS_Admin_Main {
 		add_action( 'admin_init', array( __CLASS__, 'register_assets' ) );
 	}
 
+	/**
+	 *
+	 */
 	public static function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min' ;
 		// Add javascript
@@ -27,7 +30,7 @@ Class SIS_Admin_Main {
 	 * Localize the var for javascript
 	 * 
 	 * @access public
-	 * @return void
+	 * @return array
 	 * @author Nicolas Juen
 	 */
 	public static function localize_vars() {
@@ -68,7 +71,15 @@ Class SIS_Admin_Main {
 		);
 	}
 
-	public static function thumbnail_rebuild( $att_id, $thumbnails ) {
+	/**
+	 * Rebuild the given attribute with the given thumbnails
+	 *
+	 * @param $att_id
+	 * @param $thumbnails
+	 * @return array
+	 * @author Nicolas Juen
+	 */
+	public static function thumbnail_rebuild( $att_id, $thumbnails = null ) {
 		global $wpdb;
 		// Time a the begining
 		timer_start();
@@ -109,6 +120,12 @@ Class SIS_Admin_Main {
 		);
 	}
 
+	/**
+	 * Include the javascript template
+	 *
+	 * @param void
+	 * @return bool
+	 */
 	public static function add_template() {
 		global $pagenow;
 		if( $pagenow != 'options-media.php' ) {
@@ -122,7 +139,21 @@ Class SIS_Admin_Main {
 		return true;
 	}
 
+	/**
+	 * Get all the available cropping
+	 *
+	 * @return array
+	 * @param void
+	 * @author Nicolas Juen
+	 */
 	public static function get_available_crop() {
+		global $wp_version;
+
+		// Return the only possible
+		if( version_compare( '3.9', $wp_version, '<' ) ) {
+			return array( );
+		}
+
 		$x = array(
 			'left' => __( 'Left', 'simple-image-sizes' ),
 			'center' => __( 'Center', 'simple-image-sizes' ),
@@ -145,11 +176,26 @@ Class SIS_Admin_Main {
 		return $crops;
 	}
 
+	/**
+	 * Check if the crop is available
+	 *
+	 * @param string $crop_position
+	 * @return bool
+	 * @author Nicolas Juen
+	 */
 	public static function is_crop_position( $crop_position = '' ) {
 		$crops = self::get_available_crop();
 		return isset( $crops[$crop_position] );
 	}
 
+	/**
+	 * Return the crop position label from the slug
+	 *
+	 *
+	 * @param string $crop_position
+	 * @return string
+	 * @author Nicolas Juen
+	 */
 	public static function get_crop_position_label( $crop_position = '' ) {
 		if( !self::is_crop_position( $crop_position ) ) {
 			return '';

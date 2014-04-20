@@ -39,6 +39,13 @@ Class SIS_Client {
 		}
 	}
 
+	/**
+	 * Load the plugin text domain
+	 *
+	 * @param void
+	 * @return void
+	 * @author Nicolas Juen
+	 */
 	public static function init_translation() {
 		load_plugin_textdomain ( 'sis', false, basename( rtrim( SIS_DIR, '/' ) ) . '/languages' );
 	}

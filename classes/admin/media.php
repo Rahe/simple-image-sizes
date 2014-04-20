@@ -311,7 +311,7 @@ Class SIS_Admin_Media {
 	 * @return void
 	 */
 	public static function a_get_sizes() {
-		global $_wp_additional_image_sizes;
+		global $_wp_additional_image_sizes,$wp_version;
 
 		foreach ( get_intermediate_image_sizes() as $s ) {
 			// Don't make the original sizes
@@ -328,7 +328,7 @@ Class SIS_Admin_Media {
 			//Set crop
 			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? $_wp_additional_image_sizes[$s]['crop'] : get_option( "{$s}_crop" ) ;
 			
-			if( is_bool( $crop ) || is_numeric( $crop ) ) {
+			if( is_bool( $crop ) || is_numeric( $crop ) || version_compare( '3.9', $wp_version, '<' ) ) {
 				$crop = ( absint( $crop ) == 0 )? 'false' : 'true' ;
 			} else {
 				if( !Sis_Admin_Main::is_crop_position( $crop ) ){
@@ -345,6 +345,7 @@ Class SIS_Admin_Media {
 		
 		die();
 	}
+
 	/**
 	 * 
 	 * Get the media list to regenerate
@@ -405,6 +406,13 @@ Class SIS_Admin_Media {
 		SIS_Admin_Main::displayJson( array( 'total' => count( $attachments ) ) );
 	}
 
+	/**
+	 * Regenerate the thumbnails ajax action
+	 *
+	 * @return array
+	 * @param void
+	 * @author Nicolas Juen
+	 */
 	public static function a_thumbnails_rebuild() {
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce']: '' ;
