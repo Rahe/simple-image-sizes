@@ -3,13 +3,13 @@
   
 **Donate link:** http://www.beapi.fr/donate/
   
-**Tags:** images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
+**Tags:** images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate, cropping
   
 **Requires at least:** 3.5
   
-**Tested up to:** 3.5.1
+**Tested up to:** 3.9
   
-**Stable tag:** 2.4.3
+**Stable tag:** 3.9
   
 
 ## Description ##
@@ -58,18 +58,18 @@ And then you can choose if the image is displayed on the media insertion or not 
 ![Get PHP for the theme
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-2.png)
 
-###3. Choose the sizes to regenerate
+###3. Choose the sizes to regenerate and regenerate them
 ###
 ![Choose the sizes to regenerate
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
-###4. Regenerating image sizes
-###
-![Regenerating image sizes
-](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-4.png)
-
-
 ## Changelog ##
+* 3.0
+	* Revamping all the code, change classes and structure
+	* Use grunt for compiling files
+	* Handle the 3.9 new cropping position
+	* Remove aristo css
+	* Use UI from WordPress
 * 2.4.3
 	* Remove some php notices
 	* Remove notice when wrong image size
