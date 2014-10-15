@@ -110,8 +110,8 @@
 				</table>
 			</div>
 		</div>
-		<div >
-			<div id="regenerate_message"></div>
+		<div class="sis" >
+			<div class="regenerate_message"></div>
 			<div class="media-item sis">
 				<div class="progress">
 					<div id="sis_progress-percent" class="percent">100%</div>
@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			
-			<div class="ui-widget" id="time">
+			<div class="ui-widget time">
 				<div class="ui-state-highlight ui-corner-all"> 
 					<p>
 						<span class="ui-icon ui-icon-info"></span> 
@@ -134,6 +134,6 @@
 					</ol>
 				</p>
 			</div>
-			<div id="thumb"><h4><?php _e( 'Last image:', 'simple-image-sizes'); ?></h4><img id="thumb-img" /></div>
+			<div class="thumb"><h4><?php _e( 'Last image:', 'simple-image-sizes'); ?></h4><img class="thumb-img" /></div>
 			<input type="button" class="button" name="ajax_thumbnail_rebuild" id="ajax_thumbnail_rebuild" value="<?php _e( 'Regenerate Thumbnails', 'simple-image-sizes' ) ?>" />
 		</div>

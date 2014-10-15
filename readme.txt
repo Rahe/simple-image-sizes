@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 3.0
+Tested up to: 4.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,11 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0.1
+	* Change the template render method for non apache webservers : https://wordpress.org/support/topic/fatal-error-1190?replies=6
+	* Remove ambigious ids for the css bugging WooCommerce : https://wordpress.org/support/topic/bad-css-style-administration and
+	* Right code for counting the elements on backoffice  : https://github.com/Rahe/Simple-image-sizes/issues/20
+	* Fix bug on regenation and _e instead of __ : https://plugins.trac.wordpress.org/ticket/2259
 * 3.0
 	* Revamping all the code, change classes and structure
 	* Use grunt for compiling files

@@ -23,6 +23,7 @@ rahe.sis.regenerate = {
 	percentText : null,
 	progress : null,
 	messageZone : null,
+	sisZone : null,
 	time : null,
 	timeZone : null,
 	buttonRegenerate : null,
@@ -31,16 +32,17 @@ rahe.sis.regenerate = {
 	thumb : null,
 	thumbImg : null,
 	init : function() {
+		this.sisZone = jQuery('.sis');
 		this.percentText = jQuery('#sis_progress-percent');
 		this.progress = jQuery( '.progress' );
-		this.messageZone = jQuery("#regenerate_message");
-		this.time = jQuery("#time");
+		this.messageZone = this.sisZone.find(".regenerate_message");
+		this.time = this.sisZone.find(".time");
 		this.timeZone = this.time.find("p span.time_message");
 		this.buttonRegenerate = jQuery( "#ajax_thumbnail_rebuild" );
 		this.errorZone = jQuery( '#error_messages' );
 		this.errorMessages = this.errorZone.find( 'ul.messages' );
-		this.thumb = jQuery( '#thumb' );
-		this.thumbImg = jQuery( '#thumb-img' );
+		this.thumb = this.sisZone.find( '.thumb' );
+		this.thumbImg = this.sisZone.find( '.thumb-img' );
 	},
 	getThumbnails : function() {
 		var self = this,
@@ -157,6 +159,7 @@ rahe.sis.regenerate = {
 		
 		// Set the message of current image regenerating
 		this.setMessage( sis.regenerating + ( this.curr + 1 ) + sis.of + this.total );
+		this.setMessage( sis.regenerating + ( this.curr + 1 ) + sis.of + this.total );
 
 		jQuery.ajax( {
 			url: sis.ajaxUrl,
@@ -266,7 +269,7 @@ rahe.sis.regenerate = {
 		this.progress.hide();
 		this.percentText.addClass( 'hidden' );
 	}
-}
+};
 
 rahe.sis.sizes = {
 	i: 0,
@@ -274,7 +277,8 @@ rahe.sis.sizes = {
 		e.preventDefault();
 		
 		// Create the template
-		var elTr = _.template( document.getElementById( 'sis-new_size' ).text, {
+		var elTr = rahe.sis.template( 'new_size' );
+		elTr = elTr( {
 			size_id : this.i,
 			validate : sis.validate
 		} );
@@ -304,8 +308,10 @@ rahe.sis.sizes = {
 			alert( sis.alreadyPresent );
 			return false;
 		}
-		
-		var row = _.template( document.getElementById( 'sis-new_size_row' ).text, {
+
+		var row = rahe.sis.template( 'new_size_row' );
+
+		row = row( {
 			size : sis.size,
 			size_name : name,
 			maximumWidth : sis.maximumWidth,
@@ -317,7 +323,7 @@ rahe.sis.sizes = {
 			deleteImage : sis.deleteImage,
 			validateButton : sis.validateButton
 		} );
-		
+
 		// Add the row to the current list
 		jQuery('#' + id).closest( 'tr' ).html( row );
 	},
@@ -531,6 +537,22 @@ rahe.sis.sizes = {
 		}
 	}
 }
+
+rahe.sis.template = _.memoize( function ( id ) {
+	var compiled,
+		options = {
+			evaluate:    /<#([\s\S]+?)#>/g,
+			interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+			escape:      /\{\{([^\}]+?)\}\}(?!\})/g,
+			variable:    'data'
+		};
+
+	return function ( data ) {
+		compiled = compiled || _.template( jQuery( '#sis-' + id ).html(), null, options );
+		return compiled( data );
+	};
+});
+
 jQuery(function() {
 	rahe.sis.regenerate.init();
 	var bodyContent = jQuery( '#wpbody-content');

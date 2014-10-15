@@ -9,7 +9,7 @@
   
 **Tested up to:** 3.9
   
-**Stable tag:** 3.0
+**Stable tag:** 3.0.1
   
 
 ## Description ##
@@ -64,6 +64,11 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+* 3.0.1
+	* Change the template render method for non apache webservers : https://wordpress.org/support/topic/fatal-error-1190?replies=6
+	* Remove ambigious ids for the css bugging WooCommerce : https://wordpress.org/support/topic/bad-css-style-administration and
+	* Right code for counting the elements on backoffice  : https://github.com/Rahe/Simple-image-sizes/issues/20
+	* Fix bug on regenation and _e instead of __ : https://plugins.trac.wordpress.org/ticket/2259
 * 3.0
 	* Revamping all the code, change classes and structure
 	* Use grunt for compiling files

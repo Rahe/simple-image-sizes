@@ -38,8 +38,9 @@ tr.errorAdding {
 tr.notChangedAdding {
 	background-color: #F2A13A;
 }
-
-#regenerate_message, #time, #thumb {
+.sis .regenerate_message,
+.sis .time,
+.sis .thumb {
 	display: none;
 }
 
@@ -52,7 +53,7 @@ tr.notChangedAdding {
 	font-weight: bold;
 }
 
-#time .ui-state-highlight{
+.sis .time .ui-state-highlight{
 	margin-top: 20px;
 	padding: 0 .7em;
 }
