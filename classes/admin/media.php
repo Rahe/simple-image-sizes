@@ -390,6 +390,8 @@ Class SIS_Admin_Media {
 					FROM $wpdb->posts 
 					WHERE post_type IN ('".implode( "', '", $_POST['post_types'] )."')
 				)" );
+			// Return the Id's and Title of medias
+			SIS_Admin_Main::displayJson( array( 'total' =>  $attachments  ) );
 				
 		} else {
 			$attachments = get_children( array(
@@ -400,10 +402,10 @@ Class SIS_Admin_Media {
 				'post_parent' => null, // any parent
 				'output' => 'ids',
 			) );
+			// Return the Id's and Title of medias
+			SIS_Admin_Main::displayJson( array( 'total' => count( $attachments ) ) );
 		}
 
-		// Return the Id's and Title of medias
-		SIS_Admin_Main::displayJson( array( 'total' => count( $attachments ) ) );
 	}
 
 	/**
