@@ -48,6 +48,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0.2
+	* Fix version check for the image crop positions
 * 3.0.1
 	* Change the template render method for non apache webservers : https://wordpress.org/support/topic/fatal-error-1190?replies=6
 	* Remove ambigious ids for the css bugging WooCommerce : https://wordpress.org/support/topic/bad-css-style-administration and
