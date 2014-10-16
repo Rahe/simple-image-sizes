@@ -150,7 +150,7 @@ Class SIS_Admin_Main {
 		global $wp_version;
 
 		// Return the only possible
-		if( version_compare( '3.9', $wp_version, '<' ) ) {
+		if( version_compare( $wp_version, '3.9', '<' ) ) {
 			return array( );
 		}
 
