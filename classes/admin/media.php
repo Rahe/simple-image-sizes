@@ -85,12 +85,17 @@ Class SIS_Admin_Media {
 		// Get the image sizes
 		global $_wp_additional_image_sizes;
 		$options = get_option( SIS_OPTION );
+		$custom_sizes = array_keys($options);
 
 		// Get the sizes and add the settings
 		foreach ( get_intermediate_image_sizes() as $s ) {
 			// Don't make the original sizes or numeric sizes that appear
 			if( in_array( $s, self::$original ) || is_integer( $s ) ) {
 				continue;
+			}
+			$is_theme_defined = false;
+			if( ! in_array( $s, $custom_sizes ) ) {
+				$is_theme_defined = true;
 			}
 			
 			// Set width
@@ -103,7 +108,7 @@ Class SIS_Admin_Media {
 			$crop = isset( $_wp_additional_image_sizes[$s]['crop'] ) ? intval( $_wp_additional_image_sizes[$s]['crop'] ) : get_option( "{$s}_crop" ) ;
 			
 			// Add the setting field for this size
-			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), array( __CLASS__, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop ) );
+			add_settings_field( 'image_size_'.$s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), array( __CLASS__, 'image_sizes' ), 'media' , 'default', array( 'name' => $s , 'width' => $width , 'height' => $height, 'c' => $crop, 'is_theme_defined' => $is_theme_defined ) );
 		}
 
 		// Register the setting for media option page
@@ -143,28 +148,29 @@ Class SIS_Admin_Media {
 		$show 		=	isset( $sizes[$args['name']]['s'] ) && !empty( $sizes[$args['name']]['s'] )? '1' : '0' ;
 		$custom 	=	isset( $sizes[$args['name']]['custom'] ) && !empty( $sizes[$args['name']]['custom'] )? '1' : '0' ;
 		$name 		=	isset( $sizes[$args['name']]['n'] ) && !empty( $sizes[$args['name']]['n'] )? esc_html( $sizes[$args['name']]['n'] ) : esc_html( $args['name'] ) ;
+		$is_theme_defined	=	esc_html( $args['is_theme_defined'] );
 		?>
 		<input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name" />
 		<?php if( $custom ): ?>
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" />
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][custom]' ); ?>" value="1" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 		<?php else: ?>
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" />
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][theme]' ); ?>" value="1" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 		<?php endif; ?>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>">
 			<?php _e( 'Maximum width', 'simple-image-sizes'); ?> 
-			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][w]' ); ?>" base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 		</label>
 		<label class="sis-label" for="<?php  esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>">
 			<?php _e( 'Maximum height', 'simple-image-sizes'); ?> 
-			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>" />
+			<input name="<?php esc_attr_e( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][h]' ); ?>" base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 		</label>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>">
 			<?php _e( 'Public name', 'simple-image-sizes'); ?> 
-			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" />
+			<input name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][n]' ); ?>" base_n='<?php echo $name; ?>' value="<?php echo $name ?>" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 		</label>
 		<span class="size_options">
 			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes'); ?></label>
-			<select id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" >
+			<select id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][c]' ); ?>" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>>
 				<option value="0" <?php selected( 0, $crop ); ?>><?php esc_html_e( 'No', 'simple-image-sizes' ); ?></option>
 				<option value="1" <?php selected( 1, $crop ); ?>><?php esc_html_e( 'Yes', 'simple-image-sizes' ); ?></option>
 				<?php foreach( SIS_Admin_Main::get_available_crop() as $crop_position => $label ): ?>
@@ -172,13 +178,15 @@ Class SIS_Admin_Media {
 				<?php endforeach; ?>
 			</select>
 			
-			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" />
+			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" <?php checked( $show, 1 ) ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>" value="1" <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes['.$args['name'].'][s]'); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes'); ?></label>
 		</span>
+		<?php if (!$is_theme_defined): ?>
 		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes'); ?></span>
 		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes'); ?></span>
+		<?php endif; ?>
 		
-		<input type="hidden" class="deleteSize button-primary" value='<?php echo wp_create_nonce( 'delete_'.$args['name'] ); ?>' />
+		<input type="hidden" class="deleteSize button-primary" value='<?php echo wp_create_nonce( 'delete_'.$args['name'] ); ?>' <?php if($is_theme_defined): ?>disabled="disabled"<?php endif; ?>/>
 	<?php }
 	
 	/**
