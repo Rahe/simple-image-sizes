@@ -14,7 +14,7 @@ input.h, input.w {
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
-tr {
+table.sis tr {
 	-webkit-transition: all .5s ease-in-out;
 	-moz-transition: all .5s ease-in-out;
 	-o-transition: all .5s ease-in-out;
