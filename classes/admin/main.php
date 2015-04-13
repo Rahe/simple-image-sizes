@@ -185,7 +185,7 @@ Class SIS_Admin_Main {
 	 */
 	public static function is_crop_position( $crop_position = '' ) {
 		$crops = self::get_available_crop();
-		return isset( $crops[$crop_position] );
+		return @isset( $crops[$crop_position] );
 	}
 
 	/**
