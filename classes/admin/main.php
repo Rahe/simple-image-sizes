@@ -183,7 +183,7 @@ Class SIS_Admin_Main {
 	 * @return bool
 	 * @author Nicolas Juen
 	 */
-	public static function is_crop_position( $crop_position = '' ) {
+	public static function is_crop_position( $crop_position ) {
 		$crops = self::get_available_crop();
 		return isset( $crops[$crop_position] );
 	}
@@ -196,7 +196,7 @@ Class SIS_Admin_Main {
 	 * @return string
 	 * @author Nicolas Juen
 	 */
-	public static function get_crop_position_label( $crop_position = '' ) {
+	public static function get_crop_position_label( $crop_position ) {
 		if( !self::is_crop_position( $crop_position ) ) {
 			return '';
 		}

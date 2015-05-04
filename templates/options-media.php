@@ -38,7 +38,7 @@
 							if( is_numeric( $crop ) || is_bool( $crop ) ) {
 								$crop = absint( $crop ) > 0 ? __( 'Yes', 'simple-image-sizes' ) : __( 'No', 'simple-image-sizes' ) ;
 							} else {
-								$crop = Sis_Admin_Main::get_crop_position_label( $crop );
+								$crop = Sis_Admin_Main::get_crop_position_label( implode( '_', $crop ) );
 							}
 							
 							?>
