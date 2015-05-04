@@ -28,16 +28,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-define( 'SIS_URL', plugin_dir_url ( __FILE__ ) );
+define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SIS_VERSION', '3.0.4' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
 // Function for easy load files
-function _sis_load_files($dir, $files, $prefix = '') {
+function _sis_load_files( $dir, $files, $prefix = '' ) {
 	foreach ( $files as $file ) {
-		if ( is_file( $dir . $prefix . $file . ".php" ) ) {
-			require_once( $dir . $prefix . $file . ".php" );
+		if ( is_file( $dir . $prefix . $file . '.php' ) ) {
+			require_once( $dir . $prefix . $file . '.php' );
 		}
 	}
 }
@@ -45,18 +45,18 @@ function _sis_load_files($dir, $files, $prefix = '') {
 // Plugin client classes
 _sis_load_files( SIS_DIR . 'classes/', array( 'main' ) );
 
-if( is_admin() ) {
+if ( is_admin() ) {
 	// Admins classes
 	_sis_load_files( SIS_DIR . 'classes/admin/', array( 'main', 'post', 'media' ) );
 }
 
-add_action ( 'plugins_loaded', 'initSIS' );
-function initSIS() {
-	if( is_admin() ) {
+add_action( 'plugins_loaded', 'init_sis' );
+function init_sis() {
+	if ( is_admin() ) {
 		new SIS_Admin_Main();
 		new SIS_Admin_Post();
 		new SIS_Admin_Media();
 	}
-	
+
 	new SIS_Client();
-} 
+}

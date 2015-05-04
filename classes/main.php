@@ -25,7 +25,7 @@ Class SIS_Client {
 		// Get inital options
 		$sizes = get_option( SIS_OPTION, array() );
 
-		// Return flase if empty
+		// Return false if empty
 		if ( empty( $sizes ) || ! is_array( $sizes ) ) {
 			return;
 		}
