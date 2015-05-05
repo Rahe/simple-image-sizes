@@ -48,6 +48,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0.5
+    * Fix bug on condition
 * 3.0.4
 	* Fix global add_image_size
 * 3.0.3

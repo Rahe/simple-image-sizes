@@ -1,6 +1,6 @@
 {
 	"name": "simple-image-sizes",
-	"version": "3.0.3",
+	"version": "3.0.5",
 	"description": "Simple image sizes for WordPress",
 	"author": "Nicolas Juen",
 	"devDependencies": {

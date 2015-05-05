@@ -9,7 +9,7 @@
   
 **Tested up to:** 4.2.1
   
-**Stable tag:** 3.0.4
+**Stable tag:** 3.0.5
   
 
 ## Description ##
@@ -64,6 +64,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+
+* 3.0.5
+    * Fix bug on condition
 * 3.0.4
 	* Fix global add_image_size
 * 3.0.3
