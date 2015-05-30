@@ -13,7 +13,7 @@ Class SIS_Admin_Main {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
 		// Add javascript
 		wp_register_script( 'underscore', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js', array(), '1.6.0' );
-		wp_register_script( 'sis_js', SIS_URL . '/assets/js/sis' . $suffix . '.js', array(
+		wp_register_script( 'sis_js', SIS_URL . 'assets/js/sis' . $suffix . '.js', array(
 			'jquery',
 			'jquery-ui-button',
 			'jquery-ui-progressbar',
@@ -21,14 +21,14 @@ Class SIS_Admin_Main {
 		), SIS_VERSION );
 
 		// Differencitate the scripts
-		wp_register_script( 'sis_js_attachments', SIS_URL . '/assets/js/sis-attachments' . $suffix . '.js', array( 'jquery' ), SIS_VERSION );
+		wp_register_script( 'sis_js_attachments', SIS_URL . 'assets/js/sis-attachments' . $suffix . '.js', array( 'jquery' ), SIS_VERSION );
 
 		// Add javascript translation
 		wp_localize_script( 'sis_js', 'sis', self::localize_vars() );
 		wp_localize_script( 'sis_js_attachments', 'sis', self::localize_vars() );
 
 		// Add CSS
-		wp_enqueue_style( 'sis_css', SIS_URL . '/assets/css/sis-style' . $suffix . '.css', array(), SIS_VERSION );
+		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/css/sis-style' . $suffix . '.css', array(), SIS_VERSION );
 	}
 
 
