@@ -35,7 +35,7 @@ Class SIS_Admin_Media {
 			return false;
 		}
 
-		if ( 'options-media.php'== $hook_suffix ) {
+		if ( 'options-media.php' == $hook_suffix ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js' );
 
@@ -61,7 +61,7 @@ Class SIS_Admin_Media {
 	 */
 	public static function add_settings_link( $links, $file ) {
 
-		if ( 'simple-image-sizes/simple_image_sizes.php' !== $file  ) {
+		if ( 'simple-image-sizes/simple_image_sizes.php' !== $file ) {
 			return $links;
 		}
 
@@ -473,7 +473,7 @@ Class SIS_Admin_Media {
 			SIS_Admin_Main::displayJson( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 
-		if ('any' !== $post_types ) {
+		if ( 'any' !== $post_types ) {
 
 			foreach ( $_POST['post_types'] as $key => $type ) {
 				if ( ! post_type_exists( $type ) ) {

@@ -36,7 +36,7 @@ Class SIS_Admin_Post {
 			return false;
 		}
 
-		if ( 'upload.php' == $hook_suffix || ( 'post.php' !== $hook_suffix  && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
+		if ( 'upload.php' == $hook_suffix || ( 'post.php' == $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js_attachments' );
 
