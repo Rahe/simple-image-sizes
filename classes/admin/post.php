@@ -33,7 +33,7 @@ Class SIS_Admin_Post {
 	 */
 	public static function enqueue_assets( $hook_suffix = '' ) {
 		if ( ! isset( $hook_suffix ) || empty( $hook_suffix ) ) {
-			return false;
+			return;
 		}
 
 		if ( 'upload.php' == $hook_suffix || ( 'post.php' == $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
@@ -56,15 +56,12 @@ Class SIS_Admin_Post {
 		// Get the nonce
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
-		// Time a the begining
-		timer_start();
-
 		// Get the thumbnails
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
 		// Check the nonce
 		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
-			SIS_Admin_Main::displayJson( array( 'error' => _e( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+			SIS_Admin_Main::displayJson( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 
 		// Get the id
