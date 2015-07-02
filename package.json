@@ -1,17 +1,22 @@
 {
-	"name": "simple-image-sizes",
-	"version": "3.0.7",
-	"description": "Simple image sizes for WordPress",
-	"author": "Nicolas Juen",
-	"devDependencies": {
-      "gulp": "*",
-      "gulp-concat-sourcemap": "*",
-      "gulp-cssmin": "*",
-      "gulp-jshint": "*",
-      "gulp-load-plugins": "*",
-      "gulp-rename": "*",
-      "gulp-uglify": "*",
-      "gulp-watch": "*",
-      "matchdep": "*"
-	}
+  "name": "simple-image-sizes",
+  "version": "3.0.8",
+  "description": "Simple image sizes for WordPress",
+  "author": "Nicolas Juen",
+  "license": "GPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rahe/simple-image-sizes"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-concat-sourcemap": "*",
+    "gulp-cssmin": "*",
+    "gulp-jshint": "*",
+    "gulp-load-plugins": "*",
+    "gulp-rename": "*",
+    "gulp-uglify": "*",
+    "gulp-watch": "*",
+    "matchdep": "*"
+  }
 }
