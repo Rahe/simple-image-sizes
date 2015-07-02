@@ -6,9 +6,8 @@ Class SIS_Client {
 	var $original = array( 'thumbnail', 'medium', 'large' );
 
 	function __construct() {
-
 		// Make new image sizes
-		add_action( 'init', array( __CLASS__, 'init' ), 1 );
+		add_action( 'after_setup_theme', array( __CLASS__, 'after_setup_theme' ), 1 );
 
 		// Add translation
 		add_action( 'init', array( __CLASS__, 'init_translation' ), 2 );
@@ -21,7 +20,7 @@ Class SIS_Client {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function init() {
+	public static function after_setup_theme() {
 		// Get inital options
 		$sizes = get_option( SIS_OPTION, array() );
 
