@@ -12,7 +12,7 @@ Class SIS_Admin_Main {
 	public static function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
 		// Add javascript
-		wp_register_script( 'underscore', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js', array(), '1.6.0' );
+		wp_register_script( 'underscore', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.0/underscore-min.js', array(), '1.8.0' );
 		wp_register_script( 'sis_js', SIS_URL . 'assets/js/sis' . $suffix . '.js', array(
 			'jquery',
 			'jquery-ui-button',
