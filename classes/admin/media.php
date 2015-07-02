@@ -7,7 +7,6 @@ Class SIS_Admin_Media {
 
 	public function __construct() {
 		// Init
-
 		add_action( 'admin_menu', array( __CLASS__, 'init' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ), 11 );
 
@@ -32,7 +31,7 @@ Class SIS_Admin_Media {
 	 */
 	public static function enqueue_assets( $hook_suffix = '' ) {
 		if ( ! isset( $hook_suffix ) || empty( $hook_suffix ) ) {
-			return false;
+			return;
 		}
 
 		if ( 'options-media.php' == $hook_suffix ) {
@@ -56,7 +55,7 @@ Class SIS_Admin_Media {
 	 * @param array $links
 	 * @param string $file
 	 *
-	 * @return void
+	 * @return string
 	 * @author Nicolas Juen
 	 */
 	public static function add_settings_link( $links, $file ) {
@@ -81,7 +80,7 @@ Class SIS_Admin_Media {
 	public static function init() {
 		// Check if admin
 		if ( ! is_admin() ) {
-			return false;
+			return;
 		}
 
 		// Get the image sizes
@@ -462,6 +461,11 @@ Class SIS_Admin_Media {
 	 * @author Nicolas Juen
 	 */
 	public static function a_thumbnails_rebuild() {
+		/**
+		 * @var $wpdb wpdb
+		 */
+		global $wpdb;
+
 		// Get the nonce
 		$nonce      = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 		$offset     = isset( $_POST['offset'] ) ? absint( $_POST['offset'] ) : 0;
