@@ -98,7 +98,7 @@ rahe.sis.regenerate = {
 		this.dateScript = new Date();
 		// Start ajax
 		jQuery.ajax( {
-			url: sis.ajaxUrl,
+			url: ajaxurl,
 			type: "POST",
 			dataType: 'json',
 			data:  {
@@ -162,7 +162,7 @@ rahe.sis.regenerate = {
 		this.setMessage( sis.regenerating + ( this.curr + 1 ) + sis.of + this.total );
 
 		jQuery.ajax( {
-			url: sis.ajaxUrl,
+			url: ajaxurl,
 			type: "POST",
 			dataType: 'json',
 			data: {
@@ -345,7 +345,7 @@ rahe.sis.sizes = {
 		var parent = jQuery( el ).closest( 'tr' );
 		
 		jQuery.ajax( {
-			url: sis.ajaxUrl,
+			url: ajaxurl,
 			type: "POST",
 			data: { action : "sis_get_sizes" },
 			beforeSend: function() {
@@ -381,7 +381,7 @@ rahe.sis.sizes = {
 		
 		if( !parentTable.hasClass( 'ajaxing' ) ) {
 			jQuery.ajax({
-				url: sis.ajaxUrl,
+				url: ajaxurl,
 				type: "POST",
 				dataType :'json',
 				data: { action : "sis_add_size", width: w, height: h, crop: c, name: n, show: s, customName : cn , nonce : wp_nonce },
@@ -442,7 +442,7 @@ rahe.sis.sizes = {
 		
 		// Make the ajax call
 		jQuery.ajax({
-			url: sis.ajaxUrl,
+			url: ajaxurl,
 			type: "POST",
 			data: { action : "sis_remove_size", name: n, nonce : wp_nonce },
 			success: function(result) {

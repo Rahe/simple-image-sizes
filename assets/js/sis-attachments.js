@@ -73,7 +73,7 @@ jQuery( function() {
 				var self = this;
 
 				jQuery.ajax( {
-					url: sis.ajaxUrl,
+					url: ajaxurl,
 					type: "POST",
 					dataType: 'json',
 					cache: false,
