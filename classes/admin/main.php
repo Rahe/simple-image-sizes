@@ -41,7 +41,6 @@ Class SIS_Admin_Main {
 	 */
 	public static function localize_vars() {
 		return array(
-			'ajaxUrl'            => admin_url( '/admin-ajax.php' ),
 			'reading'            => __( 'Reading attachments...', 'simple-image-sizes' ),
 			'maximumWidth'       => __( 'Maximum width', 'simple-image-sizes' ),
 			'maximumHeight'      => __( 'Maximum height', 'simple-image-sizes' ),
@@ -59,7 +58,7 @@ Class SIS_Admin_Main {
 			'validate'           => __( 'Validate image size name', 'simple-image-sizes' ),
 			'done'               => __( 'Done.', 'simple-image-sizes' ),
 			'size'               => __( 'Size', 'simple-image-sizes' ),
-			'notOriginal'        => __( 'Don\'t use the basic Wordpress thumbnail size name, use the form above to edit them', 'simple-image-sizes' ),
+			'notOriginal'        => __( 'Don\'t use the basic WordPress thumbnail size name, use the form above to edit them', 'simple-image-sizes' ),
 			'alreadyPresent'     => __( 'This size is already registered, edit it instead of recreating it.', 'simple-image-sizes' ),
 			'confirmDelete'      => __( 'Do you really want to delete these size ?', 'simple-image-sizes' ),
 			'update'             => __( 'Update', 'simple-image-sizes' ),
@@ -70,7 +69,7 @@ Class SIS_Admin_Main {
 			'customName'         => __( 'Public name', 'simple-image-sizes' ),
 			'finishedAt'         => __( ' finished at :', 'simple-image-sizes' ),
 			'phpError'           => __( 'Error during the php treatment, be sure to not have php errors in your page', 'simple-image-sizes' ),
-			'notSaved'           => __( 'All the sizes you have modifed are not saved, continue anyway ?', 'simple-image-sizes' ),
+			'notSaved'           => __( 'All the sizes you have modified are not saved, continue anyway ?', 'simple-image-sizes' ),
 			'soloRegenerated'    => __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
 			'crop_positions'     => self::get_available_crop(),
 			'regen_one'          => wp_create_nonce( 'regen' ),
