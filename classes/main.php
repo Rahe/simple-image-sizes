@@ -7,7 +7,7 @@ Class SIS_Client {
 
 	function __construct() {
 		// Make new image sizes
-		add_action( 'after_setup_theme', array( __CLASS__, 'after_setup_theme' ), 1 );
+		add_action( 'init', array( __CLASS__, 'after_setup_theme' ), 1 );
 
 		// Add translation
 		add_action( 'init', array( __CLASS__, 'init_translation' ), 2 );
