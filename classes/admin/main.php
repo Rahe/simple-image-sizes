@@ -176,7 +176,13 @@ Class SIS_Admin_Main {
 			'bottom' => __( 'bottom', 'simple-image-sizes' ),
 		);
 
-		$crops = array();
+		/**
+		 * Base crops
+		 */
+		$crops = array(
+			0 => __( 'No','simple-image-sizes' ),
+			1 => __( 'Yes','simple-image-sizes' ),
+		);
 		foreach ( $x as $x_pos => $x_pos_label ) {
 			foreach ( $y as $y_pos => $y_pos_label ) {
 				$crops[ $x_pos . '_' . $y_pos ] = $x_pos_label . ' ' . $y_pos_label;
@@ -196,8 +202,9 @@ Class SIS_Admin_Main {
 	 */
 	public static function is_crop_position( $crop_position ) {
 		$crops = self::get_available_crop();
+		var_dump($crop_position);
 
-		return isset( $crops[ $crop_position ] );
+		return is_bool( $crop_position ) ? $crop_position : isset( $crops[ $crop_position ] );
 	}
 
 	/**
