@@ -83,7 +83,7 @@ jQuery( function() {
 						nonce : sis.regen_one
 					},
 					beforeSend : function() {
-						self.parent.addClass( 'ajaxing' ).find( '.sis-regenerate-one' ).hide().end().find('.spinner').show();
+						self.parent.addClass( 'ajaxing' ).find( '.sis-regenerate-one' ).hide().end().find('.spinner').addClass( 'is-active').show();
 						self.parent.find( 'a.sis-regenerate-one' ).closest( 'tr' ).fadeTo( 'fast', '0.3' );
 					},
 					success: function( r ) {
@@ -95,7 +95,7 @@ jQuery( function() {
 							message = sis.soloRegenerated.replace( '%s', r.time );
 						}
 						self.setMessage( message );
-						self.parent.removeClass( 'ajaxing' ).find( '.sis-regenerate-one' ).show().end().find('.spinner').hide();
+						self.parent.removeClass( 'ajaxing' ).find( '.sis-regenerate-one' ).show().end().find('.spinner').removeClass( 'is-active' ).hide();
 						self.parent.find( 'a.sis-regenerate-one' ).closest( 'tr' ).fadeTo( 'fast', '1' );
 					}
 				});
