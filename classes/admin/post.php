@@ -159,23 +159,23 @@ Class SIS_Admin_Post {
 		// Get options
 		$sizes_custom = get_option( SIS_OPTION, array() );
 		// init size array
-		$addsizes = array();
+		$add_sizes = array();
 
 		// check there is custom sizes
 		if ( is_array( $sizes_custom ) && ! empty( $sizes_custom ) ) {
 			foreach ( $sizes_custom as $key => $value ) {
 				// If we show this size in the admin
 				if ( isset( $value['s'] ) && 1 == $value['s'] ) {
-					$addsizes[ $key ] = self::_get_thumbnail_name( $key );
+					$add_sizes[ $key ] = self::_get_thumbnail_name( $key );
 				}
 			}
 		}
 
 		// Merge the two array
-		$newsizes = array_merge( $sizes, $addsizes );
+		$new_sizes = array_merge( $sizes, $add_sizes );
 
 		// Add new size
-		return $newsizes;
+		return $new_sizes;
 	}
 
 	/**
@@ -221,7 +221,7 @@ Class SIS_Admin_Post {
 			return $actions;
 		}
 		// Add action for regeneration
-		$actions['sis-regenerate'] = "<a href='#' data-id='" . $object->ID . "' class='sis-regenerate-one'>" . __( 'Regenerate thumbnails', 'simple-image-sizes' ) . "</a>";
+		$actions['sis-regenerate'] = sprintf( "<a href='#' data-id='%s' class='sis-regenerate-one'>%s</a>", esc_attr( $object->ID ), esc_html__( 'Regenerate thumbnails', 'simple-image-sizes' ) );
 
 		// Return actions
 		return $actions;
@@ -249,11 +249,15 @@ Class SIS_Admin_Post {
 		$fields['sis-regenerate'] = array(
 			'label'         => __( 'Regenerate Thumbnails', 'simple-image-sizes' ),
 			'input'         => 'html',
-			'html'          => '
-			<input type="button" data-id="' . $post->ID . '" class="button title sis-regenerate-one" value="' . __( 'Regenerate Thumbnails', 'simple-image-sizes' ) . '" />
+			'html'          => sprintf( '
+			<input type="button" data-id="%s" class="button title sis-regenerate-one" value="%s" />
 			<span class="spinner"></span>
 			<span class="title"><em></em></span>
-			<input type="hidden" class="regen" value="' . wp_create_nonce( 'regen' ) . '" />',
+			<input type="hidden" class="regen" value="%s" />',
+				esc_attr( $post->ID ),
+				esc_attr__( 'Regenerate Thumbnails', 'simple-image-sizes' ),
+				wp_create_nonce( 'regen' )
+			),
 			'show_in_edit'  => true,
 			'show_in_modal' => false,
 		);
