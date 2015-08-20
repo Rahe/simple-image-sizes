@@ -1,4 +1,4 @@
-# Copyright (C) 2010 
+# Copyright (C) 2010
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
@@ -11,286 +11,264 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Basepath: .\n"
-"X-Poedit-KeywordsList: esc_attr_e;esc_html_e;esc_attr__;esc_html__;_e;__\n"
-"X-Generator: Poedit 1.6.3\n"
-"X-Poedit-SearchPath-0: ..\n"
 
-#: ../classes/admin/main.php:39
-msgid "Reading attachments..."
-msgstr ""
-
-#: ../classes/admin/main.php:40 ../classes/admin/media.php:154
-msgid "Maximum width"
-msgstr ""
-
-#: ../classes/admin/main.php:41 ../classes/admin/media.php:158
-msgid "Maximum height"
-msgstr ""
-
-#: ../classes/admin/main.php:42
-msgid "Crop"
-msgstr ""
-
-#: ../classes/admin/main.php:43
-msgid "yes"
-msgstr ""
-
-#: ../classes/admin/main.php:44
-msgid "no"
-msgstr ""
-
-#: ../classes/admin/main.php:45 ../classes/admin/media.php:176
-msgid "Show in post insertion ?"
-msgstr ""
-
-#: ../classes/admin/main.php:46
-msgid " of "
-msgstr ""
-
-#: ../classes/admin/main.php:47
-msgid " or "
-msgstr ""
-
-#: ../classes/admin/main.php:48
-msgid " before the end."
-msgstr ""
-
-#: ../classes/admin/main.php:49 ../classes/admin/media.php:178
-msgid "Delete"
-msgstr ""
-
-#: ../classes/admin/main.php:50
-msgid "No media in your site to regenerate !"
-msgstr ""
-
-#: ../classes/admin/main.php:51
-msgid "Regenerating "
-msgstr ""
-
-#: ../classes/admin/main.php:52
-msgid "Regenerate "
-msgstr ""
-
-#: ../classes/admin/main.php:53
-msgid "Validate image size name"
-msgstr ""
-
-#: ../classes/admin/main.php:54
-msgid "Done."
-msgstr ""
-
-#: ../classes/admin/main.php:55
-msgid "Size"
-msgstr ""
-
-#: ../classes/admin/main.php:56
-msgid ""
-"Don't use the basic Wordpress thumbnail size name, use the form above to "
-"edit them"
-msgstr ""
-
-#: ../classes/admin/main.php:57
-msgid "This size is already registered, edit it instead of recreating it."
-msgstr ""
-
-#: ../classes/admin/main.php:58
-msgid "Do you really want to delete these size ?"
-msgstr ""
-
-#: ../classes/admin/main.php:59 ../classes/admin/media.php:179
-msgid "Update"
-msgstr ""
-
-#: ../classes/admin/main.php:60
-msgid "Error requesting page"
-msgstr ""
-
-#: ../classes/admin/main.php:61
-msgid "images have been regenerated !"
-msgstr ""
-
-#: ../classes/admin/main.php:62
-msgid "Validate"
-msgstr ""
-
-#: ../classes/admin/main.php:63
-msgid " started at"
-msgstr ""
-
-#: ../classes/admin/main.php:64 ../classes/admin/media.php:162
-msgid "Public name"
-msgstr ""
-
-#: ../classes/admin/main.php:65
-msgid " finished at :"
-msgstr ""
-
-#: ../classes/admin/main.php:66
-msgid ""
-"Error during the php treatment, be sure to not have php errors in your page"
-msgstr ""
-
-#: ../classes/admin/main.php:67
-msgid "All the sizes you have modifed are not saved, continue anyway ?"
-msgstr ""
-
-#: ../classes/admin/main.php:68
-#, php-format
-msgid "This image has been regenerated in %s seconds"
-msgstr ""
-
-#: ../classes/admin/main.php:91
-msgid "No id given in POST datas."
-msgstr ""
-
-#: ../classes/admin/main.php:104
-#, php-format
-msgid ""
-"This file already exists in this size and have not been regenerated :<br/><a "
-"target=\"_blank\" href=\"%1$s\" >%2$s</a>"
-msgstr ""
-
-#: ../classes/admin/main.php:111
-#, php-format
-msgid ""
-"This file does not exists and have not been regenerated :<br/><a target="
-"\"_blank\" href=\"%1$s\" >%2$s</a>"
-msgstr ""
-
-#: ../classes/admin/main.php:158
-msgid "Left"
-msgstr ""
-
-#: ../classes/admin/main.php:159
-msgid "Center"
-msgstr ""
-
-#: ../classes/admin/main.php:160
-msgid "Right"
-msgstr ""
-
-#: ../classes/admin/main.php:164
-msgid "top"
-msgstr ""
-
-#: ../classes/admin/main.php:165
-msgid "center"
-msgstr ""
-
-#: ../classes/admin/main.php:166
-msgid "bottom"
-msgstr ""
-
-#: ../classes/admin/media.php:66
-msgid "Settings"
-msgstr ""
-
-#: ../classes/admin/media.php:106
-#, php-format
-msgid "%s size"
-msgstr ""
-
-#: ../classes/admin/media.php:113
-msgid "Add a new size"
-msgstr ""
-
-#: ../classes/admin/media.php:116
-msgid "Get php for theme"
-msgstr ""
-
-#: ../classes/admin/media.php:119
-msgid "Thumbnail regeneration"
-msgstr ""
-
-#: ../classes/admin/media.php:155 ../classes/admin/media.php:157
-#: ../classes/admin/media.php:159
-msgid "custom_image_sizes["
-msgstr ""
-
-#: ../classes/admin/media.php:166
-msgid "Cropping"
-msgstr ""
-
-#: ../classes/admin/media.php:168 ../templates/options-media.php:39
-msgid "No"
-msgstr ""
-
-#: ../classes/admin/media.php:169 ../templates/options-media.php:39
-msgid "Yes"
-msgstr ""
-
-#: ../classes/admin/media.php:192
-msgid "Add a new size of thumbnail"
-msgstr ""
-
-#: ../classes/admin/media.php:204
-msgid "Get the PHP for the theme"
-msgstr ""
-
-#: ../classes/admin/media.php:205
-msgid ""
-"Copy and paste the code below into your Wordpress theme function file if you "
-"wanted to save them and deactivate the plugin."
-msgstr ""
-
-#: ../classes/admin/media.php:221
-msgid "Admin option-media template missing"
-msgstr ""
-
-#: ../classes/admin/media.php:425 ../classes/admin/post.php:65
-msgid "Trying to cheat ?"
-msgstr ""
-
-#: ../classes/admin/media.php:472
-msgid "Regeneration ended"
-msgstr ""
-
-#: ../classes/admin/post.php:216
-msgid "Regenerate thumbnails"
-msgstr ""
-
-#: ../classes/admin/post.php:240 ../classes/admin/post.php:243
-#: ../templates/options-media.php:138
-msgid "Regenerate Thumbnails"
-msgstr ""
-
-#: ../templates/options-media.php:10
+#: templates/options-media.php:10
 msgid "Select which thumbnails you want to rebuild:"
 msgstr ""
 
-#: ../templates/options-media.php:15 ../templates/options-media.php:67
+#: templates/options-media.php:17 templates/options-media.php:73
 msgid "Size name"
 msgstr ""
 
-#: ../templates/options-media.php:16 ../templates/options-media.php:68
+#: templates/options-media.php:18 templates/options-media.php:74
 msgid "Width"
 msgstr ""
 
-#: ../templates/options-media.php:17 ../templates/options-media.php:69
+#: templates/options-media.php:19 templates/options-media.php:75
 msgid "Height"
 msgstr ""
 
-#: ../templates/options-media.php:18 ../templates/options-media.php:70
+#: templates/options-media.php:20 templates/options-media.php:76
 msgid "Crop ?"
 msgstr ""
 
-#: ../templates/options-media.php:75
+#: templates/options-media.php:42 classes/admin/main.php:183
+msgid "Yes"
+msgstr ""
+
+#: templates/options-media.php:42 classes/admin/main.php:182
+msgid "No"
+msgstr ""
+
+#: templates/options-media.php:81
 msgid "Select which post type source thumbnails you want to rebuild:"
 msgstr ""
 
-#: ../templates/options-media.php:80 ../templates/options-media.php:107
+#: templates/options-media.php:88 templates/options-media.php:119
 msgid "Post type"
 msgstr ""
 
-#: ../templates/options-media.php:126
+#: templates/options-media.php:138
 msgid "End time calculated :"
 msgstr ""
 
-#: ../templates/options-media.php:126
+#: templates/options-media.php:139
 msgid "Calculating..."
 msgstr ""
 
-#: ../templates/options-media.php:137
+#: templates/options-media.php:150
 msgid "Last image:"
+msgstr ""
+
+#: templates/options-media.php:152 classes/admin/post.php:250
+#: classes/admin/post.php:258
+msgid "Regenerate Thumbnails"
+msgstr ""
+
+#: classes/admin/post.php:64 classes/admin/media.php:474
+msgid "Trying to cheat ?"
+msgstr ""
+
+#: classes/admin/post.php:224
+msgid "Regenerate thumbnails"
+msgstr ""
+
+#: classes/admin/main.php:44
+msgid "Reading attachments..."
+msgstr ""
+
+#: classes/admin/main.php:45 classes/admin/media.php:171
+msgid "Maximum width"
+msgstr ""
+
+#: classes/admin/main.php:46 classes/admin/media.php:178
+msgid "Maximum height"
+msgstr ""
+
+#: classes/admin/main.php:47
+msgid "Crop"
+msgstr ""
+
+#: classes/admin/main.php:48
+msgid "yes"
+msgstr ""
+
+#: classes/admin/main.php:49
+msgid "no"
+msgstr ""
+
+#: classes/admin/main.php:50 classes/admin/media.php:208
+msgid "Show in post insertion ?"
+msgstr ""
+
+#: classes/admin/main.php:51
+msgid " of "
+msgstr ""
+
+#: classes/admin/main.php:52
+msgid " or "
+msgstr ""
+
+#: classes/admin/main.php:53
+msgid " before the end."
+msgstr ""
+
+#: classes/admin/main.php:54 classes/admin/media.php:210
+msgid "Delete"
+msgstr ""
+
+#: classes/admin/main.php:55
+msgid "No media in your site to regenerate !"
+msgstr ""
+
+#: classes/admin/main.php:56
+msgid "Regenerating "
+msgstr ""
+
+#: classes/admin/main.php:57
+msgid "Regenerate "
+msgstr ""
+
+#: classes/admin/main.php:58
+msgid "Validate image size name"
+msgstr ""
+
+#: classes/admin/main.php:59
+msgid "Done."
+msgstr ""
+
+#: classes/admin/main.php:60
+msgid "Size"
+msgstr ""
+
+#: classes/admin/main.php:61
+msgid "Don't use the basic WordPress thumbnail size name, use the form above to edit them"
+msgstr ""
+
+#: classes/admin/main.php:62
+msgid "This size is already registered, edit it instead of recreating it."
+msgstr ""
+
+#: classes/admin/main.php:63
+msgid "Do you really want to delete these size ?"
+msgstr ""
+
+#: classes/admin/main.php:64 classes/admin/media.php:211
+msgid "Update"
+msgstr ""
+
+#: classes/admin/main.php:65
+msgid "Error requesting page"
+msgstr ""
+
+#: classes/admin/main.php:66
+msgid "images have been regenerated !"
+msgstr ""
+
+#: classes/admin/main.php:67
+msgid "Validate"
+msgstr ""
+
+#: classes/admin/main.php:68
+msgid " started at"
+msgstr ""
+
+#: classes/admin/main.php:69 classes/admin/media.php:185
+msgid "Public name"
+msgstr ""
+
+#: classes/admin/main.php:70
+msgid " finished at :"
+msgstr ""
+
+#: classes/admin/main.php:71
+msgid "Error during the php treatment, be sure to not have php errors in your page"
+msgstr ""
+
+#: classes/admin/main.php:72
+msgid "All the sizes you have modified are not saved, continue anyway ?"
+msgstr ""
+
+#: classes/admin/main.php:73
+msgid "This image has been regenerated in %s seconds"
+msgstr ""
+
+#: classes/admin/main.php:96
+msgid "No id given in POST datas."
+msgstr ""
+
+#: classes/admin/main.php:109
+msgid "This file already exists in this size and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgstr ""
+
+#: classes/admin/main.php:116
+msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+msgstr ""
+
+#: classes/admin/main.php:167
+msgid "Left"
+msgstr ""
+
+#: classes/admin/main.php:168
+msgid "Center"
+msgstr ""
+
+#: classes/admin/main.php:169
+msgid "Right"
+msgstr ""
+
+#: classes/admin/main.php:173
+msgid "top"
+msgstr ""
+
+#: classes/admin/main.php:174
+msgid "center"
+msgstr ""
+
+#: classes/admin/main.php:175
+msgid "bottom"
+msgstr ""
+
+#: classes/admin/media.php:67
+msgid "Settings"
+msgstr ""
+
+#: classes/admin/media.php:107
+msgid "%s size"
+msgstr ""
+
+#: classes/admin/media.php:117
+msgid "Add a new size"
+msgstr ""
+
+#: classes/admin/media.php:123
+msgid "Get php for theme"
+msgstr ""
+
+#: classes/admin/media.php:129
+msgid "Thumbnail regeneration"
+msgstr ""
+
+#: classes/admin/media.php:192
+msgid "Cropping"
+msgstr ""
+
+#: classes/admin/media.php:226
+msgid "Add a new size of thumbnail"
+msgstr ""
+
+#: classes/admin/media.php:239
+msgid "Get the PHP for the theme"
+msgstr ""
+
+#: classes/admin/media.php:240
+msgid "Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin."
+msgstr ""
+
+#: classes/admin/media.php:256
+msgid "Admin option-media template missing"
+msgstr ""
+
+#: classes/admin/media.php:521
+msgid "Regeneration ended"
 msgstr ""
