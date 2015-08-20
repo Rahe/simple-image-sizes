@@ -7,9 +7,9 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 4.2.1
+**Tested up to:** 4.3
   
-**Stable tag:** 3.0.6
+**Stable tag:** 3.9
   
 
 ## Description ##
@@ -64,9 +64,15 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
-* 3.0.7
-    * Fix bug on single image regeneration upload page
-    * Fix bug https://github.com/Rahe/Simple-image-sizes/issues/30
+* 3.0.9
+    * Reuse the after_setup_theme for image size registering
+    * Code formatting and cleaning
+    * Check compatibility wth 4.3
+* 3.0.8
+    * Fix potential bug on error ajax
+    * Stop using init hook and use after_setup_theme for image size registering
+    * Update underscore cdn version for WP install without it
+    * Remove useless timer_start
 * 3.0.6
     * Fix bug for the image adding
 * 3.0.5

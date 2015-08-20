@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 4.2.2
-Stable tag: 3.0.8
+Tested up to: 4.3
+Stable tag: 3.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,10 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0.9
+    * Reuse the after_setup_theme for image size registering
+    * Code formatting and cleaning
+    * Check compatibility wth 4.3
 * 3.0.8
     * Fix potential bug on error ajax
     * Stop using init hook and use after_setup_theme for image size registering
