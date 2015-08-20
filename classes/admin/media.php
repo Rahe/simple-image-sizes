@@ -401,7 +401,7 @@ Class SIS_Admin_Media {
 
 		// Check the nonce
 		if ( ! wp_verify_nonce( $nonce, 'getList' ) ) {
-			SIS_Admin_Main::displayJson();
+			SIS_Admin_Main::display_json();
 		}
 
 		if ( isset( $_POST['post_types'] ) && ! empty( $_POST['post_types'] ) ) {
@@ -413,7 +413,7 @@ Class SIS_Admin_Media {
 			}
 
 			if ( empty( $_POST['post_types'][ $key ] ) ) {
-				SIS_Admin_Main::displayJson();
+				SIS_Admin_Main::display_json();
 			}
 
 			// Get image medias
@@ -431,7 +431,7 @@ Class SIS_Admin_Media {
 					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)" );
 			// Return the Id's and Title of medias
-			SIS_Admin_Main::displayJson( array( 'total' => $attachments ) );
+			SIS_Admin_Main::display_json( array( 'total' => $attachments ) );
 
 		} else {
 			$attachments = get_children( array(
@@ -443,7 +443,7 @@ Class SIS_Admin_Media {
 				'output'         => 'ids',
 			) );
 			// Return the Id's and Title of medias
-			SIS_Admin_Main::displayJson( array( 'total' => count( $attachments ) ) );
+			SIS_Admin_Main::display_json( array( 'total' => count( $attachments ) ) );
 		}
 
 	}
@@ -471,7 +471,7 @@ Class SIS_Admin_Media {
 
 		// Check the nonce
 		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
-			SIS_Admin_Main::displayJson( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+			SIS_Admin_Main::display_json( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 
 		if ( 'any' !== $post_types ) {
@@ -483,7 +483,7 @@ Class SIS_Admin_Media {
 			}
 
 			if ( empty( $_POST['post_types'] ) ) {
-				SIS_Admin_Main::displayJson();
+				SIS_Admin_Main::display_json();
 			}
 
 			// Get image medias
@@ -521,6 +521,6 @@ Class SIS_Admin_Media {
 				'message' => __( 'Regeneration ended', 'simple-image-sizes' )
 			);
 		}
-		SIS_Admin_Main::displayJson( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
+		SIS_Admin_Main::display_json( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
 	}
 }

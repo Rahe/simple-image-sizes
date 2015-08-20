@@ -61,12 +61,12 @@ Class SIS_Admin_Post {
 
 		// Check the nonce
 		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
-			SIS_Admin_Main::displayJson( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+			SIS_Admin_Main::display_json( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 
 		// Get the id
 		$id = isset( $_POST['id'] ) ? $_POST['id'] : 0;
-		SIS_Admin_Main::displayJson( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
+		SIS_Admin_Main::display_json( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
 	}
 
 	/**
