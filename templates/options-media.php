@@ -51,16 +51,16 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 						       checked="checked" value="<?php echo esc_attr( $s ); ?>"/>
 					</th>
 					<th>
-						<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $s ); ?></label>
+						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $s ); ?></label>
 					</th>
 					<th>
-						<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $width ); ?> px</label>
+						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $width ); ?> px</label>
 					</th>
 					<th>
-						<label for="<?php esc_attr_e( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
+						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
 					</th>
 					<th>
-						<label for="<?php esc_attr_e( $s ); ?>"><?php echo $crop; ?> </label>
+						<label for="<?php echo esc_attr( $s ); ?>"><?php echo $crop; ?> </label>
 					</th>
 				</tr>
 			<?php endforeach; ?>
@@ -99,7 +99,7 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 				?>
 				<tr>
 					<th class="check-column">
-						<label for="<?php esc_attr_e( $ptype->name ); ?>">
+						<label for="<?php echo esc_attr( $ptype->name ); ?>">
 							<input type="checkbox" class="post_types" name="post_types[]" checked="checked"
 							       id="<?php echo esc_attr( $ptype->name ); ?>"
 							       value="<?php echo esc_attr( $ptype->name ); ?>"/>
@@ -107,7 +107,7 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 					</th>
 					<th>
 						<label
-							for="<?php esc_attr_e( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
+							for="<?php echo esc_attr( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
 					</th>
 				</tr>
 			<?php endforeach; ?>
