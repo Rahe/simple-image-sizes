@@ -30,8 +30,6 @@
 				{{ data.crop }}
 			</label>
 			<select type="checkbox" name="custom_image_sizes[{{ data.size_name }}][c]" id="custom_image_sizes[{{ data.size_name }}][c]" base_c="0" class="c crop">
-				<option value="0"> {{ sis.fl }} </option>
-				<option value="1"> {{ sis.tr }} </option>
 				<# _.each( sis.crop_positions, function( label, name ) { #>
 					<option value="{{ name }}"> {{ label }} </option>
 				<# }); #>
@@ -42,6 +40,6 @@
 			</label>
 		</span>
 		<div class="delete_size button-secondary">{{ data.deleteImage }}</div>
-		<div class="add_size button-secondary">{{ data.validateButton }}</div>
+		<div class="add_size button-primary">{{ data.validateButton }}</div>
 	</td>
 </script>

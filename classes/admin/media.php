@@ -193,10 +193,7 @@ Class SIS_Admin_Media {
 			<select id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>" class="c crop"
 			        base_c='<?php echo esc_attr( $crop ); ?>'
 			        name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
-				<option
-					value="0" <?php selected( 0, $crop ); ?>><?php esc_html_e( 'No', 'simple-image-sizes' ); ?></option>
-				<option
-					value="1" <?php selected( 1, $crop ); ?>><?php esc_html_e( 'Yes', 'simple-image-sizes' ); ?></option>
+
 				<?php foreach ( SIS_Admin_Main::get_available_crop() as $crop_position => $label ): ?>
 					<option <?php selected( $crop_position, $crop ); ?>
 						value="<?php echo esc_attr( $crop_position ) ?>"><?php echo esc_html( $label ); ?></option>
