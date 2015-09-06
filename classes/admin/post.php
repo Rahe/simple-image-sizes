@@ -28,7 +28,9 @@ Class SIS_Admin_Post {
 	 * Register javascripts and css.
 	 *
 	 * @access public
-	 * @return void
+	 *
+	 * @param string $hook_suffix
+	 *
 	 * @author Nicolas Juen
 	 */
 	public static function enqueue_assets( $hook_suffix = '' ) {
@@ -213,7 +215,11 @@ Class SIS_Admin_Post {
 	 *
 	 * @since 2.2
 	 * @access public
-	 * @return $actions : array of actions and content to display
+	 *
+	 * @param $actions : array of actions and content to display
+	 * @param WP_Post $object
+	 *
+	 * @return string $actions
 	 * @author Nicolas Juen
 	 */
 	public static function add_actions_list( $actions, $object ) {

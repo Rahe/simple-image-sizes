@@ -252,6 +252,8 @@ Class SIS_Admin_Main {
 	 * @param int $attachment_id Attachment Id to process.
 	 * @param string $file Filepath of the Attached image.
 	 *
+	 * @param null|array $thumbnails: thumbnails to regenerate, if null all
+	 *
 	 * @return mixed Metadata for attachment.
 	 */
 	public static function wp_generate_attachment_metadata_custom( $attachment_id, $file, $thumbnails = null ) {

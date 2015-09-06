@@ -228,7 +228,7 @@ rahe.sis.regenerate = {
 					}
 
 					// Make the average value of the regenerating time
-					ave = sum/num,
+					ave = sum/num;
 					
 					// Round the value in miliseconds and add 25% or error
 					t = Math.round( ( ( ave * self.total ) * 1000 ) );
@@ -395,7 +395,7 @@ rahe.sis.sizes = {
 					// Set basic class and remove pending
 					var classTr = '';
 					parent.removeClass();
-					parentTable.removeClass( 'ajaxing' )
+					parentTable.removeClass( 'ajaxing' );
 					
 					// Check the result for the different messages
 					if( result == 0 ) {
@@ -536,7 +536,7 @@ rahe.sis.sizes = {
 			el.closest( 'td' ).removeClass( 'notSaved' ).find('.add_size').css( 'display', 'none' );
 		}
 	}
-}
+};
 
 rahe.sis.template = _.memoize( function ( id ) {
 	var compiled,

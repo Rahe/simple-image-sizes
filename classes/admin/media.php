@@ -26,7 +26,9 @@ Class SIS_Admin_Media {
 	 * Register javascripts and css.
 	 *
 	 * @access public
-	 * @return void
+	 *
+	 * @param string $hook_suffix
+	 *
 	 * @author Nicolas Juen
 	 */
 	public static function enqueue_assets( $hook_suffix = '' ) {
@@ -85,7 +87,6 @@ Class SIS_Admin_Media {
 
 		// Get the image sizes
 		global $_wp_additional_image_sizes;
-		$options = get_option( SIS_OPTION );
 
 		// Get the sizes and add the settings
 		foreach ( get_intermediate_image_sizes() as $s ) {
@@ -396,7 +397,6 @@ Class SIS_Admin_Media {
 		global $wpdb;
 
 		// Basic vars
-		$res   = array();
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
 		// Check the nonce
