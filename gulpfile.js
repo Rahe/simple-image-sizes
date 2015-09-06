@@ -19,7 +19,7 @@ gulp.task('dist', function () {
     ])
 		.pipe(plugins.uglify())
 		.pipe(concat('sis.min.js', { sourceRoot : '../../' }))
-		.pipe(gulp.dest('assets/js/'));
+		.pipe(gulp.dest('assets/js/build/'));
 });
 
 gulp.task('dev', function () {
@@ -36,7 +36,7 @@ gulp.task('dev', function () {
     ])
         .pipe(plugins.jshint())
         .pipe(concat('sis.js', { sourceRoot : '../../' }))
-        .pipe(gulp.dest('assets/js/'));
+        .pipe(gulp.dest('assets/js/build/'));
 });
 
 // On default task, just compile on demand
