@@ -1,4 +1,7 @@
-rahe.sis.tools = {
+var _ = require( 'underscore' );
+var $ = require( 'jquery' );
+
+var tools = {
     uniqid: function (prefix, more_entropy) {
         // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
         // +    revised by: Kankrelune (http://www.webfaktory.info/)
@@ -102,3 +105,6 @@ rahe.sis.tools = {
         };
     })
 };
+
+
+module.exports = tools;

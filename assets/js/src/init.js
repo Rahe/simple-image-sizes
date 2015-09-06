@@ -1,5 +1,4 @@
-// Launch media view
-rahe.sis.media = new rahe.sis.views.Medias();
+medias = require( './views/medias' );
 
-// Launch Attachments view
-rahe.sis.media = new rahe.sis.views.Attachments();
+// Launch media view
+medias.Medias();

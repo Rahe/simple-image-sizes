@@ -1,8 +1,13 @@
 /**
  * Image size view
  */
+
 'use strict';
-rahe.sis.views.Image_size = Backbone.View.extend({
+
+// Deps
+var Backbone = require( 'backbone' );
+
+module.exports = Backbone.View.extend({
     template : '',
     events : {
     },

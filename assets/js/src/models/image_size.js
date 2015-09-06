@@ -2,7 +2,11 @@
  * Image size model
  */
 'use strict';
-rahe.sis.models.Field = Backbone.Model.extend({
+
+// Deps
+var Backbone = require( 'backbone' );
+
+module.exports = Backbone.Model.extend({
     defaults: {
         width: 0,
         height: 0,

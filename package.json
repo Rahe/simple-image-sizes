@@ -1,17 +1,35 @@
 {
-	"name": "simple-image-sizes",
-	"version": "3.0.7",
-	"description": "Simple image sizes for WordPress",
-	"author": "Nicolas Juen",
-	"devDependencies": {
-      "gulp": "*",
-      "gulp-concat-sourcemap": "*",
-      "gulp-cssmin": "*",
-      "gulp-jshint": "*",
-      "gulp-load-plugins": "*",
-      "gulp-rename": "*",
-      "gulp-uglify": "*",
-      "gulp-watch": "*",
-      "matchdep": "*"
-	}
+  "name": "simple-image-sizes",
+  "version": "3.0.7",
+  "description": "Simple image sizes for WordPress",
+  "author": "Nicolas Juen",
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "browserify-shim": "^3.8.10",
+    "gulp": "^3.9.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-jshint": "^1.11.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.4.0",
+    "gulp-util": "^3.0.6",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "wp": "global:wp",
+    "underscore": "global:_",
+    "backbone": {
+      "exports": "global:Backbone",
+      "depends": [
+        "jquery",
+        "underscore"
+      ]
+    }
+  }
 }

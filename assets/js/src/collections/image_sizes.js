@@ -2,5 +2,9 @@
  * Image sizes collection
  */
 'use strict';
-rahe.sis.collections.image_sizes = Backbone.Collection.extend({
+
+// Deps
+var Backbone = require( 'backbone' );
+
+module.exports = Backbone.Collection.extend({
 });

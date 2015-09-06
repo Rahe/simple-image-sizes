@@ -1,45 +1,43 @@
 /*Load all plugin define in package.json*/
-var gulp = require('gulp'),
-	gulpLoadPlugins = require('gulp-load-plugins'),
-	plugins = gulpLoadPlugins(),
-	concat = require('gulp-concat-sourcemap');
+var browserify = require('browserify');
+var gulp = require('gulp');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+var gutil = require('gulp-util');
+var cssmin = require('gulp-cssmin');
 
-/*JS task*/
-gulp.task('dist', function () {
-    gulp.src([
-        'assets/js/src/main.js',
-        'assets/js/src/tools.js',
-        'assets/js/src/vendor/*.js',
-        'assets/js/src/tools/*.js',
-        'assets/js/src/views/*.js',
-        'assets/js/src/models/*.js',
-        'assets/js/src/routers/*.js',
-        'assets/js/src/collections/*.js',
-        'assets/js/src/init.js'
-    ])
-		.pipe(plugins.uglify())
-		.pipe(concat('sis.min.js', { sourceRoot : '../../' }))
-		.pipe(gulp.dest('assets/js/build/'));
+/**
+ * Browserify
+ */
+gulp.task('javascript', function () {
+
+    var b = browserify({
+        entries: ['assets/js/src/main.js']
+    } );
+
+    return b.bundle()
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+       // .pipe(uglify())
+        .on('error', gutil.log)
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./assets/js/build/'));
 });
 
-gulp.task('dev', function () {
-    return gulp.src([
-        'assets/js/src/main.js',
-        'assets/js/src/tools.js',
-        'assets/js/src/vendor/*.js',
-        'assets/js/src/tools/*.js',
-        'assets/js/src/views/*.js',
-        'assets/js/src/models/*.js',
-        'assets/js/src/routers/*.js',
-        'assets/js/src/collections/*.js',
-        'assets/js/src/init.js'
+gulp.task('css', function () {
+   return gulp.src([
+        'assets/css/src/sis-style.css'
     ])
-        .pipe(plugins.jshint())
-        .pipe(concat('sis.js', { sourceRoot : '../../' }))
-        .pipe(gulp.dest('assets/js/build/'));
+        .pipe(cssmin())
+        .pipe(gulp.dest('assets/css/build/'));
 });
 
 // On default task, just compile on demand
-gulp.task('default', function() {
-	gulp.watch( [ 'assets/js/src/*.js' ], [ 'dev' ] );
+gulp.task('default', function () {
+    gulp.watch(['assets/js/src/**/*.js'], ['javascript']);
+    gulp.watch(['assets/css/src/**/*.css'], ['css']);
 });
