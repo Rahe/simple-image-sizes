@@ -3,10 +3,10 @@
 Plugin Name: Simple Image Sizes
 Plugin URI: https://github.com/Rahe/simple-image-sizes
 Description: Add options in media setting page for images sizes
-Version: 3.0.9
+Version: 3.0.10
 Author: Rahe
 Author URI: http://nicolas-juen.fr
-Text Domain: 'simple-image-sizes'
+Text Domain: simple-image-sizes
 Domain Path: /languages
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SIS_VERSION', '3.0.9' );
+define( 'SIS_VERSION', '3.0.10' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
 // Function for easy load files

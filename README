@@ -64,6 +64,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+* 3.0.10
+    * Remove text-domain on the header for language pack
 * 3.0.9
     * Reuse the after_setup_theme for image size registering
     * Code formatting and cleaning

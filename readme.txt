@@ -48,6 +48,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.0.10
+    * Remove text-domain on the header for language pack
 * 3.0.9
     * Reuse the after_setup_theme for image size registering
     * Code formatting and cleaning
