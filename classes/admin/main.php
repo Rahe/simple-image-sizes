@@ -181,6 +181,8 @@ Class SIS_Admin_Main {
 		$crops = array(
 			0 => __( 'No','simple-image-sizes' ),
 			1 => __( 'Yes','simple-image-sizes' ),
+      // Add the 'Smart Crop' option to facilitate entropy based cropping
+			'smart_smart' => __( 'Smart Crop', 'simple-image-sizes' ),
 		);
 		foreach ( $x as $x_pos => $x_pos_label ) {
 			foreach ( $y as $y_pos => $y_pos_label ) {
@@ -290,7 +292,14 @@ Class SIS_Admin_Main {
 					$sizes[ $s ]['height'] = get_option( "{$s}_size_h" );
 				} // For default sizes set in options
 				if ( isset( $_wp_additional_image_sizes[ $s ]['crop'] ) ) {
-					$sizes[ $s ]['crop'] = intval( $_wp_additional_image_sizes[ $s ]['crop'] );
+          // If the size was set to smart crop, we have a special case
+          if ($_wp_additional_image_sizes[ $s ]['crop'][0] == 'smart') {
+            $sizes[ $s ]['crop'] = 'smart';
+          }
+          // Otherwise business as usual
+          else {
+            $sizes[ $s ]['crop'] = intval( $_wp_additional_image_sizes[ $s ]['crop'] );
+          }
 				} // For theme-added sizes
 				else {
 					$sizes[ $s ]['crop'] = get_option( "{$s}_crop" );
@@ -314,7 +323,27 @@ Class SIS_Admin_Main {
 					}
 				}
 
-				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
+				// Smart Crop
+				if ($size_data['crop'] === 'smart') {
+          // Get the path and filename of the file to crop
+					$pathparts = explode('/', $file);
+          // Prepend the new filename
+          $filename = 'entropy_' . array_pop($pathparts);
+          // Get our path
+          $filepath = implode('/', $pathparts) . '/';
+          // Create the crop entropy object, feeding it our original file path
+					$ce = new SIS\crop\CropEntropy($file);
+          // Perform the entropy based crop
+					$ci = $ce->resizeAndCrop($size_data['width'], $size_data['height']);
+          // Write the result to our new file in the same directory as the original
+					$ci->writeImage($filepath . $filename);
+          // Feed the new image back into Wordpress' attachment system
+					$resized = image_make_intermediate_size( $filepath . $filename, $size_data['width'], $size_data['height'] );
+				}
+        // No Smart Crop
+				else {
+					$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
+				}
 
 				if ( isset( $meta_datas['size'][ $size ] ) ) {
 					// Remove the size from the orignal sizes for after work

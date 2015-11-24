@@ -47,7 +47,7 @@ _sis_load_files( SIS_DIR . 'classes/', array( 'main' ) );
 
 if ( is_admin() ) {
 	// Admins classes
-	_sis_load_files( SIS_DIR . 'classes/admin/', array( 'main', 'post', 'media' ) );
+	_sis_load_files( SIS_DIR . 'classes/admin/', array( 'main', 'post', 'media', 'Crop', 'CropEntropy' ) );
 }
 
 add_action( 'plugins_loaded', 'init_sis' );
