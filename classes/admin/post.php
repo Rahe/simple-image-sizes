@@ -17,11 +17,61 @@ Class SIS_Admin_Post {
 		// Rebuilt the image
 		add_action( 'wp_ajax_' . 'sis_rebuild_image', array( __CLASS__, 'a_thumbnail_rebuild' ) );
 
+		// Rebuild featured
+		add_action( 'wp_ajax_' . 'sis_rebuild_featured', array( __CLASS__, 'a_featured_rebuild' ) );
+
 		// Add action in media row quick actions
 		add_filter( 'media_row_actions', array( __CLASS__, 'add_actions_list' ), 10, 2 );
 
 		// Add filter for the Media single
 		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_field_regenerate' ), 9, 2 );
+
+		add_filter( 'admin_post_thumbnail_html', array( __CLASS__, 'admin_post_thumbnail_html' ), 10, 2 );
+	}
+
+	/**
+	 * Generate HTML on the featured image size
+	 *
+	 * @param $content
+	 * @param $ID
+	 *
+	 * @return string
+	 */
+	public static function admin_post_thumbnail_html( $content, $ID ) {
+
+		$content .= '<span class="spinner"></span>';
+		$content .= get_submit_button( 'Regenerate image sizes', 'primary', 'sis_featured', false, array(
+			'id' => 'sis_featured_regenerate',
+			'data-nonce' => wp_create_nonce( 'sis-regenerate-featured-'.$ID ),
+		) );
+		$content .= '<p class="sis_message"></p>';
+
+		return $content;
+	}
+
+	/**
+	 * Rebuild the image size of a content featured image
+	 */
+	public static function a_featured_rebuild() {
+		// Get the nonce
+		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
+
+		// Get the thumbnails
+		$id = isset( $_POST['id'] ) ? $_POST['id'] : null;
+
+		// Check the nonce
+		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-'.$id ) ) {
+			wp_send_json( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+		}
+
+		$attachment_id = get_post_thumbnail_id( $id );
+
+		if( ! has_post_thumbnail( $id ) || is_null( $attachment_id ) ) {
+			wp_send_json( array( 'error' => __( 'There is no media attached to this content.', 'simple-image-sizes' ) ) );
+		}
+
+		// Get the id
+		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $attachment_id ) );
 	}
 
 	/**
@@ -36,6 +86,17 @@ Class SIS_Admin_Post {
 	public static function enqueue_assets( $hook_suffix = '' ) {
 		if ( ! isset( $hook_suffix ) || empty( $hook_suffix ) ) {
 			return;
+		}
+
+		/**
+		 * Enqueue the assets for the featured image only on the edit pages and the post types that supports it
+		 */
+		if( in_array( $hook_suffix, array( 'post-new.php', 'post.php' ) ) ) {
+			if(  post_type_supports( get_post_type( get_post() ), 'thumbnail' ) ) {
+				// Add javascript
+				wp_enqueue_script( 'sis_js_featured' );
+			}
+
 		}
 
 		if ( 'upload.php' == $hook_suffix || ( 'post.php' == $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
@@ -63,12 +124,12 @@ Class SIS_Admin_Post {
 
 		// Check the nonce
 		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
-			SIS_Admin_Main::display_json( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
+			wp_send_json( array( 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ) );
 		}
 
 		// Get the id
 		$id = isset( $_POST['id'] ) ? $_POST['id'] : 0;
-		SIS_Admin_Main::display_json( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
+		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
 	}
 
 	/**
