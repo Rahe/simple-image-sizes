@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 4.3
-Stable tag: 3.0.9
+Tested up to: 4.5
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,10 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+
+* 3.1.0
+    * Regenerate images from the featured image
+    * Use wp_send_json since the minimum WordPress version is 3.5
 * 3.0.10
     * Remove text-domain on the header for language pack
 * 3.0.9
