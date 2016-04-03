@@ -94,14 +94,14 @@ Class SIS_Admin_Post {
 		if( in_array( $hook_suffix, array( 'post-new.php', 'post.php' ) ) ) {
 			if(  post_type_supports( get_post_type( get_post() ), 'thumbnail' ) ) {
 				// Add javascript
-				wp_enqueue_script( 'sis_js_featured' );
+				wp_enqueue_script( 'sis_js' );
 			}
 
 		}
 
 		if ( 'upload.php' == $hook_suffix || ( 'post.php' == $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
 			// Add javascript
-			wp_enqueue_script( 'sis_js_attachments' );
+			wp_enqueue_script( 'sis_js' );
 
 			// Add underscore template
 			add_action( 'admin_footer', array( 'SIS_Admin_Main', 'add_template' ) );

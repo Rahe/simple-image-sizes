@@ -7,25 +7,13 @@ var gulp = require('gulp'),
 /*JS task*/
 gulp.task('dist', function () {
 	gulp.src([
-		'assets/js/sis.js'
+		'assets/js/src/sis.js',
+		'assets/js/src/attachments.js',
+		'assets/js/src/featured.js'
 	])
 		.pipe(plugins.uglify())
-		.pipe(concat('sis.min.js', { sourceRoot : '../../' }))
-		.pipe(gulp.dest('assets/js/'));
-
-    gulp.src([
-        'assets/js/sis-attachments.js'
-    ])
-	.pipe(plugins.uglify())
-	.pipe(concat('sis-attachments.min.js', { sourceRoot : '../../' }))
-	.pipe(gulp.dest('assets/js/'));
-
-	gulp.src([
-		'assets/js/sis-featured.js'
-	])
-	.pipe(plugins.uglify())
-	.pipe(concat('sis-featured.min.js', { sourceRoot : '../../' }))
-	.pipe(gulp.dest('assets/js/'));
+		.pipe(concat('app.min.js', { sourceRoot : '../../' }))
+		.pipe(gulp.dest('assets/js/dist/'));
 
 	gulp.src([
 		'assets/css/sis-style.css'
@@ -37,14 +25,16 @@ gulp.task('dist', function () {
 
 gulp.task('dev', function () {
 	return gulp.src([
-        'assets/js/sis.js',
-        'assets/js/sis-attachments.js',
-		'assets/js/sis-featured.js'
+		'assets/js/src/sis.js',
+		'assets/js/src/attachments.js',
+		'assets/js/src/featured.js'
     ])
-		.pipe(plugins.jshint());
+		.pipe(plugins.jshint())
+		.pipe(concat('app.js', { sourceRoot : '../../' }))
+		.pipe(gulp.dest('assets/js/dist/'));
 });
 
 // On default task, just compile on demand
 gulp.task('default', function() {
-	gulp.watch( [ 'assets/js/*.js', '!assets/js/*.min.js' ], [ 'dev' ] );
+	gulp.watch( [ 'assets/js/src/*.js', '!assets/js/src/*.min.js' ], [ 'dev' ] );
 });
