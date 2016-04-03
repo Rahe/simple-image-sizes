@@ -44,7 +44,7 @@ Class SIS_Admin_Post {
 			'id' => 'sis_featured_regenerate',
 			'data-nonce' => wp_create_nonce( 'sis-regenerate-featured-'.$ID ),
 		) );
-		$content .= '<p class="sis_message"></p>';
+		$content .= '<div class="sis_message"></div>';
 
 		return $content;
 	}
