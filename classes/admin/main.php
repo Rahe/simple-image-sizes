@@ -7,6 +7,8 @@ Class SIS_Admin_Main {
 	}
 
 	/**
+	 * Register all the assets for the admin
+	 *
 	 *
 	 */
 	public static function register_assets() {
@@ -23,9 +25,13 @@ Class SIS_Admin_Main {
 		// Differencitate the scripts
 		wp_register_script( 'sis_js_attachments', SIS_URL . 'assets/js/sis-attachments' . $suffix . '.js', array( 'jquery' ), SIS_VERSION );
 
-		// Add javascript translation
+		// Featured image
+		wp_register_script( 'sis_js_featured', SIS_URL . 'assets/js/sis-featured' . $suffix . '.js', array( 'jquery' ), SIS_VERSION );
+
+		// Add javascript translations
 		wp_localize_script( 'sis_js', 'sis', self::localize_vars() );
 		wp_localize_script( 'sis_js_attachments', 'sis', self::localize_vars() );
+		wp_localize_script( 'sis_js_featured', 'sis', self::localize_vars() );
 
 		// Add CSS
 		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/css/sis-style' . $suffix . '.css', array(), SIS_VERSION );
@@ -221,27 +227,6 @@ Class SIS_Admin_Main {
 		$crops = self::get_available_crop();
 
 		return $crops[ $crop_position ];
-	}
-
-
-	/**
-	 * Display a json encoded element with right headers
-	 *
-	 * @param $data (optional) : the element to display ( if needed )
-	 *
-	 * @return void
-	 * @author Nicolas Juen
-	 */
-	public static function display_json( $data = array() ) {
-		if ( function_exists( 'wp_send_json' ) ) {
-			wp_send_json( $data );
-		}
-
-		header( 'Cache-Control: no-cache, must-revalidate' );
-		header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
-		header( 'Content-type: application/json' );
-		echo json_encode( $data );
-		die();
 	}
 
 	/**
