@@ -40,7 +40,7 @@ Class SIS_Admin_Post {
 	public static function admin_post_thumbnail_html( $content, $ID ) {
 
 		$content .= '<span class="spinner"></span>';
-		$content .= get_submit_button( 'Regenerate image sizes', 'primary', 'sis_featured', false, array(
+		$content .= get_submit_button( __( 'Regenerate image sizes', 'simple-image-sizes'), 'primary', 'sis_featured', false, array(
 			'id' => 'sis_featured_regenerate',
 			'data-nonce' => wp_create_nonce( 'sis-regenerate-featured-'.$ID ),
 		) );
