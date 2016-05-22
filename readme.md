@@ -9,7 +9,7 @@
   
 **Tested up to:** 4.5
   
-**Stable tag:** 3.1.0
+**Stable tag:** 3.1.1
   
 
 ## Description ##
