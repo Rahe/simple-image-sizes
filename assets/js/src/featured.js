@@ -56,7 +56,6 @@ rahe.sis.featured = {
             } else {
                 message = sis.soloRegenerated.replace( '%s', r.time );
             }
-			console.log(message);
             self.setMessage( message );
 
             self.parent.find('.spinner').removeClass( 'is-active');
