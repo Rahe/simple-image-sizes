@@ -26,6 +26,7 @@ Class SIS_Admin_Post {
 		// Add filter for the Media single
 		add_filter( 'attachment_fields_to_edit', array( __CLASS__, 'add_field_regenerate' ), 9, 2 );
 
+		// Media regenerate on admin featured
 		add_filter( 'admin_post_thumbnail_html', array( __CLASS__, 'admin_post_thumbnail_html' ), 10, 2 );
 	}
 
@@ -38,12 +39,19 @@ Class SIS_Admin_Post {
 	 * @return string
 	 */
 	public static function admin_post_thumbnail_html( $content, $ID ) {
+		/**
+		 * Allow to not display the regenerate image link
+		 */
+		if ( false === apply_filters( 'SIS/Admin/Post/Display_Thumbnail_Regenerate', true ) ) {
+			return $content;
+		}
 
 		$content .= '<span class="spinner"></span>';
-		$content .= get_submit_button( 'Regenerate image sizes', 'primary', 'sis_featured', false, array(
-			'id' => 'sis_featured_regenerate',
-			'data-nonce' => wp_create_nonce( 'sis-regenerate-featured-'.$ID ),
-		) );
+		$content .= sprintf(
+			            "<a id='sis_featured_regenerate' data-nonce='%s' href='#' >%s</a>",
+			            wp_create_nonce( 'sis-regenerate-featured-'.$ID ) ,
+			            esc_html__( 'Regenerate image sizes', 'simple-image-sizes' )
+		            );
 		$content .= '<div class="sis_message"></div>';
 
 		return $content;
