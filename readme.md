@@ -64,6 +64,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+* 3.1.1
+    * Make translatable the link on admin featured image metabox
+    * Add filter to allow to remove the button : filter SIS/Admin/Post/Display_Thumbnail_Regenerate
 * 3.1.0
     * Regenerate images from the featured image
     * Use wp_send_json since the minimum WordPress version is 3.5
