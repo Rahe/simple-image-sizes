@@ -63,6 +63,12 @@ And then you can choose if the image is displayed on the media insertion or not 
 ![Choose the sizes to regenerate
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
+## Customization
+###
+To remove button "regenerate image sizes" in post edition add this code to your functions.php file
+
+`add_filter('SIS/Admin/Post/Display_Thumbnail_Regenerate',function(){return false;});`
+
 ## Changelog ##
 * 3.1.1
     * Make translatable the link on admin featured image metabox
