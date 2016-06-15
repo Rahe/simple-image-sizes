@@ -354,8 +354,30 @@ rahe.sis.sizes = {
 				parent.addClass('addPending');
 			},
 			success: function (result) {
-				// Add the classes for the status
-				jQuery('#get_php').nextAll('code').html('<br />' + result).show().css({'display': 'block'});
+
+				// Add instructions for "Get php for theme"
+				var keys=jQuery('input[name="image_name"]');
+				var names=jQuery('input.n');
+				var show_in_post_insertion=jQuery('input.s');
+				var items_to_show='';
+				// loop for every name:
+				for (i = 0; i < keys.length; i++) {
+					if(jQuery(show_in_post_insertion[i]).is(':checked')){
+						//add key - values
+						items_to_show+="'"+jQuery(keys[i]).val()+"' => '"+jQuery(names[i]).val()+"',<br />"
+					}
+				}
+				// add the filter (if any)
+				var filter_to_show_in_post='';
+				if (items_to_show != ''){					
+					filter_to_show_in_post="add_filter('image_size_names_choose',function( $sizes ){<br />";
+					filter_to_show_in_post+="return array_merge($sizes,array(<br />";				
+					filter_to_show_in_post+=items_to_show;
+					filter_to_show_in_post+="));<br />";
+					filter_to_show_in_post+="});";
+				}				
+
+				jQuery('#get_php').nextAll('code').html('<br />' + result+'<br />'+filter_to_show_in_post).show().css({'display': 'block'});
 				parent.removeClass('addPending');
 			}
 		});
