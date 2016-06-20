@@ -370,11 +370,12 @@ rahe.sis.sizes = {
 				// add the filter (if any)
 				var filter_to_show_in_post='';
 				if (items_to_show != ''){					
-					filter_to_show_in_post="add_filter('image_size_names_choose',function( $sizes ){<br />";
+					filter_to_show_in_post="add_filter('image_size_names_choose','simple_image_sizes_register_sizes');<br />";
+					filter_to_show_in_post+="function simple_image_sizes_register_sizes( $sizes ){<br />";
 					filter_to_show_in_post+="return array_merge($sizes,array(<br />";				
 					filter_to_show_in_post+=items_to_show;
 					filter_to_show_in_post+="));<br />";
-					filter_to_show_in_post+="});";
+					filter_to_show_in_post+="};";
 				}				
 
 				jQuery('#get_php').nextAll('code').html('<br />' + result+'<br />'+filter_to_show_in_post).show().css({'display': 'block'});
