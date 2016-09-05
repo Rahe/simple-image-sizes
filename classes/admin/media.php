@@ -36,7 +36,7 @@ Class SIS_Admin_Media {
 			return;
 		}
 
-		if ( 'options-media.php' == $hook_suffix ) {
+		if ( 'options-media.php' == $hook_suffix || 'settings_page_media' == $hook_suffix ) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js' );
 
