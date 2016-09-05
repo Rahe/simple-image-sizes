@@ -35,8 +35,9 @@ Class SIS_Admin_Media {
 		if ( ! isset( $hook_suffix ) || empty( $hook_suffix ) ) {
 			return;
 		}
-
-		if ( 'options-media.php' == $hook_suffix || 'settings_page_media' == $hook_suffix ) {
+		
+		$suffixes = array('options-media.php', 'settings_page_media');
+		if (in_array($hook_suffix, $suffixes)) {
 			// Add javascript
 			wp_enqueue_script( 'sis_js' );
 
