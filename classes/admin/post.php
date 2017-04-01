@@ -49,6 +49,13 @@ Class SIS_Admin_Post {
 			return $content;
 		}
 
+		/**
+		 * Do not display if post_Type does not support it
+		 */
+		if( false === post_type_supports( get_post_type(), 'thumbnail' ) ) {
+			return $content;
+		}
+
 		$content .= '<span class="spinner"></span>';
 		$content .= sprintf(
 			            "<a id='sis_featured_regenerate' data-nonce='%s' href='#' >%s</a>",
@@ -232,9 +239,6 @@ Class SIS_Admin_Post {
 	public static function add_thumbnail_name( $sizes ) {
 		// Get options
 		$sizes_custom = get_option( SIS_OPTION, array() );
-
-		var_dump($sizes_custom);
-		die();
 
 		// init size array
 		$add_sizes = array();
