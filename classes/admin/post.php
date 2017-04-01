@@ -2,8 +2,11 @@
 
 Class SIS_Admin_Post {
 	public function __construct() {
+
+		global $wp_version;
+
 		// Add image sizes in the form, check if 3.3 is installed or not
-		if ( ! function_exists( 'is_main_query' ) ) {
+		if ( version_compare( $wp_version, '3.3', '<' ) ) {
 			add_filter( 'attachment_fields_to_edit', array(
 				__CLASS__,
 				'sizes_in_form'
@@ -229,6 +232,10 @@ Class SIS_Admin_Post {
 	public static function add_thumbnail_name( $sizes ) {
 		// Get options
 		$sizes_custom = get_option( SIS_OPTION, array() );
+
+		var_dump($sizes_custom);
+		die();
+
 		// init size array
 		$add_sizes = array();
 
