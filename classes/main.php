@@ -36,8 +36,10 @@ Class SIS_Client {
 			}
 
 			$crop = ( isset( $size['c'] ) && ! empty( $size['c'] ) ) ? $size['c'] : false;
-
-			if ( is_string( $crop ) ) {
+			
+			if ( is_bool( $crop ) || is_numeric( $crop ) ) {
+				$crop = ( absint( $crop ) == 0 ) ? false : true;
+			} elseif ( is_string( $crop ) ) {
 				$crop = explode( '_', $crop );
 			}
 
