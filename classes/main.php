@@ -39,7 +39,7 @@ Class SIS_Client {
 			
 			if ( is_bool( $crop ) || is_numeric( $crop ) ) {
 				$crop = ( absint( $crop ) == 0 ) ? false : true;
-			}elseif ( is_string( $crop ) ) {
+			} elseif ( is_string( $crop ) ) {
 				$crop = explode( '_', $crop );
 			}
 
