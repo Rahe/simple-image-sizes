@@ -3,30 +3,27 @@
 Class SIS_Admin_Main {
 
 	public function __construct() {
-		add_action( 'admin_init', array( __CLASS__, 'register_assets' ) );
+		add_action( 'admin_init', [ __CLASS__, 'register_assets' ] );
 	}
 
 	/**
 	 * Register all the assets for the admin
-	 *
-	 *
 	 */
 	public static function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
-		// Add javascript
-		wp_register_script( 'underscore', 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.0/underscore-min.js', array(), '1.8.0' );
-		wp_register_script( 'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', array(
+		// Add javascript.
+		wp_register_script( 'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', [
 			'jquery',
 			'jquery-ui-button',
 			'jquery-ui-progressbar',
 			'underscore',
-		), SIS_VERSION );
+		], SIS_VERSION );
 
-		// Add javascript translations
+		// Add javascript translations.
 		wp_localize_script( 'sis_js', 'sis', self::localize_vars() );
 
-		// Add CSS
-		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/css/sis-style' . $suffix . '.css', array(), SIS_VERSION );
+		// Add CSS.
+		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/css/sis-style' . $suffix . '.css', [], SIS_VERSION );
 	}
 
 
@@ -77,57 +74,63 @@ Class SIS_Admin_Main {
 	/**
 	 * Rebuild the given attribute with the given thumbnails
 	 *
-	 * @param $att_id
-	 * @param $thumbnails
+	 * @param int   $att_id : The attachment_id.
+	 * @param array $thumbnails : the thumbnails to re-generate.
 	 *
 	 * @return array
 	 * @author Nicolas Juen
 	 */
 	public static function thumbnail_rebuild( $att_id, $thumbnails = null ) {
-		// Time a the begining
+		// Time a the beginning.
 		timer_start();
 
-		// Check Id
+		// Check Id.
 		if ( (int) $att_id <= 0 ) {
-			return array(
+			return [
 				'time'  => timer_stop( false, 4 ),
 				'error' => __( 'No id given in POST datas.', 'simple-image-sizes' ),
-			);
+			];
 		}
 
-		// Get the path
+		// Get the path.
 		$fullsizepath = get_attached_file( $att_id );
 
-		// Regen the attachment
+		// Regen the attachment.
 		if ( false !== $fullsizepath && file_exists( $fullsizepath ) ) {
 			if ( false == wp_update_attachment_metadata( $att_id, self::wp_generate_attachment_metadata_custom( $att_id, $fullsizepath, $thumbnails ) ) ) {
-				return array(
+				return [
 					'src'     => wp_get_attachment_thumb_url( $att_id ),
 					'time'    => timer_stop( false, 4 ),
-					'message' => sprintf( __( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ), get_edit_post_link( $att_id ), get_the_title( $att_id ) ),
-				);
+					'message' => sprintf(
+						__( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
+						get_edit_post_link( $att_id ),
+						get_the_title( $att_id )
+					),
+				];
 			}
 		} else {
-			return array(
+			return [
 				'src'   => wp_get_attachment_thumb_url( $att_id ),
 				'time'  => timer_stop( false, 4 ),
-				'error' => sprintf( __( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ), get_edit_post_link( $att_id ), get_the_title( $att_id ) ),
-			);
+				'error' => sprintf(
+					__( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
+					get_edit_post_link( $att_id ),
+					get_the_title( $att_id )
+				),
+			];
 
 		}
 
-		// Display the attachment url for feedback
-		return array(
+		// Display the attachment url for feedback.
+		return [
 			'time'  => timer_stop( false, 4 ),
 			'src'   => wp_get_attachment_thumb_url( $att_id ),
 			'title' => get_the_title( $att_id ),
-		);
+		];
 	}
 
 	/**
 	 * Include the javascript template
-	 *
-	 * @param void
 	 *
 	 * @return bool
 	 */
@@ -138,7 +141,7 @@ Class SIS_Admin_Main {
 		}
 
 		if ( is_file( SIS_DIR . '/templates/admin-js.html' ) ) {
-			include( SIS_DIR . '/templates/admin-js.html' );
+			include SIS_DIR . '/templates/admin-js.html';
 		}
 
 		return true;
@@ -149,37 +152,36 @@ Class SIS_Admin_Main {
 	 *
 	 * @return array
 	 *
-	 * @param void
-	 *
 	 * @author Nicolas Juen
 	 */
 	public static function get_available_crop() {
 		global $wp_version;
 
-		// Return the only possible
+		// Return the only possible.
 		if ( version_compare( $wp_version, '3.9', '<' ) ) {
-			return array();
+			return [];
 		}
 
-		$x = array(
+		$x = [
 			'left'   => __( 'Left', 'simple-image-sizes' ),
 			'center' => __( 'Center', 'simple-image-sizes' ),
 			'right'  => __( 'Right', 'simple-image-sizes' ),
-		);
+		];
 
-		$y = array(
+		$y = [
 			'top'    => __( 'top', 'simple-image-sizes' ),
 			'center' => __( 'center', 'simple-image-sizes' ),
 			'bottom' => __( 'bottom', 'simple-image-sizes' ),
-		);
+		];
 
 		/**
 		 * Base crops
 		 */
-		$crops = array(
-			0 => __( 'No','simple-image-sizes' ),
-			1 => __( 'Yes','simple-image-sizes' ),
-		);
+		$crops = [
+			0 => __( 'No', 'simple-image-sizes' ),
+			1 => __( 'Yes', 'simple-image-sizes' ),
+		];
+
 		foreach ( $x as $x_pos => $x_pos_label ) {
 			foreach ( $y as $y_pos => $y_pos_label ) {
 				$crops[ $x_pos . '_' . $y_pos ] = $x_pos_label . ' ' . $y_pos_label;
@@ -192,7 +194,7 @@ Class SIS_Admin_Main {
 	/**
 	 * Check if the crop is available
 	 *
-	 * @param string $crop_position
+	 * @param string $crop_position : the crop position slug.
 	 *
 	 * @return bool
 	 * @author Nicolas Juen
@@ -206,8 +208,7 @@ Class SIS_Admin_Main {
 	/**
 	 * Return the crop position label from the slug
 	 *
-	 *
-	 * @param string $crop_position
+	 * @param string $crop_position : the crop position slug.
 	 *
 	 * @return string
 	 * @author Nicolas Juen
@@ -226,10 +227,10 @@ Class SIS_Admin_Main {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @param int $attachment_id Attachment Id to process.
-	 * @param string $file Filepath of the Attached image.
+	 * @param int        $attachment_id : Attachment Id to process.
+	 * @param string     $file          : Filepath of the Attached image.
 	 *
-	 * @param null|array $thumbnails: thumbnails to regenerate, if null all
+	 * @param null|array $thumbnails : thumbnails to regenerate, if null all
 	 *
 	 * @return mixed Metadata for attachment.
 	 */
@@ -238,7 +239,7 @@ Class SIS_Admin_Main {
 
 		$meta_datas = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
 
-		$metadata = array();
+		$metadata = [];
 		if ( preg_match( '!^image/!', get_post_mime_type( $attachment ) ) && file_is_displayable_image( $file ) ) {
 			$imagesize          = getimagesize( $file );
 			$metadata['width']  = $imagesize[0];
@@ -246,14 +247,18 @@ Class SIS_Admin_Main {
 			list( $uwidth, $uheight ) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 128, 96 );
 			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
 
-			// Make the file path relative to the upload dir
+			// Make the file path relative to the upload dir.
 			$metadata['file'] = _wp_relative_upload_path( $file );
 
-			// make thumbnails and other intermediate sizes
+			// make thumbnails and other intermediate sizes.
 			global $_wp_additional_image_sizes;
 
 			foreach ( get_intermediate_image_sizes() as $s ) {
-				$sizes[ $s ] = array( 'width' => '', 'height' => '', 'crop' => false );
+				$sizes[ $s ] = [
+					'width'  => '',
+					'height' => '',
+					'crop'   => false,
+				];
 				if ( isset( $_wp_additional_image_sizes[ $s ]['width'] ) ) {
 					$sizes[ $s ]['width'] = intval( $_wp_additional_image_sizes[ $s ]['width'] );
 				} // For theme-added sizes
@@ -276,9 +281,9 @@ Class SIS_Admin_Main {
 
 			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
 
-			// Only if not all sizes
+			// Only if not all sizes.
 			if ( isset( $thumbnails ) && is_array( $thumbnails ) && isset( $meta_datas['sizes'] ) && ! empty( $meta_datas['sizes'] ) ) {
-				// Fill the array with the other sizes not have to be done
+				// Fill the array with the other sizes not have to be done.
 				foreach ( $meta_datas['sizes'] as $name => $fsize ) {
 					$metadata['sizes'][ $name ] = $fsize;
 				}
@@ -294,7 +299,7 @@ Class SIS_Admin_Main {
 				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
 
 				if ( isset( $meta_datas['size'][ $size ] ) ) {
-					// Remove the size from the orignal sizes for after work
+					// Remove the size from the orignal sizes for after work.
 					unset( $meta_datas['size'][ $size ] );
 				}
 
@@ -303,7 +308,7 @@ Class SIS_Admin_Main {
 				}
 			}
 
-			// fetch additional metadata from exif/iptc
+			// fetch additional metadata from exif/iptc.
 			$image_meta = wp_read_image_metadata( $file );
 			if ( $image_meta ) {
 				$metadata['image_meta'] = $image_meta;
