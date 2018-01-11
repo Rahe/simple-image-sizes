@@ -2,15 +2,19 @@
 
 Class SIS_Client {
 
-	// Set the original
-	var $original = array( 'thumbnail', 'medium', 'large' );
+	/**
+	 * Basic WordPress sizes.
+	 *
+	 * @var array
+	 */
+	private $original = [ 'thumbnail', 'medium', 'large' ];
 
-	function __construct() {
-		// Make new image sizes
-		add_action( 'init', array( __CLASS__, 'after_setup_theme' ), 1 );
+	public function __construct() {
+		// Make new image sizes.
+		add_action( 'init', [ __CLASS__, 'after_setup_theme' ], 1 );
 
-		// Add translation
-		add_action( 'init', array( __CLASS__, 'init_translation' ), 2 );
+		// Add translation.
+		add_action( 'init', [ __CLASS__, 'init_translation' ], 2 );
 	}
 
 	/**
@@ -21,37 +25,35 @@ Class SIS_Client {
 	 * @author Nicolas Juen
 	 */
 	public static function after_setup_theme() {
-		// Get inital options
-		$sizes = get_option( SIS_OPTION, array() );
+		// Get initial options.
+		$sizes = get_option( SIS_OPTION, [] );
 
-		// Return false if empty
+		// Return false if empty.
 		if ( empty( $sizes ) || ! is_array( $sizes ) ) {
 			return;
 		}
 
-		// Set the new sizes
+		// Set the new sizes.
 		foreach ( $sizes as $name => $size ) {
 			if ( empty( $size ) || ! isset( $size['w'] ) || ! isset( $size['h'] ) ) {
 				continue;
 			}
 
 			$crop = ( isset( $size['c'] ) && ! empty( $size['c'] ) ) ? $size['c'] : false;
-			
+
 			if ( is_bool( $crop ) || is_numeric( $crop ) ) {
-				$crop = ( absint( $crop ) == 0 ) ? false : true;
+				$crop = ( 0 === absint( $crop ) ) ? false : true;
 			} elseif ( is_string( $crop ) ) {
 				$crop = explode( '_', $crop );
 			}
 
-			// Add the images sizes
+			// Add the images sizes.
 			add_image_size( $name, $size['w'], $size['h'], $crop );
 		}
 	}
 
 	/**
 	 * Load the plugin text domain
-	 *
-	 * @param void
 	 *
 	 * @return void
 	 * @author Nicolas Juen
