@@ -1,5 +1,5 @@
 <?php
-// Get the sizes
+// Get the sizes.
 global $_wp_additional_image_sizes, $_wp_post_type_features;
 ?>
 <input type="hidden" class="addSize" value='<?php echo wp_create_nonce( 'add_size' ); ?>'/>
@@ -22,14 +22,14 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 			</thead>
 			<tbody>
 			<?php
-			// Display the sizes in the array
-			foreach ( get_intermediate_image_sizes() as $s ):
-				// Don't make or numeric sizes that appear
+			// Display the sizes in the array.
+			foreach ( get_intermediate_image_sizes() as $s ) :
+				// Don't make or numeric sizes that appear.
 				if ( is_integer( $s ) ) {
 					continue;
 				}
 
-				// Set width
+				// Set width.
 				$width = isset( $_wp_additional_image_sizes[ $s ]['width'] ) ? intval( $_wp_additional_image_sizes[ $s ]['width'] ) : get_option( "{$s}_size_w" );
 
 				// Set height
