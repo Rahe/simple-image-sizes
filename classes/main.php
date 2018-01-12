@@ -2,13 +2,6 @@
 
 Class SIS_Client {
 
-	/**
-	 * Basic WordPress sizes.
-	 *
-	 * @var array
-	 */
-	private $original = [ 'thumbnail', 'medium', 'large' ];
-
 	public function __construct() {
 		// Make new image sizes.
 		add_action( 'init', [ __CLASS__, 'after_setup_theme' ], 1 );
