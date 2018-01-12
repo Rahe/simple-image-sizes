@@ -162,7 +162,7 @@ Class SIS_Admin_Post {
 		if ( is_array( $sizes_custom ) && ! empty( $sizes_custom ) ) {
 			foreach ( $sizes_custom as $key => $value ) {
 				// If we show this size in the admin.
-				if ( ! isset( $value['s'] ) || 1 !== $value['s'] ) {
+				if ( ! isset( $value['s'] ) || 1 !== (int) $value['s'] ) {
 					continue;
 				}
 				$add_sizes[ $key ] = self::get_thumbnail_name( $key );
