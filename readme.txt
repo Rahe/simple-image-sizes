@@ -4,7 +4,7 @@ Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
 Tested up to: 4.9.1
-Stable tag: 3.1.1
+Stable tag: 3.2.0
 Requires PHP: 5.6.33
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.0
+    * Compatibility to 4.9.X
+    * Reformat and clean some code and improve maintenability
 * 3.1.1
     * Make translatable the link on admin featured image metabox
     * Add filter to allow to remove the button : filter SIS/Admin/Post/Display_Thumbnail_Regenerate

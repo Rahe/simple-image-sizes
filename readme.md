@@ -7,9 +7,9 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 4.5
+**Tested up to:** 4.9.1
   
-**Stable tag:** 3.1.1
+**Stable tag:** 3.2.0
   
 
 ## Description ##
@@ -64,6 +64,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+* 3.2.0
+    * Compatibility to 4.9.X
+    * Reformat code and improve maintenability
 * 3.1.1
     * Make translatable the link on admin featured image metabox
     * Add filter to allow to remove the button : filter SIS/Admin/Post/Display_Thumbnail_Regenerate
