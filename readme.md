@@ -29,7 +29,7 @@ I have improved the php and javascript, you can know if the image have been rege
 Contribute on https://github.com/Rahe/Simple-image-sizes
 
 ## Installation ##
- **PHP5 Required.**
+ **PHP5.6 minimum Required.**
  
 1. Download, unzip and upload to your WordPress plugins directory
 2. Activate the plugin within you WordPress Administration Backend
