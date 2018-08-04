@@ -1,0 +1,17 @@
+{
+  "name": "rahe/simple-image-sizes",
+  "description": "Add options in media setting page for handling images sizes",
+  "minimum-stability": "stable",
+  "license": "GPLv2 or later",
+  "authors": [
+    {
+      "name": "Nicolas Juen",
+      "email": "njuen87@gmail.com"
+    }
+  ],
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.6",
+    "composer/installers": "~1.0"
+  }
+}
