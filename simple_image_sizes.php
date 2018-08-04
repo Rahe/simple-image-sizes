@@ -37,7 +37,7 @@ define( 'SIS_OPTION', 'custom_image_sizes' );
 function _sis_load_files( $dir, $files, $prefix = '' ) {
 	foreach ( $files as $file ) {
 		if ( is_file( $dir . $prefix . $file . '.php' ) ) {
-			require_once( $dir . $prefix . $file . '.php' );
+			require_once $dir . $prefix . $file . '.php';
 		}
 	}
 }

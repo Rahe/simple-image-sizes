@@ -1,6 +1,6 @@
 <?php
 
-Class SIS_Client {
+class SIS_Client {
 
 	public function __construct() {
 		// Make new image sizes.

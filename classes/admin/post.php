@@ -1,6 +1,6 @@
 <?php
 
-Class SIS_Admin_Post {
+class SIS_Admin_Post {
 	public function __construct() {
 
 		add_filter( 'image_size_names_choose', [ __CLASS__, 'add_thumbnail_name' ] );
@@ -27,7 +27,7 @@ Class SIS_Admin_Post {
 	 * Generate HTML on the featured image size.
 	 *
 	 * @param string $content : the content of the post_thumbnail view.
-	 * @param int    $ID : the ID of the content concerned.
+	 * @param int $ID : the ID of the content concerned.
 	 *
 	 * @return string
 	 */
@@ -212,7 +212,7 @@ Class SIS_Admin_Post {
 	 * @since 2.2
 	 * @access public
 	 *
-	 * @param array   $actions : array of actions and content to display.
+	 * @param array $actions : array of actions and content to display.
 	 * @param WP_Post $object : the WordPress object for the actions.
 	 *
 	 * @return array  $actions
@@ -235,7 +235,7 @@ Class SIS_Admin_Post {
 	 *
 	 * @access public
 	 *
-	 * @param array  $fields : the fields of the media.
+	 * @param array $fields : the fields of the media.
 	 * @param object $post : the post object.
 	 *
 	 * @return array
@@ -251,7 +251,8 @@ Class SIS_Admin_Post {
 		$fields['sis-regenerate'] = [
 			'label'         => __( 'Regenerate Thumbnails', 'simple-image-sizes' ),
 			'input'         => 'html',
-			'html'          => sprintf( '
+			'html'          => sprintf(
+				'
 			<input type="button" data-id="%s" class="button title sis-regenerate-one" value="%s" />
 			<span class="spinner"></span>
 			<span class="title"><em></em></span>

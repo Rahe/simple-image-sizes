@@ -1,6 +1,6 @@
 <?php
 
-Class SIS_Admin_Media {
+class SIS_Admin_Media {
 
 	/**
 	 * Original WordPress sizes.
@@ -64,7 +64,7 @@ Class SIS_Admin_Media {
 	 *
 	 * @access public
 	 *
-	 * @param array  $links : the admin links.
+	 * @param array $links : the admin links.
 	 * @param string $file : the file concerned in the row.
 	 *
 	 * @return array
@@ -115,38 +115,45 @@ Class SIS_Admin_Media {
 			$crop = isset( $_wp_additional_image_sizes[ $s ]['crop'] ) ? intval( $_wp_additional_image_sizes[ $s ]['crop'] ) : get_option( "{$s}_crop" );
 
 			// Add the setting field for this size.
-			add_settings_field( 'image_size_' . $s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), [
+			add_settings_field(
+				'image_size_' . $s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), [
 				__CLASS__,
 				'image_sizes',
 			], 'media', 'default', [
-			        'name' => $s,
-                    'width' => $width,
-                    'height' => $height,
-                    'c' => $crop,
-                ]
-            );
+					'name'   => $s,
+					'width'  => $width,
+					'height' => $height,
+					'c'      => $crop,
+				]
+			);
 		}
 
 		// Register the setting for media option page.
 		register_setting( 'media', SIS_OPTION );
 
 		// Add the button.
-		add_settings_field( 'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), [
+		add_settings_field(
+			'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), [
 			__CLASS__,
 			'addSizeButton',
-		], 'media' );
+		], 'media'
+		);
 
 		// Add php button.
-		add_settings_field( 'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), [
+		add_settings_field(
+			'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), [
 			__CLASS__,
 			'getPhpButton',
-		], 'media' );
+		], 'media'
+		);
 
 		// Add section for the thumbnail regeneration.
-		add_settings_section( 'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), [
+		add_settings_section(
+			'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), [
 			__CLASS__,
 			'thumbnailRegenerate',
-		], 'media' );
+		], 'media'
+		);
 	}
 
 	/**
@@ -177,10 +184,10 @@ Class SIS_Admin_Media {
 		$name   = isset( $sizes[ $args['name'] ]['n'] ) && ! empty( $sizes[ $args['name'] ]['n'] ) ? esc_html( $sizes[ $args['name'] ]['n'] ) : esc_html( $args['name'] );
 		?>
         <input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name"/>
-		<?php if ( $custom ): ?>
+		<?php if ( $custom ) : ?>
             <input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" type="hidden"
                    id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" value="1"/>
-		<?php else: ?>
+		<?php else : ?>
             <input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" type="hidden"
                    id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" value="1"/>
 		<?php endif; ?>
@@ -212,7 +219,8 @@ Class SIS_Admin_Media {
                     name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
 
 				<?php foreach ( SIS_Admin_Main::get_available_crop() as $crop_position => $label ) : ?>
-                    <option <?php selected( $crop_position, $crop ); ?> value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
+                    <option <?php selected( $crop_position, $crop ); ?>
+                            value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			
@@ -228,7 +236,7 @@ Class SIS_Admin_Media {
 
         <input type="hidden" class="deleteSize button-primary"
                value='<?php echo wp_create_nonce( 'delete_' . $args['name'] ); ?>'/>
-	<?php
+		<?php
 	}
 
 	/**
@@ -238,7 +246,8 @@ Class SIS_Admin_Media {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function addSizeButton() { ?>
+	public static function addSizeButton() {
+		?>
         <input type="button" class="button-secondary action" id="add_size"
                value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes' ); ?>"/>
 		<?php
@@ -251,10 +260,11 @@ Class SIS_Admin_Media {
 	 * @return void
 	 * @author Nicolas Juen
 	 */
-	public static function getPhpButton() { ?>
+	public static function getPhpButton() {
+		?>
         <input type="button" class="button-secondary action" id="get_php"
                value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
-        <p> <?php _e( 'Copy and paste the code below into your Wordpress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
+        <p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
         <code></code>
 		<?php
 	}
@@ -312,13 +322,13 @@ Class SIS_Admin_Media {
 
 		// Make values
 		$values = [
-            'custom' => 1,
-            'w' => $width,
-            'h' => $height,
-            'c' => $crop,
-            's' => $show,
-            'n' => $cn,
-        ];
+			'custom' => 1,
+			'w'      => $width,
+			'h'      => $height,
+			'c'      => $crop,
+			's'      => $show,
+			'n'      => $cn,
+		];
 
 		// If the size have not changed return 2
 		if ( isset( $sizes[ $name ] ) && $sizes[ $name ] === $values ) {
@@ -391,7 +401,7 @@ Class SIS_Admin_Media {
 				$crop = ( absint( $crop ) == 0 ) ? 'false' : 'true';
 			} else {
 				if ( ! Sis_Admin_Main::is_crop_position( implode( '_', $crop ) ) ) {
-					$crop = "false";
+					$crop = 'false';
 				} else {
 					$crop = '[ "' . $crop[0] . '", "' . $crop[1] . '")';
 				}
@@ -443,7 +453,8 @@ Class SIS_Admin_Media {
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
 
 			// Get all parent from post type.
-			$attachments = $wpdb->get_var( "SELECT COUNT( ID )
+			$attachments = $wpdb->get_var(
+				"SELECT COUNT( ID )
 				FROM $wpdb->posts 
 				WHERE 1 = 1
 				AND post_type = 'attachment'
@@ -452,19 +463,22 @@ Class SIS_Admin_Media {
 					SELECT DISTINCT ID 
 					FROM $wpdb->posts 
 					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
-				)" );
+				)"
+			);
 			// Return the Id's and Title of medias
 			wp_send_json( [ 'total' => $attachments ] );
 
 		} else {
-			$attachments = get_children( [
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image',
-				'numberposts'    => - 1,
-				'post_status'    => null,
-				'post_parent'    => null, // any parent
-				'output'         => 'ids',
-			] );
+			$attachments = get_children(
+				[
+					'post_type'      => 'attachment',
+					'post_mime_type' => 'image',
+					'numberposts'    => - 1,
+					'post_status'    => null,
+					'post_parent'    => null, // any parent
+					'output'         => 'ids',
+				]
+			);
 			// Return the Id's and Title of medias
 			wp_send_json( [ 'total' => count( $attachments ) ] );
 		}
@@ -511,7 +525,9 @@ Class SIS_Admin_Media {
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
 
 			// Get all parent from post type
-			$attachment = $wpdb->get_var( $wpdb->prepare( "SELECT ID
+			$attachment = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT ID
 				FROM $wpdb->posts 
 				WHERE 1 = 1
 				AND post_type = 'attachment'
@@ -522,25 +538,31 @@ Class SIS_Admin_Media {
 					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)
 				LIMIT %d,1 
-			", $offset ) );
+			", $offset
+				)
+			);
 
 		} else {
-			$attachment = get_posts( [
-				'post_type'      => 'attachment',
-				'post_mime_type' => 'image',
-				'numberposts'    => 1,
-				'post_status'    => 'any',
-				'output'         => 'object',
-				'offset'         => $offset,
-			] );
+			$attachment = get_posts(
+				[
+					'post_type'      => 'attachment',
+					'post_mime_type' => 'image',
+					'numberposts'    => 1,
+					'post_status'    => 'any',
+					'output'         => 'object',
+					'offset'         => $offset,
+				]
+			);
 
 			$attachment = ! empty( $attachment ) ? $attachment[0]->ID : 0;
 		}
 
 		if ( empty( $attachment ) ) {
-			wp_send_json( [
-				'message' => __( 'Regeneration ended', 'simple-image-sizes' )
-			] );
+			wp_send_json(
+				[
+					'message' => __( 'Regeneration ended', 'simple-image-sizes' ),
+				]
+			);
 		}
 		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
 	}

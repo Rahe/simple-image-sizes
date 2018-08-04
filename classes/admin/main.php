@@ -1,6 +1,6 @@
 <?php
 
-Class SIS_Admin_Main {
+class SIS_Admin_Main {
 
 	public function __construct() {
 		add_action( 'admin_init', [ __CLASS__, 'register_assets' ] );
@@ -12,12 +12,14 @@ Class SIS_Admin_Main {
 	public static function register_assets() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
 		// Add javascript.
-		wp_register_script( 'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', [
+		wp_register_script(
+			'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', [
 			'jquery',
 			'jquery-ui-button',
 			'jquery-ui-progressbar',
 			'underscore',
-		], SIS_VERSION );
+		], SIS_VERSION
+		);
 
 		// Add javascript translations.
 		wp_localize_script( 'sis_js', 'sis', self::localize_vars() );
@@ -74,7 +76,7 @@ Class SIS_Admin_Main {
 	/**
 	 * Rebuild the given attribute with the given thumbnails
 	 *
-	 * @param int   $att_id : The attachment_id.
+	 * @param int $att_id : The attachment_id.
 	 * @param array $thumbnails : the thumbnails to re-generate.
 	 *
 	 * @return array
@@ -227,8 +229,8 @@ Class SIS_Admin_Main {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @param int        $attachment_id : Attachment Id to process.
-	 * @param string     $file          : Filepath of the Attached image.
+	 * @param int $attachment_id : Attachment Id to process.
+	 * @param string $file : Filepath of the Attached image.
 	 *
 	 * @param null|array $thumbnails : thumbnails to regenerate, if null all
 	 *
