@@ -105,6 +105,10 @@ class Main {
 					'src'     => wp_get_attachment_thumb_url( $att_id ),
 					'time'    => timer_stop( false, 4 ),
 					'message' => sprintf(
+
+						/*
+						 * Translators: First element is link to the attachment admin edit, second the title of the attachment
+						 */
 						__( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
 						get_edit_post_link( $att_id ),
 						get_the_title( $att_id )
@@ -116,6 +120,10 @@ class Main {
 				'src'   => wp_get_attachment_thumb_url( $att_id ),
 				'time'  => timer_stop( false, 4 ),
 				'error' => sprintf(
+
+					/*
+					* Translators: First element is link to the attachment admin edit, second the title of the attachment
+					*/
 					__( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
 					get_edit_post_link( $att_id ),
 					get_the_title( $att_id )
