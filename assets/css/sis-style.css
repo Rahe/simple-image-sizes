@@ -72,3 +72,7 @@ tr.notChangedAdding {
 #post-body .sis-regenerate-one {
     float: left;
 }
+
+#sis_get_php {
+    user-select: all;
+}
