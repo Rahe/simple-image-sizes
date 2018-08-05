@@ -13,5 +13,10 @@
   "require": {
     "php": ">=5.6",
     "composer/installers": "~1.0"
+  },
+  "autoload"   : {
+    "psr-4": {
+      "Rahe\\Simple_Image_Sizes\\" : "classes/"
+    }
   }
 }
