@@ -1,6 +1,7 @@
 <?php
+namespace Rahe\Simple_Image_Sizes\Admin;
 
-class SIS_Admin_Media {
+class Media {
 
 	/**
 	 * Original WordPress sizes.
@@ -55,7 +56,7 @@ class SIS_Admin_Media {
 		wp_enqueue_style( 'sis_css' );
 
 		// Add underscore template.
-		add_action( 'admin_footer', [ 'SIS_Admin_Main', 'add_template' ] );
+		add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
 	}
 
 
@@ -218,7 +219,7 @@ class SIS_Admin_Media {
                     base_c='<?php echo esc_attr( $crop ); ?>'
                     name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
 
-				<?php foreach ( SIS_Admin_Main::get_available_crop() as $crop_position => $label ) : ?>
+				<?php foreach ( Main::get_available_crop() as $crop_position => $label ) : ?>
                     <option <?php selected( $crop_position, $crop ); ?>
                             value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -265,7 +266,7 @@ class SIS_Admin_Media {
         <input type="button" class="button-secondary action" id="get_php"
                value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
         <p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
-        <code></code>
+        <code id="sis_get_php"></code>
 		<?php
 	}
 
@@ -298,7 +299,7 @@ class SIS_Admin_Media {
 
 		// Get old options
 		$sizes              = (array) get_option( SIS_OPTION, [] );
-		$croppings          = SIS_Admin_Main::get_available_crop();
+		$croppings          = Main::get_available_crop();
 		$croppings[ true ]  = '';
 		$croppings[ false ] = '';
 
@@ -400,7 +401,7 @@ class SIS_Admin_Media {
 			if ( is_bool( $crop ) || is_numeric( $crop ) || version_compare( $wp_version, '3.9', '<' ) ) {
 				$crop = ( absint( $crop ) == 0 ) ? 'false' : 'true';
 			} else {
-				if ( ! Sis_Admin_Main::is_crop_position( implode( '_', $crop ) ) ) {
+				if ( ! Main::is_crop_position( implode( '_', $crop ) ) ) {
 					$crop = 'false';
 				} else {
 					$crop = '[ "' . $crop[0] . '", "' . $crop[1] . '")';
@@ -425,7 +426,7 @@ class SIS_Admin_Media {
 	 */
 	public static function a_get_list() {
 		/**
-		 * @var wpdb $wpdb
+		 * @var \wpdb $wpdb
 		 */
 		global $wpdb;
 
@@ -494,7 +495,7 @@ class SIS_Admin_Media {
 	 */
 	public static function a_thumbnails_rebuild() {
 		/**
-		 * @var $wpdb wpdb
+		 * @var $wpdb \wpdb
 		 */
 		global $wpdb;
 
@@ -564,6 +565,6 @@ class SIS_Admin_Media {
 				]
 			);
 		}
-		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $attachment, $thumbnails ) );
+		wp_send_json( Main::thumbnail_rebuild( $attachment, $thumbnails ) );
 	}
 }

@@ -41,7 +41,7 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 				if ( is_numeric( $crop ) || is_bool( $crop ) || is_string( $crop ) ) {
 					$crop = absint( $crop ) > 0 ? __( 'Yes', 'simple-image-sizes' ) : __( 'No', 'simple-image-sizes' );
 				} else {
-					$crop = Sis_Admin_Main::get_crop_position_label( implode( '_', $crop ) );
+					$crop = \Rahe\Simple_Image_Sizes\Admin\Main::get_crop_position_label( implode( '_', $crop ) );
 				}
 
 				?>

@@ -33,30 +33,18 @@ define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SIS_VERSION', '3.2.0' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
-// Function for easy load files
-function _sis_load_files( $dir, $files, $prefix = '' ) {
-	foreach ( $files as $file ) {
-		if ( is_file( $dir . $prefix . $file . '.php' ) ) {
-			require_once $dir . $prefix . $file . '.php';
-		}
-	}
-}
-
-// Plugin client classes
-_sis_load_files( SIS_DIR . 'classes/', array( 'main' ) );
-
-if ( is_admin() ) {
-	// Admins classes
-	_sis_load_files( SIS_DIR . 'classes/admin/', array( 'main', 'post', 'media' ) );
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
 }
 
 add_action( 'plugins_loaded', 'init_sis' );
 function init_sis() {
+	new Rahe\Simple_Image_Sizes\Main();
+
 	if ( is_admin() ) {
-		new SIS_Admin_Main();
-		new SIS_Admin_Post();
-		new SIS_Admin_Media();
+		new \Rahe\Simple_Image_Sizes\Admin\Main();
+		new \Rahe\Simple_Image_Sizes\Admin\Post();
+		new \Rahe\Simple_Image_Sizes\Admin\Media();
 	}
 
-	new SIS_Client();
 }

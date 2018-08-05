@@ -1,6 +1,7 @@
 <?php
+namespace Rahe\Simple_Image_Sizes\Admin;
 
-class SIS_Admin_Post {
+class Post {
 	public function __construct() {
 
 		add_filter( 'image_size_names_choose', [ __CLASS__, 'add_thumbnail_name' ] );
@@ -111,7 +112,7 @@ class SIS_Admin_Post {
 			wp_enqueue_script( 'sis_js' );
 
 			// Add underscore template.
-			add_action( 'admin_footer', [ 'SIS_Admin_Main', 'add_template' ] );
+			add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
 		}
 	}
 
@@ -136,7 +137,7 @@ class SIS_Admin_Post {
 
 		// Get the id.
 		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
-		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $id, $thumbnails ) );
+		wp_send_json( Main::thumbnail_rebuild( $id, $thumbnails ) );
 	}
 
 	/**

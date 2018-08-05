@@ -1,6 +1,7 @@
 <?php
+namespace Rahe\Simple_Image_Sizes\Admin;
 
-class SIS_Admin_Main {
+class Main {
 
 	public function __construct() {
 		add_action( 'admin_init', [ __CLASS__, 'register_assets' ] );
