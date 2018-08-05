@@ -162,3 +162,6 @@ pip-log.txt
 
 #Grunt
 node_modules/
+
+#Composer
+vendor
