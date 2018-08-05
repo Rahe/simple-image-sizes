@@ -68,6 +68,10 @@ class Main {
 			'finishedAt'         => __( ' finished at :', 'simple-image-sizes' ),
 			'phpError'           => __( 'Error during the php treatment, be sure to not have php errors in your page', 'simple-image-sizes' ),
 			'notSaved'           => __( 'All the sizes you have modified are not saved, continue anyway ?', 'simple-image-sizes' ),
+
+			/*
+			 * translators: %s is the number of seconds for the image generation.
+			 */
 			'soloRegenerated'    => __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
 			'crop_positions'     => self::get_available_crop(),
 			'regen_one'          => wp_create_nonce( 'regen' ),
@@ -77,7 +81,7 @@ class Main {
 	/**
 	 * Rebuild the given attribute with the given thumbnails
 	 *
-	 * @param int $att_id : The attachment_id.
+	 * @param int   $att_id : The attachment_id.
 	 * @param array $thumbnails : the thumbnails to re-generate.
 	 *
 	 * @return array
@@ -100,7 +104,7 @@ class Main {
 
 		// Regen the attachment.
 		if ( false !== $fullsizepath && file_exists( $fullsizepath ) ) {
-			if ( false == wp_update_attachment_metadata( $att_id, self::wp_generate_attachment_metadata_custom( $att_id, $fullsizepath, $thumbnails ) ) ) {
+			if ( false === wp_update_attachment_metadata( $att_id, self::wp_generate_attachment_metadata_custom( $att_id, $fullsizepath, $thumbnails ) ) ) {
 				return [
 					'src'     => wp_get_attachment_thumb_url( $att_id ),
 					'time'    => timer_stop( false, 4 ),
