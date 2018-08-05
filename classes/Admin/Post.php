@@ -28,7 +28,7 @@ class Post {
 	 * Generate HTML on the featured image size.
 	 *
 	 * @param string $content : the content of the post_thumbnail view.
-	 * @param int $ID : the ID of the content concerned.
+	 * @param int    $ID : the ID of the content concerned.
 	 *
 	 * @return string
 	 */
@@ -66,10 +66,10 @@ class Post {
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
 		// Get the thumbnails.
-		$id = isset( $_POST['id'] ) ? $_POST['id'] : null;
+		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : null;
 
 		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) || ! \current_user_can( 'manage_options' ) ) {
 			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
 		}
 
@@ -80,7 +80,7 @@ class Post {
 		}
 
 		// Get the id.
-		wp_send_json( SIS_Admin_Main::thumbnail_rebuild( $attachment_id ) );
+		wp_send_json( Main::thumbnail_rebuild( $attachment_id ) );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Post {
 			}
 		}
 
-		if ( 'upload.php' == $hook_suffix || ( 'post.php' == $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
+		if ( 'upload.php' === $hook_suffix || ( 'post.php' === $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
 			// Add javascript.
 			wp_enqueue_script( 'sis_js' );
 
@@ -131,7 +131,7 @@ class Post {
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
 		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! \current_user_can( 'manage_options' ) ) {
 			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
 		}
 
@@ -213,8 +213,8 @@ class Post {
 	 * @since 2.2
 	 * @access public
 	 *
-	 * @param array $actions : array of actions and content to display.
-	 * @param WP_Post $object : the WordPress object for the actions.
+	 * @param array    $actions : array of actions and content to display.
+	 * @param \WP_Post $object : the WordPress object for the actions.
 	 *
 	 * @return array  $actions
 	 * @author Nicolas Juen
@@ -236,8 +236,8 @@ class Post {
 	 *
 	 * @access public
 	 *
-	 * @param array $fields : the fields of the media.
-	 * @param object $post : the post object.
+	 * @param array    $fields : the fields of the media.
+	 * @param \WP_Post $post : the post object.
 	 *
 	 * @return array
 	 * @since 2.3.1
