@@ -9,7 +9,7 @@
   
 **Tested up to:** 4.9.1
   
-**Stable tag:** 3.2.0
+**Stable tag:** 3.2.1
   
 
 ## Description ##
@@ -64,6 +64,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 ](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
 
 ## Changelog ##
+* 3.2.1
+    * Remove the .git file
+    * Add phpcs file
 * 3.2.0
     * Compatibility to 4.9.X
     * Reformat code and improve maintenability
