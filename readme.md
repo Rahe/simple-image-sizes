@@ -7,10 +7,10 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 4.9.1
+**Tested up to:** 5.2.0
   
 **Stable tag:** 3.2.1
-  
+
 
 ## Description ##
 
