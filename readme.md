@@ -48,20 +48,14 @@ And then you can choose if the image is displayed on the media insertion or not 
 
 ## Screenshots ##
 
-###1. Settings page
-###
-![Settings page
-](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-1.png)
+### 1. Settings page ###
+![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-1.png)
 
-###2. Get PHP for the theme
-###
-![Get PHP for the theme
-](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-2.png)
+### 2. Get PHP for the theme ###
+![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-2.png)
 
-###3. Choose the sizes to regenerate and regenerate them
-###
-![Choose the sizes to regenerate
-](http://s.wordpress.org/extend/plugins/simple-image-sizes/screenshot-3.png)
+### 3. Choose the sizes to regenerate and regenerate them ###
+![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-3.png)
 
 ## Changelog ##
 * 3.2.1
