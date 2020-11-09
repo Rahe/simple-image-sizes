@@ -404,7 +404,7 @@ class Media {
 				if ( ! Main::is_crop_position( implode( '_', $crop ) ) ) {
 					$crop = 'false';
 				} else {
-					$crop = '[ "' . $crop[0] . '", "' . $crop[1] . '")';
+					$crop = '[ "' . $crop[0] . '", "' . $crop[1] . '"]';
 				}
 			}
 			?>
