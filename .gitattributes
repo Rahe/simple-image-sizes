@@ -1,8 +1,16 @@
+# Do not export theses on download
 .github export-ignore
 .gitattributes export-ignore
-phpcs.xml export-ignore
+phpcs.xml.dist export-ignore
 gulpfile.js export-ignore
 package.json export-ignore
 package-lock.json export-ignore
 composer.json export-ignore
 composer.lock export-ignore
+.gitignore export-ignore
+grumphp.yml export-ignore
+psalm.yml export-ignore
+
+# Do not diff theses fikes
+composer.lock -diff
+package-lock.json -diff
