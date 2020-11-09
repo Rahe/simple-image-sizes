@@ -1,0 +1,48 @@
+name: simple-image-sizes
+recipe: wordpress
+config:
+  webroot: ./wordpress/
+env:
+  - .env.testing
+services:
+  appserver:
+    run_as_root:
+      - ln -s /app/ /app/wordpress/wp-content/plugins/simple-image-sizes
+  test:
+    type: mysql:5.7
+    portforward: true
+    creds:
+      user: test
+      password: test
+      database: test
+events:
+  # Runs composer install and a custom php script before your app starts
+  pre-start:
+  - appserver: cd $LANDO_MOUNT && composer install
+tooling:
+  setup:
+    service: appserver
+    description: 'Setup env'
+    cmd:
+      - if [ -f app/wordpress/wp-config.php ]; then wp db reset --yes; fi
+      - if [ -f app/wordpress/wp-config.php ]; then rm -f /app/wordpress/wp-config.php; fi
+      - wp config create --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --dbhost=database --path=/app/wordpress
+      - wp core install --url=https://bea-content-sync-fusion.lndo.site --title="Content sync fusion" --admin_password=admin --admin_email=admin@admin.fr --path=wordpress --skip-email
+      - wp plugin install --activate query-monitor
+      - wp plugin activate --activate simple-image-sizes
+  test-unit:
+      service: appserver
+      cmd: composer test-unit
+      description: Run our PHPunit tests
+  test-wpunit:
+      service: appserver
+      cmd: composer test-wpunit
+      description: Run our wpunit tests
+  test-acceptance:
+      service: appserver
+      cmd: composer test-acceptance
+      description: Run our acceptance tests
+  test-functional:
+      service: appserver
+      cmd: composer test-functional
+      description: Run our functional tests

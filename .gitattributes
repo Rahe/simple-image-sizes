@@ -11,6 +11,7 @@ composer.lock export-ignore
 grumphp.yml export-ignore
 psalm.yml export-ignore
 .wordpress-org export-ignore
+.lando.yml export-ignore
 
 
 # Do not diff theses fikes
