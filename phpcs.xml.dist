@@ -5,6 +5,8 @@
 
     <!-- Exclude the Composer Vendor directory. -->
     <exclude-pattern>./vendor/</exclude-pattern>
+    <exclude-pattern>./languages/</exclude-pattern>
+    <exclude-pattern>./assets/</exclude-pattern>
 
     <!-- Exclude the Node Modules directory. -->
     <exclude-pattern>/node_modules/*</exclude-pattern>
@@ -13,17 +15,19 @@
     <exclude-pattern>*.min.js</exclude-pattern>
     <exclude-pattern>*.js</exclude-pattern>
 
-    <rule ref="WordPress-Extra">
+       <rule ref="WordPress-Extra">
         <!-- Exclude as we use a custom autoloader. -->
         <exclude name="WordPress.Files.FileName"/>
-        <exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"/>
 
         <!-- Exclude as it conflict with @var declaration. -->
         <exclude name="Squiz.PHP.CommentedOutCode.Found"/>
-    </rule>
 
-    <!-- Only parse php files. -->
-    <arg name="extensions" value="php"/>
+        <!-- Exclude as we use the short array syntax over the long one. -->
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+
+        <!-- Allow to use short ternary operators since they are very usefull. -->
+        <exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+    </rule>
 
     <!-- Show sniff name in report. -->
     <arg value="sp"/>
@@ -37,5 +41,22 @@
     <!-- Set ini. -->
     <ini name="memory_limit" value="512M"/>
     <ini name="max_execution_time" value="-1"/>
+
+    <rule ref="PHPCompatibility"/>
+    <config name="testVersion" value="5.6-"/>
+
+    <rule ref="WordPress.WP.I18n">
+    <properties>
+      <!-- Value: replace the text domain used. -->
+      <property name="text_domain" type="array" value="simple-image-sizes"/>
+    </properties>
+    </rule>
+    <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
+    <properties>
+      <property name="blank_line_check" value="true"/>
+    </properties>
+    </rule>
+
+
 
 </ruleset>
