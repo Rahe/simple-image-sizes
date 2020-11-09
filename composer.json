@@ -17,5 +17,18 @@
     "psr-4": {
       "Rahe\\Simple_Image_Sizes\\" : "classes/"
     }
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+    "php-parallel-lint/php-parallel-lint": "^1.2",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "phpro/grumphp-shim": "^1.1",
+    "vimeo/psalm": "^4.1",
+    "wp-coding-standards/wpcs": "^2.3"
+  },
+    "scripts": {
+      "cs": "./vendor/bin/phpcs ./",
+      "cb": "./vendor/bin/phpcbf ./",
+      "psalm": "./vendor/bin/psalm ./"
   }
 }
