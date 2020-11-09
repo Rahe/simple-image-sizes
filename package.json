@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "gulp": "*",
+    "gulp-concat": "^2.6.1",
     "gulp-concat-sourcemap": "*",
     "gulp-cssmin": "*",
     "gulp-jshint": "*",
+    "gulp-uglify": "*",
     "gulp-load-plugins": "*",
     "gulp-rename": "*",
-    "gulp-uglify": "*",
-    "gulp-watch": "*",
     "matchdep": "*"
   }
 }

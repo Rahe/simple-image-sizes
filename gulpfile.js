@@ -1,52 +1,54 @@
-/*Load all plugin define in package.json*/
-var gulp = require('gulp'),
-    gulpLoadPlugins = require('gulp-load-plugins'),
-    plugins = gulpLoadPlugins(),
-    concat = require('gulp-concat-sourcemap');
+const { watch, series, src, dest } = require('gulp');
+const concat = require('gulp-concat');
+const cssmin = require('gulp-cssmin');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
 
-/*JS task*/
-gulp.task(
-    'dist', function () {
-        gulp.src(
+
+function defaultTask(cb) {
+    watch('assets/js/src/*.js', dev);
+  cb();
+}
+
+
+function dist(cb) {
+    src(
+        [
+            'assets/js/src/sis.js',
+            'assets/js/src/attachments.js',
+            'assets/js/src/featured.js'
+        ], { sourcemaps: true }
+    )
+        .pipe(uglify())
+        .pipe(concat('app.min.js', {sourceRoot: '../../'}))
+        .pipe(dest('assets/js/dist/', { sourcemaps: '.' }));
+
+    src(
+        [
+            'assets/css/sis-style.css'
+        ]
+    )
+        .pipe(cssmin())
+        .pipe(rename({'suffix': '.min'}))
+        .pipe(dest('assets/css/'));
+
+  cb();
+}
+
+function dev(cb) {
+    src(
             [
                 'assets/js/src/sis.js',
                 'assets/js/src/attachments.js',
                 'assets/js/src/featured.js'
-            ]
+            ], { sourcemaps: true }
         )
-            .pipe(plugins.uglify())
-            .pipe(concat('app.min.js', {sourceRoot: '../../'}))
-            .pipe(gulp.dest('assets/js/dist/'));
+        .pipe(concat('app.js', {sourceRoot: '../../'}))
+        .pipe(dest('assets/js/dist/', { sourcemaps: '.' }));
+  cb();
+}
 
-        gulp.src(
-            [
-                'assets/css/sis-style.css'
-            ]
-        )
-            .pipe(plugins.cssmin())
-            .pipe(plugins.rename({'suffix': '.min'}))
-            .pipe(gulp.dest('assets/css/'));
-    }
-);
 
-gulp.task(
-    'dev', function () {
-        return gulp.src(
-            [
-                'assets/js/src/sis.js',
-                'assets/js/src/attachments.js',
-                'assets/js/src/featured.js'
-            ]
-        )
-            .pipe(plugins.jshint())
-            .pipe(concat('app.js', {sourceRoot: '../../'}))
-            .pipe(gulp.dest('assets/js/dist/'));
-    }
-);
-
-// On default task, just compile on demand
-gulp.task(
-    'default', function () {
-        gulp.watch(['assets/js/src/*.js', '!assets/js/src/*.min.js'], ['dev']);
-    }
-);
+exports.default = defaultTask
+exports.dist = dist;
+exports.dev = dev;
