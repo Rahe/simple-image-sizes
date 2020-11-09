@@ -1,0 +1,15 @@
+.wordpress-org
+.git
+.github
+node_modules
+.distignore
+.gitignore
+.idea
+composer.json
+composer.lock
+grumphp.yml
+gulpfile.js
+package.json
+package-lock.json
+phpcs.xml.dist
+psalm.xml
