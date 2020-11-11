@@ -7,6 +7,7 @@
     <exclude-pattern>./vendor/</exclude-pattern>
     <exclude-pattern>./languages/</exclude-pattern>
     <exclude-pattern>./assets/</exclude-pattern>
+    <exclude-pattern>./tests/</exclude-pattern>
 
     <!-- Exclude the Node Modules directory. -->
     <exclude-pattern>/node_modules/*</exclude-pattern>

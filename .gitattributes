@@ -12,6 +12,8 @@ grumphp.yml export-ignore
 psalm.yml export-ignore
 .wordpress-org export-ignore
 .lando.yml export-ignore
+tests export-ignore
+wp-cli.yml
 
 
 # Do not diff theses fikes

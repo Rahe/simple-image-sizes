@@ -13,3 +13,4 @@ package.json
 package-lock.json
 phpcs.xml.dist
 psalm.xml
+tests

@@ -15,6 +15,19 @@ services:
       user: test
       password: test
       database: test
+  chromedriver:
+    type: compose
+    services:
+      image: robcherry/docker-chromedriver:latest
+      expose:
+        - "4444"
+      environment:
+        CHROMEDRIVER_WHITELISTED_IPS: ""
+        CHROMEDRIVER_URL_BASE: "/wd/hub"
+        CHROMEDRIVER_EXTRA_ARGS: "--ignore-certificate-errors --reduce-security-for-testing --enable-features=NetworkService"
+      security_opt:
+        - seccomp:unconfined
+      command: ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
 events:
   # Runs composer install and a custom php script before your app starts
   pre-start:
@@ -24,12 +37,16 @@ tooling:
     service: appserver
     description: 'Setup env'
     cmd:
-      - if [ -f app/wordpress/wp-config.php ]; then wp db reset --yes; fi
-      - if [ -f app/wordpress/wp-config.php ]; then rm -f /app/wordpress/wp-config.php; fi
+      - echo "Reset DB ?"
+      - if [ ! -f app/wordpress/wp-config.php ]; then wp db reset --yes --path=/app/wordpress; fi
+      - echo "Reset config"
+      - if [ ! -f app/wordpress/wp-config.php ]; then rm -f /app/wordpress/wp-config.php; fi
+      - echo "Create config"
       - wp config create --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --dbhost=database --path=/app/wordpress
-      - wp core install --url=https://bea-content-sync-fusion.lndo.site --title="Content sync fusion" --admin_password=admin --admin_email=admin@admin.fr --path=wordpress --skip-email
-      - wp plugin install --activate query-monitor
-      - wp plugin activate --activate simple-image-sizes
+      - echo "Install WP"
+      - wp core install --url=https://simple-image-sizes.lndo.site --title="Content sync fusion" --admin_user=admin --admin_password=admin --admin_email=admin@admin.fr --path=/app/wordpress --skip-email
+      - wp plugin install --activate query-monitor --path=/app/wordpress
+      - wp plugin activate simple-image-sizes --path=/app/wordpress
   test-unit:
       service: appserver
       cmd: composer test-unit

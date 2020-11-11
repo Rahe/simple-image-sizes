@@ -13,22 +13,38 @@
   "require": {
     "php": ">=5.6"
   },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
   "autoload"   : {
     "psr-4": {
       "Rahe\\Simple_Image_Sizes\\" : "classes/"
     }
   },
   "require-dev": {
+    "codeception/module-asserts": "^1.3",
+    "codeception/module-cli": "^1.0",
+    "codeception/module-db": "^1.0",
+    "codeception/module-filesystem": "^1.0",
+    "codeception/module-phpbrowser": "^1.0",
+    "codeception/module-webdriver": "^1.1",
+    "codeception/util-universalframework": "^1.0",
+    "lucatume/wp-browser": "^2.6",
+    "roots/wordpress": "^5.5",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
     "php-parallel-lint/php-parallel-lint": "^1.2",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpro/grumphp-shim": "^1.1",
-    "vimeo/psalm": "^4.1",
     "wp-coding-standards/wpcs": "^2.3"
   },
     "scripts": {
       "cs": "./vendor/bin/phpcs ./",
       "cb": "./vendor/bin/phpcbf ./",
-      "psalm": "./vendor/bin/psalm ./"
+      "test-unit": "./vendor/bin/codecept run unit --html",
+      "test-wpunit": "./vendor/bin/codecept run wpunit --html",
+      "test-functional": "./vendor/bin/codecept run functional --html",
+      "test-acceptance": "./vendor/bin/codecept run acceptance --html"
   }
 }
