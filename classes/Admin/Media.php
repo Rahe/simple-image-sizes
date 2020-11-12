@@ -1,5 +1,9 @@
 <?php
+
 namespace Rahe\Simple_Image_Sizes\Admin;
+
+use wpdb;
+use function current_user_can;
 
 class Media {
 
@@ -65,13 +69,13 @@ class Media {
 	 *
 	 * @access public
 	 *
-	 * @param array $links : the admin links.
-	 * @param string $file : the file concerned in the row.
+	 * @param array  $links : the admin links.
+	 * @param string $file  : the file concerned in the row.
 	 *
 	 * @return array
 	 * @author Nicolas Juen
 	 */
-	public static function add_settings_link( $links = array(), $file = '' ) {
+	public static function add_settings_link( $links = [], $file = '' ) {
 
 		if ( 'simple-image-sizes/simple_image_sizes.php' !== $file ) {
 			return $links;
@@ -184,59 +188,59 @@ class Media {
 		$custom = isset( $sizes[ $args['name'] ]['custom'] ) && ! empty( $sizes[ $args['name'] ]['custom'] ) ? '1' : '0';
 		$name   = isset( $sizes[ $args['name'] ]['n'] ) && ! empty( $sizes[ $args['name'] ]['n'] ) ? esc_html( $sizes[ $args['name'] ]['n'] ) : esc_html( $args['name'] );
 		?>
-        <input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name"/>
+		<input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name"/>
 		<?php if ( $custom ) : ?>
-            <input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" type="hidden"
-                   id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" value="1"/>
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" type="hidden"
+			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" value="1"/>
 		<?php else : ?>
-            <input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" type="hidden"
-                   id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" value="1"/>
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" type="hidden"
+			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" value="1"/>
 		<?php endif; ?>
-        <label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>">
+		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>">
 			<?php _e( 'Maximum width', 'simple-image-sizes' ); ?>
-            <input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>" class='w small-text'
-                   type="number" step='1' min='0'
-                   id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>"
-                   base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>"/>
-        </label>
-        <label class="sis-label" for="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>">
+			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>" class='w small-text'
+			       type="number" step='1' min='0'
+			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>"
+			       base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>"/>
+		</label>
+		<label class="sis-label" for="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>">
 			<?php _e( 'Maximum height', 'simple-image-sizes' ); ?>
-            <input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>" class='h small-text'
-                   type="number" step='1' min='0'
-                   id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>"
-                   base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>"/>
-        </label>
-        <label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>">
+			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>" class='h small-text'
+			       type="number" step='1' min='0'
+			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>"
+			       base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>"/>
+		</label>
+		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>">
 			<?php _e( 'Public name', 'simple-image-sizes' ); ?>
-            <input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>" class='n'
-                   type="text" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>"
-                   base_n='<?php echo $name; ?>' value="<?php echo $name; ?>"/>
-        </label>
-        <span class="size_options">
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>" class='n'
+			       type="text" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>"
+			       base_n='<?php echo $name; ?>' value="<?php echo $name; ?>"/>
+		</label>
+		<span class="size_options">
 			<label class="c"
-                   for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes' ); ?></label>
+			       for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes' ); ?></label>
 			<select id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>" class="c crop"
-                    base_c='<?php echo esc_attr( $crop ); ?>'
-                    name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
+			        base_c='<?php echo esc_attr( $crop ); ?>'
+			        name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
 
 				<?php foreach ( Main::get_available_crop() as $crop_position => $label ) : ?>
-                    <option <?php selected( $crop_position, $crop ); ?>
+					<option <?php selected( $crop_position, $crop ); ?>
                             value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			
 			<input type='checkbox'
-                   id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" <?php checked( $show, 1 ); ?>
+			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" <?php checked( $show, 1 ); ?>
                    class="s show" base_s='<?php echo esc_attr( $show ); ?>'
                    name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" value="1"/>
 			<label class="s"
-                   for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes' ); ?></label>
+			       for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes' ); ?></label>
 		</span>
-        <span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes' ); ?></span>
-        <span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes' ); ?></span>
+		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes' ); ?></span>
+		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes' ); ?></span>
 
-        <input type="hidden" class="deleteSize button-primary"
-               value='<?php echo wp_create_nonce( 'delete_' . $args['name'] ); ?>'/>
+		<input type="hidden" class="deleteSize button-primary"
+		       value='<?php echo wp_create_nonce( 'delete_' . $args['name'] ); ?>'/>
 		<?php
 	}
 
@@ -249,8 +253,8 @@ class Media {
 	 */
 	public static function addSizeButton() {
 		?>
-        <input type="button" class="button-secondary action" id="add_size"
-               value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes' ); ?>"/>
+		<input type="button" class="button-secondary action" id="add_size"
+		       value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes' ); ?>"/>
 		<?php
 	}
 
@@ -263,10 +267,10 @@ class Media {
 	 */
 	public static function getPhpButton() {
 		?>
-        <input type="button" class="button-secondary action" id="get_php"
-               value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
-        <p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
-        <code id="sis_get_php"></code>
+		<input type="button" class="button-secondary action" id="get_php"
+		       value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
+		<p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
+		<code id="sis_get_php"></code>
 		<?php
 	}
 
@@ -312,7 +316,7 @@ class Media {
 		$cn     = isset( $_POST['customName'] ) && ! empty( $_POST['customName'] ) ? sanitize_text_field( $_POST['customName'] ) : $name;
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'add_size' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'add_size' ) || ! current_user_can( 'manage_options' ) ) {
 			die( 0 );
 		}
 
@@ -408,8 +412,8 @@ class Media {
 				}
 			}
 			?>
-            add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop; ?> );
-            <br/>
+			add_image_size( '<?php echo $s; ?>', '<?php echo $width; ?>', '<?php echo $height; ?>', <?php echo $crop; ?> );
+			<br/>
 			<?php
 		}
 
@@ -426,7 +430,7 @@ class Media {
 	 */
 	public static function a_get_list() {
 		/**
-		 * @var \wpdb $wpdb
+		 * @var wpdb $wpdb
 		 */
 		global $wpdb;
 
@@ -495,7 +499,7 @@ class Media {
 	 */
 	public static function a_thumbnails_rebuild() {
 		/**
-		 * @var $wpdb \wpdb
+		 * @var $wpdb wpdb
 		 */
 		global $wpdb;
 
