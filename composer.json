@@ -42,6 +42,12 @@
     "scripts": {
       "cs": "./vendor/bin/phpcs phpcs.xml.dist ./",
       "cb": "./vendor/bin/phpcbf phpcs.xml.dist ./",
+      "tests" : [
+        "@test-unit",
+        "@test-wpunit",
+        "@test-functional",
+        "@test-acceptance"
+      ],
       "test-unit": "./vendor/bin/codecept run unit --html",
       "test-wpunit": "./vendor/bin/codecept run wpunit --html",
       "test-functional": "./vendor/bin/codecept run functional --html",
