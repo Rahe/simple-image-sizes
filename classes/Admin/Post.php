@@ -1,9 +1,12 @@
 <?php
+
 namespace Rahe\Simple_Image_Sizes\Admin;
+
+use WP_Post;
+use function current_user_can;
 
 class Post {
 	public function __construct() {
-
 		add_filter( 'image_size_names_choose', [ __CLASS__, 'add_thumbnail_name' ] );
 
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ], 11 );
@@ -28,11 +31,11 @@ class Post {
 	 * Generate HTML on the featured image size.
 	 *
 	 * @param string $content : the content of the post_thumbnail view.
-	 * @param int    $ID : the ID of the content concerned.
+	 * @param int    $id      : the ID of the content concerned.
 	 *
 	 * @return string
 	 */
-	public static function admin_post_thumbnail_html( $content, $ID ) {
+	public static function admin_post_thumbnail_html( $content, $id ) {
 		/**
 		 * Allow to not display the regenerate image link
 		 */
@@ -50,7 +53,7 @@ class Post {
 		$content .= '<span class="spinner"></span>';
 		$content .= sprintf(
 			"<a id='sis_featured_regenerate' data-nonce='%s' href='#' >%s</a>",
-			wp_create_nonce( 'sis-regenerate-featured-' . $ID ),
+			wp_create_nonce( 'sis-regenerate-featured-' . $id ),
 			esc_html__( 'Regenerate image sizes', 'simple-image-sizes' )
 		);
 		$content .= '<div class="sis_message"></div>';
@@ -69,7 +72,7 @@ class Post {
 		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : null;
 
 		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) || ! \current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
 		}
 
@@ -100,19 +103,19 @@ class Post {
 		/**
 		 * Enqueue the assets for the featured image only on the edit pages and the post types that supports it
 		 */
-		if ( in_array( $hook_suffix, [ 'post-new.php', 'post.php' ] ) ) {
+		if ( in_array( $hook_suffix, [ 'post-new.php', 'post.php' ], true ) ) {
 			if ( post_type_supports( get_post_type( get_post() ), 'thumbnail' ) ) {
 				// Add javascript.
 				wp_enqueue_script( 'sis_js' );
 			}
 		}
 
-		if ( 'upload.php' === $hook_suffix || ( 'post.php' === $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
+		if ( 'upload.php' === $hook_suffix || ( 'post.php' === $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) ) {
 			// Add javascript.
 			wp_enqueue_script( 'sis_js' );
 
 			// Add underscore template.
-			add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
+			add_action( 'admin_footer', [ Main::class, 'add_template' ] );
 		}
 	}
 
@@ -131,7 +134,7 @@ class Post {
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
 		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! \current_user_can( 'manage_options' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
 		}
 
@@ -148,7 +151,7 @@ class Post {
 	 * @param array $sizes : the sizes.
 	 *
 	 * @return array
-	 * @since 2.3
+	 * @since  2.3
 	 * @author Nicolas Juen
 	 * @author radeno based on this post : http://www.wpmayor.com/wordpress-hacks/how-to-add-custom-image-sizes-to-wordpress-uploader/
 	 */
@@ -170,11 +173,8 @@ class Post {
 			}
 		}
 
-		// Merge the two array.
-		$new_sizes = array_merge( $sizes, $add_sizes );
-
 		// Add new size.
-		return $new_sizes;
+		return array_merge( $sizes, $add_sizes );
 	}
 
 	/**
@@ -185,7 +185,7 @@ class Post {
 	 * @param string $thumbnail_slug : the slug of the thumbnail.
 	 *
 	 * @return string
-	 * @since 2.3
+	 * @since  2.3
 	 * @author Nicolas Juen
 	 */
 	private static function get_thumbnail_name( $thumbnail_slug = '' ) {
@@ -210,13 +210,13 @@ class Post {
 	/**
 	 * Add action in media row
 	 *
-	 * @since 2.2
-	 * @access public
-	 *
-	 * @param array    $actions : array of actions and content to display.
-	 * @param \WP_Post $object : the WordPress object for the actions.
+	 * @param array   $actions : array of actions and content to display.
+	 * @param WP_Post $object  : the WordPress object for the actions.
 	 *
 	 * @return array  $actions
+	 * @since  2.2
+	 * @access public
+	 *
 	 * @author Nicolas Juen
 	 */
 	public static function add_actions_list( $actions, $object ) {
@@ -236,11 +236,11 @@ class Post {
 	 *
 	 * @access public
 	 *
-	 * @param array    $fields : the fields of the media.
-	 * @param \WP_Post $post : the post object.
+	 * @param array   $fields : the fields of the media.
+	 * @param WP_Post $post   : the post object.
 	 *
 	 * @return array
-	 * @since 2.3.1
+	 * @since  2.3.1
 	 * @author Nicolas Juen
 	 */
 	public static function add_field_regenerate( $fields, $post ) {

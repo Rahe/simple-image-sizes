@@ -14,12 +14,16 @@ class Main {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
 		// Add javascript.
 		wp_register_script(
-			'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', [
-			'jquery',
-			'jquery-ui-button',
-			'jquery-ui-progressbar',
-			'underscore',
-		], SIS_VERSION
+			'sis_js',
+			SIS_URL . 'assets/js/dist/app' . $suffix . '.js',
+			[
+				'jquery',
+				'jquery-ui-button',
+				'jquery-ui-progressbar',
+				'underscore',
+			],
+			SIS_VERSION,
+			true
 		);
 
 		// Add javascript translations.
@@ -109,7 +113,6 @@ class Main {
 					'src'     => wp_get_attachment_thumb_url( $att_id ),
 					'time'    => timer_stop( false, 4 ),
 					'message' => sprintf(
-
 						/*
 						 * Translators: First element is link to the attachment admin edit, second the title of the attachment
 						 */
@@ -124,7 +127,6 @@ class Main {
 				'src'   => wp_get_attachment_thumb_url( $att_id ),
 				'time'  => timer_stop( false, 4 ),
 				'error' => sprintf(
-
 					/*
 					* Translators: First element is link to the attachment admin edit, second the title of the attachment
 					*/
@@ -133,7 +135,6 @@ class Main {
 					get_the_title( $att_id )
 				),
 			];
-
 		}
 
 		// Display the attachment url for feedback.
@@ -256,10 +257,10 @@ class Main {
 
 		$metadata = [];
 		if ( preg_match( '!^image/!', get_post_mime_type( $attachment ) ) && file_is_displayable_image( $file ) ) {
-			$imagesize          = getimagesize( $file );
-			$metadata['width']  = $imagesize[0];
-			$metadata['height'] = $imagesize[1];
-			list( $uwidth, $uheight ) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 128, 96 );
+			$imagesize                  = getimagesize( $file );
+			$metadata['width']          = $imagesize[0];
+			$metadata['height']         = $imagesize[1];
+			list( $uwidth, $uheight )   = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 128, 96 );
 			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
 
 			// Make the file path relative to the upload dir.
@@ -275,29 +276,30 @@ class Main {
 					'crop'   => false,
 				];
 				if ( isset( $_wp_additional_image_sizes[ $s ]['width'] ) ) {
-					$sizes[ $s ]['width'] = intval( $_wp_additional_image_sizes[ $s ]['width'] );
-				} // For theme-added sizes
-				else {
+					$sizes[ $s ]['width'] = (int) $_wp_additional_image_sizes[ $s ]['width'];
+				} else {
 					$sizes[ $s ]['width'] = get_option( "{$s}_size_w" );
-				} // For default sizes set in options
+				}
+				// For default sizes set in options.
 				if ( isset( $_wp_additional_image_sizes[ $s ]['height'] ) ) {
-					$sizes[ $s ]['height'] = intval( $_wp_additional_image_sizes[ $s ]['height'] );
-				} // For theme-added sizes
-				else {
+					$sizes[ $s ]['height'] = (int) $_wp_additional_image_sizes[ $s ]['height'];
+				} else {
 					$sizes[ $s ]['height'] = get_option( "{$s}_size_h" );
-				} // For default sizes set in options
+				}
+				// For default sizes set in options.
+
 				if ( isset( $_wp_additional_image_sizes[ $s ]['crop'] ) ) {
-					$sizes[ $s ]['crop'] = intval( $_wp_additional_image_sizes[ $s ]['crop'] );
-				} // For theme-added sizes
-				else {
+					$sizes[ $s ]['crop'] = (int) $_wp_additional_image_sizes[ $s ]['crop'];
+				} else {
 					$sizes[ $s ]['crop'] = get_option( "{$s}_crop" );
-				} // For default sizes set in options
+				}
+				// For default sizes set in options.
 			}
 
 			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
 
 			// Only if not all sizes.
-			if ( isset( $thumbnails ) && is_array( $thumbnails ) && isset( $meta_datas['sizes'] ) && ! empty( $meta_datas['sizes'] ) ) {
+			if ( isset( $thumbnails, $meta_datas['sizes'] ) && is_array( $thumbnails ) && ! empty( $meta_datas['sizes'] ) ) {
 				// Fill the array with the other sizes not have to be done.
 				foreach ( $meta_datas['sizes'] as $name => $fsize ) {
 					$metadata['sizes'][ $name ] = $fsize;
@@ -305,16 +307,14 @@ class Main {
 			}
 
 			foreach ( $sizes as $size => $size_data ) {
-				if ( isset( $thumbnails ) ) {
-					if ( ! in_array( $size, $thumbnails ) ) {
-						continue;
-					}
+				if ( isset( $thumbnails ) && ! in_array( $size, $thumbnails, true ) ) {
+					continue;
 				}
 
 				$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] );
 
 				if ( isset( $meta_datas['size'][ $size ] ) ) {
-					// Remove the size from the orignal sizes for after work.
+					// Remove the size from the original sizes for after work.
 					unset( $meta_datas['size'][ $size ] );
 				}
 

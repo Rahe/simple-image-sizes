@@ -60,7 +60,7 @@ class Media {
 		wp_enqueue_style( 'sis_css' );
 
 		// Add underscore template.
-		add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
+		add_action( 'admin_footer', [ Main::class, 'add_template' ] );
 	}
 
 
@@ -76,7 +76,6 @@ class Media {
 	 * @author Nicolas Juen
 	 */
 	public static function add_settings_link( $links = [], $file = '' ) {
-
 		if ( 'simple-image-sizes/simple_image_sizes.php' !== $file ) {
 			return $links;
 		}
@@ -106,7 +105,7 @@ class Media {
 		// Get the sizes and add the settings.
 		foreach ( get_intermediate_image_sizes() as $s ) {
 			// Don't make the original sizes or numeric sizes that appear.
-			if ( in_array( $s, self::$original ) || is_integer( $s ) ) {
+			if ( is_int( $s ) || in_array( $s, self::$original, true ) ) {
 				continue;
 			}
 
@@ -121,10 +120,15 @@ class Media {
 
 			// Add the setting field for this size.
 			add_settings_field(
-				'image_size_' . $s, sprintf( __( '%s size', 'simple-image-sizes' ), $s ), [
-				__CLASS__,
-				'image_sizes',
-			], 'media', 'default', [
+				'image_size_' . $s,
+				sprintf( __( '%s size', 'simple-image-sizes' ), $s ),
+				[
+					__CLASS__,
+					'image_sizes',
+				],
+				'media',
+				'default',
+				[
 					'name'   => $s,
 					'width'  => $width,
 					'height' => $height,
@@ -138,26 +142,35 @@ class Media {
 
 		// Add the button.
 		add_settings_field(
-			'add_size_button', __( 'Add a new size', 'simple-image-sizes' ), [
-			__CLASS__,
-			'addSizeButton',
-		], 'media'
+			'add_size_button',
+			__( 'Add a new size', 'simple-image-sizes' ),
+			[
+				__CLASS__,
+				'addSizeButton',
+			],
+			'media'
 		);
 
 		// Add php button.
 		add_settings_field(
-			'get_php_button', __( 'Get php for theme', 'simple-image-sizes' ), [
-			__CLASS__,
-			'getPhpButton',
-		], 'media'
+			'get_php_button',
+			__( 'Get php for theme', 'simple-image-sizes' ),
+			[
+				__CLASS__,
+				'getPhpButton',
+			],
+			'media'
 		);
 
 		// Add section for the thumbnail regeneration.
 		add_settings_section(
-			'thumbnail_regenerate', __( 'Thumbnail regeneration', 'simple-image-sizes' ), [
-			__CLASS__,
-			'thumbnailRegenerate',
-		], 'media'
+			'thumbnail_regenerate',
+			__( 'Thumbnail regeneration', 'simple-image-sizes' ),
+			[
+				__CLASS__,
+				'thumbnailRegenerate',
+			],
+			'media'
 		);
 	}
 
@@ -172,7 +185,6 @@ class Media {
 	 * @author Nicolas Juen
 	 */
 	public static function image_sizes( $args ) {
-
 		if ( is_integer( $args['name'] ) ) {
 			return;
 		}
@@ -190,57 +202,40 @@ class Media {
 		?>
 		<input type="hidden" value="<?php echo esc_attr( $args['name'] ); ?>" name="image_name"/>
 		<?php if ( $custom ) : ?>
-			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" type="hidden"
-			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" value="1"/>
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][custom]' ); ?>" value="1"/>
 		<?php else : ?>
-			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" type="hidden"
-			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" value="1"/>
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" type="hidden" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][theme]' ); ?>" value="1"/>
 		<?php endif; ?>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>">
 			<?php _e( 'Maximum width', 'simple-image-sizes' ); ?>
-			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>" class='w small-text'
-			       type="number" step='1' min='0'
-			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>"
-			       base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>"/>
+			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>" class='w small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][w]' ); ?>" base_w='<?php echo esc_attr( $width ); ?>' value="<?php echo esc_attr( $width ); ?>"/>
 		</label>
 		<label class="sis-label" for="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>">
 			<?php _e( 'Maximum height', 'simple-image-sizes' ); ?>
-			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>" class='h small-text'
-			       type="number" step='1' min='0'
-			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>"
-			       base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>"/>
+			<input name="<?php esc_attr_e( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>" class='h small-text' type="number" step='1' min='0' id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][h]' ); ?>" base_h='<?php echo esc_attr( $height ); ?>' value="<?php echo esc_attr( $height ); ?>"/>
 		</label>
 		<label class="sis-label" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>">
 			<?php _e( 'Public name', 'simple-image-sizes' ); ?>
-			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>" class='n'
-			       type="text" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>"
-			       base_n='<?php echo $name; ?>' value="<?php echo $name; ?>"/>
+			<input name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>" class='n' type="text" id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][n]' ); ?>" base_n='<?php echo \esc_attr( $name ); ?>' value="<?php echo \esc_attr( $name ); ?>"/>
 		</label>
 		<span class="size_options">
-			<label class="c"
-			       for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes' ); ?></label>
-			<select id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>" class="c crop"
-			        base_c='<?php echo esc_attr( $crop ); ?>'
-			        name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
+			<label class="c" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>"><?php _e( 'Cropping', 'simple-image-sizes' ); ?></label>
+			<select id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>" class="c crop" base_c='<?php echo esc_attr( $crop ); ?>' name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][c]' ); ?>">
 
 				<?php foreach ( Main::get_available_crop() as $crop_position => $label ) : ?>
 					<option <?php selected( $crop_position, $crop ); ?>
-                            value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
+							value="<?php echo esc_attr( $crop_position ); ?>"><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			
-			<input type='checkbox'
-			       id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" <?php checked( $show, 1 ); ?>
-                   class="s show" base_s='<?php echo esc_attr( $show ); ?>'
-                   name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" value="1"/>
-			<label class="s"
-			       for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes' ); ?></label>
+			<input type='checkbox' id="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" <?php checked( $show, 1 ); ?> class="s show" base_s='<?php echo esc_attr( $show ); ?>' name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" value="1"/>
+			<label class="s" for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php \esc_html_e( 'Show in post insertion ?', 'simple-image-sizes' ); ?></label>
 		</span>
 		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes' ); ?></span>
 		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes' ); ?></span>
 
 		<input type="hidden" class="deleteSize button-primary"
-		       value='<?php echo wp_create_nonce( 'delete_' . $args['name'] ); ?>'/>
+			   value='<?php echo \esc_attr( wp_create_nonce( 'delete_' . $args['name'] ) ); ?>'/>
 		<?php
 	}
 
@@ -254,7 +249,7 @@ class Media {
 	public static function addSizeButton() {
 		?>
 		<input type="button" class="button-secondary action" id="add_size"
-		       value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes' ); ?>"/>
+			   value="<?php esc_attr_e( 'Add a new size of thumbnail', 'simple-image-sizes' ); ?>"/>
 		<?php
 	}
 
@@ -268,7 +263,7 @@ class Media {
 	public static function getPhpButton() {
 		?>
 		<input type="button" class="button-secondary action" id="get_php"
-		       value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
+			   value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
 		<p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
 		<code id="sis_get_php"></code>
 		<?php
@@ -365,7 +360,7 @@ class Media {
 		$name  = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ) : '';
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'delete_' . $name ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'delete_' . $name ) || ! current_user_can( 'manage_options' )  ) {
 			die( 0 );
 		}
 
@@ -386,6 +381,10 @@ class Media {
 	 */
 	public static function a_get_sizes() {
 		global $_wp_additional_image_sizes, $wp_version;
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			die();
+		}
 
 		foreach ( get_intermediate_image_sizes() as $s ) {
 			// Don't make the original sizes
@@ -430,7 +429,7 @@ class Media {
 	 */
 	public static function a_get_list() {
 		/**
-		 * @var wpdb $wpdb
+		 * @var wpdb
 		 */
 		global $wpdb;
 
@@ -438,19 +437,18 @@ class Media {
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'getList' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'getList' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json( [] );
 		}
 
 		if ( isset( $_POST['post_types'] ) && ! empty( $_POST['post_types'] ) ) {
-
 			foreach ( $_POST['post_types'] as $key => $type ) {
 				if ( ! post_type_exists( $type ) ) {
 					unset( $_POST['post_types'][ $key ] );
 				}
 			}
 
-			if ( empty( $_POST['post_types'][ $key ] ) ) {
+			if ( empty( $_POST['post_types'] ) ) {
 				wp_send_json( [] );
 			}
 
@@ -460,34 +458,33 @@ class Media {
 			// Get all parent from post type.
 			$attachments = $wpdb->get_var(
 				"SELECT COUNT( ID )
-				FROM $wpdb->posts 
+				FROM $wpdb->posts
 				WHERE 1 = 1
 				AND post_type = 'attachment'
 				$whichmimetype
 				AND post_parent IN (
-					SELECT DISTINCT ID 
-					FROM $wpdb->posts 
+					SELECT DISTINCT ID
+					FROM $wpdb->posts
 					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)"
 			);
 			// Return the Id's and Title of medias
 			wp_send_json( [ 'total' => $attachments ] );
-
-		} else {
-			$attachments = get_children(
-				[
-					'post_type'      => 'attachment',
-					'post_mime_type' => 'image',
-					'numberposts'    => - 1,
-					'post_status'    => null,
-					'post_parent'    => null, // any parent
-					'output'         => 'ids',
-				]
-			);
-			// Return the Id's and Title of medias
-			wp_send_json( [ 'total' => count( $attachments ) ] );
 		}
 
+		$attachments = get_children(
+			[
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'no_found_rows'  => true,
+				'numberposts'    => - 1,
+				'post_status'    => null,
+				'post_parent'    => null, // any parent
+				'output'         => 'ids',
+			]
+		);
+		// Return the Id's and Title of medias
+		wp_send_json( [ 'total' => count( $attachments ) ] );
 	}
 
 	/**
@@ -499,7 +496,7 @@ class Media {
 	 */
 	public static function a_thumbnails_rebuild() {
 		/**
-		 * @var $wpdb wpdb
+		 * @var wpdb
 		 */
 		global $wpdb;
 
@@ -510,12 +507,11 @@ class Media {
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
 		}
 
 		if ( 'any' !== $post_types ) {
-
 			foreach ( $_POST['post_types'] as $key => $type ) {
 				if ( ! post_type_exists( $type ) ) {
 					unset( $_POST['post_types'][ $key ] );
@@ -538,15 +534,15 @@ class Media {
 				AND post_type = 'attachment'
 				$whichmimetype
 				AND post_parent IN (
-					SELECT DISTINCT ID 
-					FROM $wpdb->posts 
+					SELECT DISTINCT ID
+					FROM $wpdb->posts
 					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)
 				LIMIT %d,1 
-			", $offset
+			",
+					$offset
 				)
 			);
-
 		} else {
 			$attachment = get_posts(
 				[
