@@ -37,15 +37,17 @@ tooling:
     service: appserver
     description: 'Setup env'
     cmd:
-      - echo "Reset DB ?"
-      - if [ ! -f app/wordpress/wp-config.php ]; then wp db reset --yes --path=/app/wordpress; fi
-      - echo "Reset config"
-      - if [ ! -f app/wordpress/wp-config.php ]; then rm -f /app/wordpress/wp-config.php; fi
-      - echo "Create config"
+      - echo "➡️ Reset DB ?"
+      - if [ -f /app/wordpress/wp-config.php ]; then echo "wp-config exists reset DB" && wp db reset --yes --path=/app/wordpress ; else echo "No wp-config.php, no reset" ; fi
+      - echo "➡️ Reset config"
+      - if [ -f /app/wordpress/wp-config.php ]; then echo "wp-config exists deleting it" && rm -f /app/wordpress/wp-config.php; else echo "No wp-config.php, no rm" ; fi
+      - echo "➡️ Create config"
       - wp config create --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --dbhost=database --path=/app/wordpress
-      - echo "Install WP"
+      - echo "➡️ Install WP"
       - wp core install --url=https://simple-image-sizes.lndo.site --title="Content sync fusion" --admin_user=admin --admin_password=admin --admin_email=admin@admin.fr --path=/app/wordpress --skip-email
+      - echo "➡️ Install query monitor"
       - wp plugin install --activate query-monitor --path=/app/wordpress
+      - echo "➡️ Activate plugin"
       - wp plugin activate simple-image-sizes --path=/app/wordpress
   test-unit:
       service: appserver
