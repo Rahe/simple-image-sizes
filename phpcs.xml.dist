@@ -29,6 +29,10 @@
 
         <!-- Allow to use short ternary operators since they are very usefull. -->
         <exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+
+        <!-- Allow custom hooks -->
+        <exclude name="WordPress.NamingConventions.ValidHookName.NotLowercase"/>
+        <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
     </rule>
 
     <!-- Show sniff name in report. -->
