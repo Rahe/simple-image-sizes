@@ -12,6 +12,15 @@ class Main {
 	}
 
 	/**
+	 * Delete the option on ininstallation
+	 *
+	 * @author Nicolas JUEN
+	 */
+	public static function uninstall() {
+		\delete_option( SIS_OPTION );
+	}
+
+	/**
 	 * Override the images by the plugin images
 	 *
 	 * @access public

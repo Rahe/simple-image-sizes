@@ -28,6 +28,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+use Rahe\Simple_Image_Sizes\Admin\Media;
+use Rahe\Simple_Image_Sizes\Admin\Post;
+
 define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SIS_VERSION', '3.2.1' );
@@ -37,14 +40,15 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
+register_uninstall_hook( __FILE__, [ \Rahe\Simple_Image_Sizes\Main::class, 'uninstall' ] );
+
 add_action( 'plugins_loaded', 'init_sis' );
 function init_sis() {
 	new Rahe\Simple_Image_Sizes\Main();
 
 	if ( is_admin() ) {
 		new \Rahe\Simple_Image_Sizes\Admin\Main();
-		new \Rahe\Simple_Image_Sizes\Admin\Post();
-		new \Rahe\Simple_Image_Sizes\Admin\Media();
+		new Post();
+		new Media();
 	}
-
 }
