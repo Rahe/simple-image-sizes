@@ -1,5 +1,6 @@
 <?php
 
+namespace Rahe\Simple_Image_Sizes\Tests;
 
 use Codeception\TestCase\WPTestCase;
 use Rahe\Simple_Image_Sizes\Main;
