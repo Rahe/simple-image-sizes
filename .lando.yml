@@ -44,7 +44,7 @@ tooling:
       - echo "➡️ Create config"
       - wp config create --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --dbhost=database --path=/app/wordpress
       - echo "➡️ Install WP"
-      - wp core install --url=https://simple-image-sizes.lndo.site --title="Content sync fusion" --admin_user=admin --admin_password=admin --admin_email=admin@admin.fr --path=/app/wordpress --skip-email
+      - wp core install --url=https://simple-image-sizes.lndo.site --title="Simple image sizes" --admin_user=admin --admin_password=admin --admin_email=admin@admin.fr --path=/app/wordpress --skip-email
       - echo "➡️ Install query monitor"
       - wp plugin install --activate query-monitor --path=/app/wordpress
       - echo "➡️ Activate plugin"
