@@ -1,0 +1,13 @@
+.github
+node_modules
+.git
+.gitattributes
+composer.json
+composer.lock
+grumphp.yml
+gulpfile.js
+package-lock.json
+package.json
+phpcs.xml.dist
+psalm.xml
+readme.txt
