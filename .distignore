@@ -11,3 +11,6 @@ package.json
 phpcs.xml.dist
 psalm.xml
 readme.txt
+.DS_Store
+.distignore
+.gitignore
