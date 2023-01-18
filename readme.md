@@ -7,9 +7,9 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 5.2.0
+**Tested up to:** 6.0.0
   
-**Stable tag:** 3.2.1
+**Stable tag:** 3.2.2
 
 
 ## Description ##
@@ -58,6 +58,10 @@ And then you can choose if the image is displayed on the media insertion or not 
 ![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-3.png)
 
 ## Changelog ##
+* 3.2.2
+    * Update minimum version
+    * Add CI/CD for releases
+    * Add wp-scripts for the compilation
 * 3.2.1
     * Remove the .git file
     * Add phpcs file

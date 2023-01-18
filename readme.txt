@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 5.7.2
-Stable tag: 3.2.1
+Tested up to: 6.0.0
+Stable tag: 3.2.2
 Requires PHP: 5.6.33
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,10 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.2
+    * Update minimum version
+    * Add CI/CD for releases
+    * Add wp-scripts for the compilation
 * 3.2.1
     * Remove the .git file
     * Add phpcs file
