@@ -14,9 +14,8 @@ jobs:
     - name: Build project PHP
       id: compile-php
       uses: shivammathur/setup-php@v2
-      run: |
-        composer validate
-        composer install --prefer-dist --no-dev --ignore-platform-reqs -o
+      
+    - run: composer validate && composer install --prefer-dist --no-dev --ignore-platform-reqs -o
 
     - name: WordPress Plugin Deploy
       id: deploy
