@@ -8,15 +8,13 @@
     "type": "git",
     "url": "https://github.com/Rahe/simple-image-sizes"
   },
+  "scripts": {
+    "start": "wp-scripts start assets/src/js/index.js --output-path=assets/dist/",
+    "build": "wp-scripts build assets/src/js/index.js --output-path=assets/dist/",
+    "lint:css": "wp-scripts lint-style 'assets/src/css/*.css'",
+    "format": "wp-scripts format ./assets/src"
+  },
   "devDependencies": {
-    "gulp": "*",
-    "gulp-concat": "^2.6.1",
-    "gulp-concat-sourcemap": "*",
-    "gulp-cssmin": "*",
-    "gulp-jshint": "*",
-    "gulp-uglify": "*",
-    "gulp-load-plugins": "*",
-    "gulp-rename": "*",
-    "matchdep": "*"
+    "@wordpress/scripts": "^25.2.0"
   }
 }
