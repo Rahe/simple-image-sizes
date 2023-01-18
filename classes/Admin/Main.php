@@ -11,22 +11,24 @@ class Main {
 	 * Register all the assets for the admin
 	 */
 	public static function register_assets() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG === true ? '' : '.min';
 		// Add javascript.
 		wp_register_script(
-			'sis_js', SIS_URL . 'assets/js/dist/app' . $suffix . '.js', [
-			'jquery',
-			'jquery-ui-button',
-			'jquery-ui-progressbar',
-			'underscore',
-		], SIS_VERSION
+			'sis_js',
+			SIS_URL . 'assets/dist/index.js',
+			[
+				'jquery',
+				'jquery-ui-button',
+				'jquery-ui-progressbar',
+				'underscore',
+			],
+			SIS_VERSION
 		);
 
 		// Add javascript translations.
 		wp_localize_script( 'sis_js', 'sis', self::localize_vars() );
 
 		// Add CSS.
-		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/css/sis-style' . $suffix . '.css', [], SIS_VERSION );
+		wp_enqueue_style( 'sis_css', SIS_URL . 'assets/dist/index.css', [], SIS_VERSION );
 	}
 
 
@@ -109,7 +111,6 @@ class Main {
 					'src'     => wp_get_attachment_thumb_url( $att_id ),
 					'time'    => timer_stop( false, 4 ),
 					'message' => sprintf(
-
 						/*
 						 * Translators: First element is link to the attachment admin edit, second the title of the attachment
 						 */
@@ -124,7 +125,6 @@ class Main {
 				'src'   => wp_get_attachment_thumb_url( $att_id ),
 				'time'  => timer_stop( false, 4 ),
 				'error' => sprintf(
-
 					/*
 					* Translators: First element is link to the attachment admin edit, second the title of the attachment
 					*/
@@ -133,7 +133,6 @@ class Main {
 					get_the_title( $att_id )
 				),
 			];
-
 		}
 
 		// Display the attachment url for feedback.
@@ -256,10 +255,10 @@ class Main {
 
 		$metadata = [];
 		if ( preg_match( '!^image/!', get_post_mime_type( $attachment ) ) && file_is_displayable_image( $file ) ) {
-			$imagesize          = getimagesize( $file );
-			$metadata['width']  = $imagesize[0];
-			$metadata['height'] = $imagesize[1];
-			list( $uwidth, $uheight ) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 128, 96 );
+			$imagesize                  = getimagesize( $file );
+			$metadata['width']          = $imagesize[0];
+			$metadata['height']         = $imagesize[1];
+			list( $uwidth, $uheight )   = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 128, 96 );
 			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
 
 			// Make the file path relative to the upload dir.
