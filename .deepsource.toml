@@ -1,0 +1,10 @@
+version = 1
+
+[[analyzers]]
+name = "php"
+
+  [analyzers.meta]
+  bootstrap_files = ["simple-image-sizes.php"]
+
+[[analyzers]]
+name = "javascript"
