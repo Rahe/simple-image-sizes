@@ -3,9 +3,9 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 6.0.0
-Stable tag: 3.2.2
-Requires PHP: 5.6.33
+Tested up to: 6.5
+Stable tag: 3.2.3
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ I have improved the php and javascript, you can know if the image have been rege
 Contribute on https://github.com/Rahe/Simple-image-sizes
 
 == Installation ==
- **PHP5 Required.**
+ **PHP8 Required.**
  
 1. Download, unzip and upload to your WordPress plugins directory
 2. Activate the plugin within you WordPress Administration Backend
@@ -38,7 +38,7 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 = Where can I add image sizes ? =
 Go to Settings -> Media then you can add a image size. You have to add a unique custom name without any spaces or special chars.
 The best is to use something like my-custom-size.
-Then you have several fields for configuring the image size, the widht, the height, cropping.
+Then you have several fields for configuring the image size, the width, the height, cropping.
 And then you can choose if the image is displayed on the media insertion or not ( this will be displayed on the dropdown list ).
 
 
@@ -49,6 +49,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.3
+    * Update minimum php version to 8.0
+    * Fix vendor error with composer, case sensitive problems
 * 3.2.2
     * Update minimum version
     * Add CI/CD for releases

@@ -7,9 +7,9 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 6.0.0
+**Tested up to:** 6.5.3
   
-**Stable tag:** 3.2.2
+**Stable tag:** 3.2.3
 
 
 ## Description ##
@@ -42,7 +42,7 @@ Contribute on https://github.com/Rahe/Simple-image-sizes
 ### Where can I add image sizes ? ####
 Go to Settings -> Media then you can add a image size. You have to add a unique custom name without any spaces or special chars.
 The best is to use something like my-custom-size.
-Then you have several fields for configuring the image size, the widht, the height, cropping.
+Then you have several fields for configuring the image size, the width, the height, cropping.
 And then you can choose if the image is displayed on the media insertion or not ( this will be displayed on the dropdown list ).
 
 
@@ -58,6 +58,9 @@ And then you can choose if the image is displayed on the media insertion or not 
 ![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-3.png)
 
 ## Changelog ##
+* 3.2.3
+    * Update minimum php version to 8.0
+    * Fix vendor error with composer, case sensitive problems
 * 3.2.2
     * Update minimum version
     * Add CI/CD for releases

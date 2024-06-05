@@ -14,3 +14,4 @@ readme.txt
 .DS_Store
 .distignore
 .gitignore
+.wp-env.json

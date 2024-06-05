@@ -10,7 +10,9 @@ composer.lock export-ignore
 .gitignore export-ignore
 grumphp.yml export-ignore
 psalm.yml export-ignore
+.wp-env.json export-ignore
 
 # Do not diff theses fikes
 composer.lock -diff
 package-lock.json -diff
+

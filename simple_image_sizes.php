@@ -3,13 +3,14 @@
 Plugin Name: Simple Image Sizes
 Plugin URI: https://github.com/Rahe/simple-image-sizes
 Description: Add options in media setting page for images sizes
-Version: 3.2.2
+Version: 3.2.3
 Author: Rahe
 Author URI: http://nicolas-juen.fr
 Text Domain: simple-image-sizes
 Domain Path: /languages
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 8.0
 
 Copyright 2011 Nicolas JUEN (njuen@beapi.fr) - Be-API
 
@@ -28,9 +29,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+use Rahe\Simple_Image_Sizes\Admin\Main;
+use Rahe\Simple_Image_Sizes\Admin\Media;
+use Rahe\Simple_Image_Sizes\Admin\Post;
+
 define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SIS_VERSION', '3.2.2' );
+define( 'SIS_VERSION', '3.2.3' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
@@ -42,8 +47,8 @@ function init_sis() {
 	new Rahe\Simple_Image_Sizes\Main();
 
 	if ( is_admin() ) {
-		new \Rahe\Simple_Image_Sizes\Admin\Main();
-		new \Rahe\Simple_Image_Sizes\Admin\Post();
-		new \Rahe\Simple_Image_Sizes\Admin\Media();
+		new Main();
+		new Post();
+		new Media();
 	}
 }

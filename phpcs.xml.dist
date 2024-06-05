@@ -15,7 +15,7 @@
     <exclude-pattern>*.min.js</exclude-pattern>
     <exclude-pattern>*.js</exclude-pattern>
 
-       <rule ref="WordPress-Extra">
+    <rule ref="WordPress-Extra">
         <!-- Exclude as we use a custom autoloader. -->
         <exclude name="WordPress.Files.FileName"/>
 
@@ -24,9 +24,11 @@
 
         <!-- Exclude as we use the short array syntax over the long one. -->
         <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
 
-        <!-- Allow to use short ternary operators since they are very usefull. -->
+        <!-- Allow to use short ternary operators since they are very useful. -->
         <exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+        <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
     </rule>
 
     <!-- Show sniff name in report. -->
