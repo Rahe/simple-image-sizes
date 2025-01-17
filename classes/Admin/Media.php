@@ -117,7 +117,7 @@ class Media {
 			// Add the setting field for this size.
 			add_settings_field(
 				'image_size_' . $s,
-				sprintf( __( '%s size', 'simple-image-sizes' ), $s ),
+				sprintf( __( '%s size', 'simple-image-sizes' ), esc_html( $s ) ),
 				[
 					__CLASS__,
 					'image_sizes',
@@ -316,15 +316,15 @@ class Media {
 		$croppings[ false ] = '';
 
 		// Check entries
-		$name   = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ) : '';
+		$name   = isset( $_POST['name'] ) ? sanitize_text_field( sanitize_title( $_POST['name'] ) ) : '';
 		$height = ! isset( $_POST['height'] ) ? 0 : absint( $_POST['height'] );
 		$width  = ! isset( $_POST['width'] ) ? 0 : absint( $_POST['width'] );
-		$crop   = isset( $_POST['crop'] ) && isset( $croppings[ $_POST['crop'] ] ) ? $_POST['crop'] : false;
-		$show   = isset( $_POST['show'] ) && $_POST['show'] == 'false' ? false : true;
+		$crop   = isset( $_POST['crop'] ) && isset( $croppings[ $_POST['crop'] ] ) ? (bool) $_POST['crop'] : false;
+		$show   = ! ( isset( $_POST['show'] ) && $_POST['show'] == 'false' );
 		$cn     = isset( $_POST['customName'] ) && ! empty( $_POST['customName'] ) ? sanitize_text_field( $_POST['customName'] ) : $name;
 
 		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'add_size' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'add_size' ) || ! current_user_can( 'manage_options' ) ) {
 			die( 0 );
 		}
 
