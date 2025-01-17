@@ -7,9 +7,9 @@
   
 **Requires at least:** 3.5
   
-**Tested up to:** 6.5.3
+**Tested up to:** 6.7.1
   
-**Stable tag:** 3.2.3
+**Stable tag:** 3.2.4
 
 
 ## Description ##
@@ -58,6 +58,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 ![](https://raw.githubusercontent.com/Rahe/Simple-image-sizes/master/screenshot-3.png)
 
 ## Changelog ##
+* 3.2.4
+  * Security fix on image size name displayed into media page. Props JPCERT.
 * 3.2.3
     * Update minimum php version to 8.0
     * Fix vendor error with composer, case sensitive problems

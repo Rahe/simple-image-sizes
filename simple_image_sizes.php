@@ -3,7 +3,7 @@
 Plugin Name: Simple Image Sizes
 Plugin URI: https://github.com/Rahe/simple-image-sizes
 Description: Add options in media setting page for images sizes
-Version: 3.2.3
+Version: 3.2.4
 Author: Rahe
 Author URI: http://nicolas-juen.fr
 Text Domain: simple-image-sizes
@@ -35,7 +35,7 @@ use Rahe\Simple_Image_Sizes\Admin\Post;
 
 define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SIS_VERSION', '3.2.3' );
+define( 'SIS_VERSION', '3.2.4' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {

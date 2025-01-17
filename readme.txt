@@ -3,8 +3,8 @@ Contributors: Rahe
 Donate link: http://www.beapi.fr/donate/
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 6.5
-Stable tag: 3.2.3
+Tested up to: 6.7.1
+Stable tag: 3.2.4
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,8 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.4
+    * Security fix on image size name displayed into media page. Props JPCERT.
 * 3.2.3
     * Update minimum php version to 8.0
     * Fix vendor error with composer, case sensitive problems
