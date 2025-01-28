@@ -50,7 +50,7 @@ And then you can choose if the image is displayed on the media insertion or not 
 
 == Changelog ==
 * 3.2.4
-    * Security fix on image size name displayed into media page. Props JPCERT.
+    * Security fix on image size name displayed into media page. Props Ibuki Sato of Nippon Engineering College of Hachioji.
 * 3.2.3
     * Update minimum php version to 8.0
     * Fix vendor error with composer, case sensitive problems
