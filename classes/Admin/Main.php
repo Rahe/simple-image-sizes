@@ -329,6 +329,6 @@ class Main {
 			}
 		}
 
-		return apply_filters( 'wp_generate_attachment_metadata', $metadata, $attachment_id );
+		return apply_filters( 'wp_generate_attachment_metadata', $metadata, $attachment_id, 'create' );
 	}
 }
