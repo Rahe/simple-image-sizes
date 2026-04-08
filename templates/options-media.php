@@ -6,18 +6,18 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 <input type="hidden" class="regen" value='<?php echo wp_create_nonce( 'regen' ); ?>'/>
 <input type="hidden" class="getList" value='<?php echo wp_create_nonce( 'getList' ); ?>'/>
 <div id="sis-regen">
-	<div class="wrapper" style="">
+	<div class="wrapper">
 		<h4> <?php _e( 'Select which thumbnails you want to rebuild:', 'simple-image-sizes' ); ?> </h4>
-		<table cellspacing="0" id="sis_sizes" class="widefat page fixed sis">
+		<table cellspacing="0" id="sis_sizes" class="widefat page sis">
 			<thead>
 			<tr>
-				<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked"
+				<th scope="col" id="cb" class="manage-column column-cb check-column"><input checked="checked"
 																									 type="checkbox">
 				</th>
 				<th class="manage-column" scope="col"><?php _e( 'Size name', 'simple-image-sizes' ); ?></th>
 				<th class="manage-column" scope="col"><?php _e( 'Width', 'simple-image-sizes' ); ?></th>
 				<th class="manage-column" scope="col"><?php _e( 'Height', 'simple-image-sizes' ); ?></th>
-				<th class="manage-column" scope="col"><?php _e( 'Crop ?', 'simple-image-sizes' ); ?></th>
+				<th class="manage-column" scope="col"><?php _e( 'Crop?', 'simple-image-sizes' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -46,43 +46,43 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 
 				?>
 				<tr id="sis-<?php echo esc_attr( $s ); ?>">
-					<th class="check-column">
+					<th scope="row" class="check-column">
 						<input type="checkbox" class="thumbnails" id="<?php echo esc_attr( $s ); ?>" name="thumbnails[]"
 							   checked="checked" value="<?php echo esc_attr( $s ); ?>"/>
 					</th>
-					<th>
+					<td>
 						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $s ); ?></label>
-					</th>
-					<th>
+					</td>
+					<td>
 						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $width ); ?> px</label>
-					</th>
-					<th>
+					</td>
+					<td>
 						<label for="<?php echo esc_attr( $s ); ?>"><?php echo esc_html( $height ); ?> px</label>
-					</th>
-					<th>
+					</td>
+					<td>
 						<label for="<?php echo esc_attr( $s ); ?>"><?php echo $crop; ?> </label>
-					</th>
+					</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>
 			<tfoot>
 			<tr>
-				<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked"
+				<th scope="col" id="cb" class="manage-column column-cb check-column"><input checked="checked"
 																									 type="checkbox">
 				</th>
 				<th class="manage-column" scope="col"><?php _e( 'Size name', 'simple-image-sizes' ); ?></th>
 				<th class="manage-column" scope="col"><?php _e( 'Width', 'simple-image-sizes' ); ?></th>
 				<th class="manage-column" scope="col"><?php _e( 'Height', 'simple-image-sizes' ); ?></th>
-				<th class="manage-column" scope="col"><?php _e( 'Crop ?', 'simple-image-sizes' ); ?></th>
+				<th class="manage-column" scope="col"><?php _e( 'Crop?', 'simple-image-sizes' ); ?></th>
 			</tr>
 			</tfoot>
 		</table>
 
 		<h4><?php _e( 'Select which post type source thumbnails you want to rebuild:', 'simple-image-sizes' ); ?></h4>
-		<table cellspacing="0" class="widefat page fixed sis">
+		<table cellspacing="0" class="widefat page sis">
 			<thead>
 			<tr>
-				<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input checked="checked"
+				<th scope="col" id="cb" class="manage-column column-cb check-column"><input checked="checked"
 																									 type="checkbox">
 				</th>
 				<th class="manage-column" scope="col"><?php _e( 'Post type', 'simple-image-sizes' ); ?></th>
@@ -90,7 +90,7 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 			</thead>
 			<tbody>
 			<?php
-			// Diplay the post types table
+			// Display the post types table
 			foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $ptype ) :
 				// Avoid the post_types without post thumbnails feature
 				if ( ! isset( $_wp_post_type_features[ $ptype->name ] ) || ! array_key_exists( 'thumbnail', $_wp_post_type_features[ $ptype->name ] ) || false == $_wp_post_type_features[ $ptype->name ] ) {
@@ -98,17 +98,14 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 				}
 				?>
 				<tr>
-					<th class="check-column">
-						<label for="<?php echo esc_attr( $ptype->name ); ?>">
-							<input type="checkbox" class="post_types" name="post_types[]" checked="checked"
-								   id="<?php echo esc_attr( $ptype->name ); ?>"
-								   value="<?php echo esc_attr( $ptype->name ); ?>"/>
-						</label>
+					<th scope="row" class="check-column">
+						<input type="checkbox" class="post_types" name="post_types[]" checked="checked"
+							   id="<?php echo esc_attr( $ptype->name ); ?>"
+							   value="<?php echo esc_attr( $ptype->name ); ?>"/>
 					</th>
-					<th>
-						<label
-								for="<?php echo esc_attr( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
-					</th>
+					<td>
+						<label for="<?php echo esc_attr( $ptype->name ); ?>"><em><?php echo esc_html( $ptype->labels->name ); ?></em></label>
+					</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>
@@ -135,7 +132,7 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 		<div class="ui-state-highlight ui-corner-all">
 			<p>
 				<span class="ui-icon ui-icon-info"></span>
-				<span><strong><?php _e( 'End time calculated :', 'simple-image-sizes' ); ?></strong> <span
+				<span><strong><?php _e( 'End time calculated:', 'simple-image-sizes' ); ?></strong> <span
 							class='time_message'><?php _e( 'Calculating...', 'simple-image-sizes' ); ?></span> </span>
 			</p>
 			<ul class="messages"></ul>
@@ -150,4 +147,32 @@ global $_wp_additional_image_sizes, $_wp_post_type_features;
 	<div class="thumb"><h4><?php _e( 'Last image:', 'simple-image-sizes' ); ?></h4><img class="thumb-img"/></div>
 	<input type="button" class="button" name="ajax_thumbnail_rebuild" id="ajax_thumbnail_rebuild"
 		   value="<?php _e( 'Regenerate Thumbnails', 'simple-image-sizes' ); ?>"/>
+	<?php
+	$sis_blog_url = apply_filters(
+		'sis_mediapapa_blog_url',
+		defined( 'SIS_MEDIAPAPA_BLOG_URL' ) ? SIS_MEDIAPAPA_BLOG_URL : 'https://www.wp-mediapapa.com/blog/simple-image-sizes-update/'
+	);
+	?>
+	<p id="sis-mediapapa-footer-note" class="description sis-mediapapa-footer">
+		<?php
+		echo wp_kses(
+			sprintf(
+				/* translators: %s: anchor to the Mediapapa blog post about this release. */
+				__( 'Simple Image Sizes is maintained by Nicolas Juen and The Mediapapa Team. %s', 'simple-image-sizes' ),
+				sprintf(
+					'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+					esc_url( $sis_blog_url ),
+					esc_html__( 'Read more about this release', 'simple-image-sizes' )
+				)
+			),
+			[
+				'a' => [
+					'href'   => [],
+					'target' => [],
+					'rel'    => [],
+				],
+			]
+		);
+		?>
+	</p>
 </div>

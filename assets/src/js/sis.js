@@ -31,6 +31,23 @@ rahe.sis.regenerate = {
 	errorMessages: null,
 	thumb: null,
 	thumbImg: null,
+	getMediapapaLink: function ( text ) {
+		if (
+			! window.sis.mediapapaCtaUrl ||
+			typeof window.sis.mediapapaCtaUrl !== 'string'
+		) {
+			return '';
+		}
+
+		var label = text || window.sis.mediapapaCtaLabel;
+		return (
+			' <a href="' +
+			window.sis.mediapapaCtaUrl +
+			'" target="_blank" rel="noopener noreferrer">' +
+			label +
+			'</a>'
+		);
+	},
 	init: function () {
 		this.sisZone = jQuery( '.sis' );
 		this.percentText = jQuery( '#sis_progress-percent' );
@@ -178,7 +195,10 @@ rahe.sis.regenerate = {
 					':' +
 					now.getMinutes() +
 					':' +
-					now.getSeconds()
+					now.getSeconds() +
+					'<br />' +
+					window.sis.mediapapaAfterRegen +
+					this.getMediapapaLink()
 			);
 			return;
 		}
@@ -714,4 +734,11 @@ jQuery( function () {
 	jQuery( '#get_php' ).nextAll( 'code' ).hide();
 
 	jQuery( '.add_size' ).hide();
+
+	// Settings > Media: place maintenance line after "Save Changes" (core prints submit after our section).
+	var $footerNote = jQuery( '#sis-mediapapa-footer-note' );
+	var $submitWrap = jQuery( '#submit' ).closest( 'p.submit' );
+	if ( $footerNote.length && $submitWrap.length ) {
+		$footerNote.insertAfter( $submitWrap );
+	}
 } );
