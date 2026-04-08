@@ -1,46 +1,54 @@
 === Simple Image Sizes ===
-Contributors: Rahe
-Donate link: http://www.beapi.fr/donate/
+Contributors: mediapapa, rahe, jaz_on
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 6.7.1
-Stable tag: 3.2.4
+Tested up to: 7.0
+Stable tag: 3.2.5
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-This plugin allow create custom image sizes for your site. Override your theme sizes directly on the media option page.
-You can regenerate all the sizes you have just created and choose which one you wanted to regenerate.
-You can now get all the code to copy and paste to your function theme file.
-Now you can use the generated sizes directly into your posts and insert images at the right size !
-Now you choose if you want display the size in the post insert image.
-Now you can regenerate the images one by one in the 'Medias' general pane.
-Now you can regenerate the images by bulk action in the 'Medias' general pane.
-Now you can regenerate the image sizes on single attachment edit page.
+This plugin lets you create custom image sizes for your site. Override your theme sizes directly on the Media settings page, regenerate thumbnails, and copy `add_image_size` PHP for your theme.
 
-I have added a timer so when you regeneration your thumbnails, you can know approximately when the regeneration will be ended.
-I have improved the php and javascript, you can know if the image have been regenerated or not or if there is an error and which one.
+ℹ️ **Simple Image Sizes, a Mediapapa product**
 
-Contribute on https://github.com/Rahe/Simple-image-sizes
+**Simple Image Sizes will always remain free.** It is actively maintained by me (Nicolas Juen). I'm also building [Mediapapa](https://wordpress.org/plugins/mediapapa/), a complementary plugin focused on understanding and organizing your media library. [More on these changes](https://www.wp-mediapapa.com/blog/simple-image-sizes-update/)
+
+**Features**
+
+* Insert images in posts at the right size using your custom sizes.
+* Control whether each size appears in the "Insert media" size dropdown.
+* Regenerate thumbnails in bulk from **Settings → Media**, and pick which sizes to rebuild.
+* Copy generated `add_image_size` PHP for your theme when you want to keep sizes and deactivate the plugin.
+* Regenerate from the **Media** library: one file at a time or with list bulk actions.
+* Regenerate from a single attachment’s edit screen.
+* Approximate end time and clearer feedback while bulk regeneration runs.
+
+[Contribute on GitHub directly.](https://github.com/Rahe/Simple-image-sizes)
 
 == Installation ==
- **PHP8 Required.**
+ **PHP 8 required.**
  
 1. Download, unzip and upload to your WordPress plugins directory
-2. Activate the plugin within you WordPress Administration Backend
-3. Go to Settings > Medias
-4. Configure your new image sizes and regenerate the thumbnails !
+2. Activate the plugin within your WordPress Administration Backend
+3. Go to Settings → Media
+4. Configure your new image sizes and regenerate the thumbnails!
 
 == Frequently Asked Questions ==
 
-= Where can I add image sizes ? =
-Go to Settings -> Media then you can add a image size. You have to add a unique custom name without any spaces or special chars.
+= Where can I add image sizes? =
+Go to Settings → Media, then you can add an image size. You have to add a unique custom name without any spaces or special chars.
 The best is to use something like my-custom-size.
 Then you have several fields for configuring the image size, the width, the height, cropping.
 And then you can choose if the image is displayed on the media insertion or not ( this will be displayed on the dropdown list ).
 
+= Who maintains this plugin? =
+Nicolas Juen, the original author, continues to lead maintenance together with the Mediapapa Team.
+
+= How does Simple Image Sizes relate to Mediapapa? =
+Simple Image Sizes focuses on creating and regenerating image sizes. Mediapapa focuses on understanding and organizing your media library (usage, cleanup, duplicates, and related workflows).
 
 == Screenshots ==
 
@@ -49,6 +57,17 @@ And then you can choose if the image is displayed on the media insertion or not 
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.5
+    * Add optional dismissible admin notice on Media library and Settings > Media about Mediapapa (not shown when Mediapapa is already active)
+    * Remember notice dismissal per user until the next release or a new plugin activation
+    * Add short maintenance line with link below thumbnail regeneration on Settings > Media
+    * Add filters and constants for Mediapapa CTA and blog URLs
+    * Tighten capability checks on media AJAX actions that were missing them
+    * Sanitize post types in regeneration queries and fix empty check after filtering post types
+    * Align single-image and featured-image regeneration with attachment and post edit permissions; show regenerate controls only when allowed
+    * Media settings: limit SIS list-table styling to the regeneration block so the core settings table layout stays intact
+    * Media settings: drop the WordPress "fixed" list-table class on regeneration tables so all columns stay visible on smaller widths
+    * Admin: reduce flash of "Update" / "Get PHP" controls before JavaScript hides them (CSS aligned with script behavior)
 * 3.2.4
     * Security fix on image size name displayed into media page. Props Ibuki Sato of Nippon Engineering College of Hachioji.
 * 3.2.3
@@ -126,7 +145,7 @@ And then you can choose if the image is displayed on the media insertion or not 
 	* Add the custom size name in the attachment insertion
 	* Exclude post_type wich do not support the post-thumbnail feature
 * 2.2.5
-	* Debug the regeneration buggy !
+	* Debug the regeneration buggy!
 	* Complete the french translation
 	* Security update for single regeneration, include the nonce this time :)
 * 2.2.4
