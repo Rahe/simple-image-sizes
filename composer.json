@@ -1,6 +1,6 @@
 {
   "name": "rahe/simple-image-sizes",
-  "description": "Add options in media setting page for handling images sizes",
+  "description": "Add options on the Media settings page for image sizes",
   "minimum-stability": "stable",
   "license": "GPL-2.0-or-later",
   "authors": [
