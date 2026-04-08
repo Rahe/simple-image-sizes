@@ -40,6 +40,11 @@ class Main {
 	 * @author Nicolas Juen
 	 */
 	public static function localize_vars() {
+		$mediapapa_cta_url = apply_filters(
+			'sis_mediapapa_notice_cta_url',
+			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
+		);
+
 		return array(
 			'reading'            => __( 'Reading attachments...', 'simple-image-sizes' ),
 			'maximumWidth'       => __( 'Maximum width', 'simple-image-sizes' ),
@@ -47,12 +52,12 @@ class Main {
 			'crop'               => __( 'Crop', 'simple-image-sizes' ),
 			'tr'                 => __( 'yes', 'simple-image-sizes' ),
 			'fl'                 => __( 'no', 'simple-image-sizes' ),
-			'show'               => __( 'Show in post insertion ?', 'simple-image-sizes' ),
+			'show'               => __( 'Show in post insertion?', 'simple-image-sizes' ),
 			'of'                 => __( ' of ', 'simple-image-sizes' ),
 			'or'                 => __( ' or ', 'simple-image-sizes' ),
 			'beforeEnd'          => __( ' before the end.', 'simple-image-sizes' ),
 			'deleteImage'        => __( 'Delete', 'simple-image-sizes' ),
-			'noMedia'            => __( 'No media in your site to regenerate !', 'simple-image-sizes' ),
+			'noMedia'            => __( 'No media on your site to regenerate!', 'simple-image-sizes' ),
 			'regenerating'       => __( 'Regenerating ', 'simple-image-sizes' ),
 			'regenerate'         => __( 'Regenerate ', 'simple-image-sizes' ),
 			'validate'           => __( 'Validate image size name', 'simple-image-sizes' ),
@@ -60,21 +65,24 @@ class Main {
 			'size'               => __( 'Size', 'simple-image-sizes' ),
 			'notOriginal'        => __( 'Don\'t use the basic WordPress thumbnail size name, use the form above to edit them', 'simple-image-sizes' ),
 			'alreadyPresent'     => __( 'This size is already registered, edit it instead of recreating it.', 'simple-image-sizes' ),
-			'confirmDelete'      => __( 'Do you really want to delete these size ?', 'simple-image-sizes' ),
+			'confirmDelete'      => __( 'Do you really want to delete this size?', 'simple-image-sizes' ),
 			'update'             => __( 'Update', 'simple-image-sizes' ),
 			'ajaxErrorHandler'   => __( 'Error requesting page', 'simple-image-sizes' ),
-			'messageRegenerated' => __( 'images have been regenerated !', 'simple-image-sizes' ),
+			'messageRegenerated' => __( 'images have been regenerated!', 'simple-image-sizes' ),
 			'validateButton'     => __( 'Validate', 'simple-image-sizes' ),
 			'startedAt'          => __( ' started at', 'simple-image-sizes' ),
 			'customName'         => __( 'Public name', 'simple-image-sizes' ),
-			'finishedAt'         => __( ' finished at :', 'simple-image-sizes' ),
-			'phpError'           => __( 'Error during the php treatment, be sure to not have php errors in your page', 'simple-image-sizes' ),
-			'notSaved'           => __( 'All the sizes you have modified are not saved, continue anyway ?', 'simple-image-sizes' ),
+			'finishedAt'         => __( ' finished at:', 'simple-image-sizes' ),
+			'phpError'           => __( 'Error during PHP processing; make sure there are no PHP errors on the page', 'simple-image-sizes' ),
+			'notSaved'           => __( 'All the sizes you have modified are not saved, continue anyway?', 'simple-image-sizes' ),
 
 			/*
 			 * translators: %s is the number of seconds for the image generation.
 			 */
 			'soloRegenerated'    => __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
+			'mediapapaCtaUrl'    => esc_url_raw( $mediapapa_cta_url ),
+			'mediapapaCtaLabel'  => __( 'Try Mediapapa', 'simple-image-sizes' ),
+			'mediapapaAfterRegen'=> __( 'Thumbnails regenerated. Need usage or duplicates insights?', 'simple-image-sizes' ),
 			'crop_positions'     => self::get_available_crop(),
 			'regen_one'          => wp_create_nonce( 'regen' ),
 		);
@@ -93,7 +101,7 @@ class Main {
 		// Time a the beginning.
 		timer_start();
 
-		// Check Id.
+		// Check ID.
 		if ( (int) $att_id <= 0 ) {
 			return [
 				'time'  => timer_stop( false, 4 ),
@@ -114,7 +122,7 @@ class Main {
 						/*
 						 * Translators: First element is link to the attachment admin edit, second the title of the attachment
 						 */
-						__( 'This file already exists in this size and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
+						__( 'This file already exists in this size and have not been regenerated:<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
 						get_edit_post_link( $att_id ),
 						get_the_title( $att_id )
 					),
@@ -128,7 +136,7 @@ class Main {
 					/*
 					* Translators: First element is link to the attachment admin edit, second the title of the attachment
 					*/
-					__( 'This file does not exists and have not been regenerated :<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
+					__( 'This file does not exist and has not been regenerated:<br/><a target="_blank" href="%1$s" >%2$s</a>', 'simple-image-sizes' ),
 					get_edit_post_link( $att_id ),
 					get_the_title( $att_id )
 				),
