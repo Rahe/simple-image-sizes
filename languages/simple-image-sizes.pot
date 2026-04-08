@@ -1,266 +1,284 @@
-# Copyright (C) 2024 Rahe
+# Copyright (C) 2026 The Mediapapa Team
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Simple Image Sizes 3.2.3\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/Simple-image-sizes\n"
+"Project-Id-Version: Simple Image Sizes 3.2.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/simple-image-sizes\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-06-05T08:30:05+00:00\n"
+"POT-Creation-Date: 2026-04-08T18:38:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: simple-image-sizes\n"
 
 #. Plugin Name of the plugin
-#: simple_image_sizes.php
 msgid "Simple Image Sizes"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: simple_image_sizes.php
-msgid "https://github.com/Rahe/simple-image-sizes"
+msgid "https://github.com/Rahe/Simple-image-sizes"
 msgstr ""
 
 #. Description of the plugin
-#: simple_image_sizes.php
-msgid "Add options in media setting page for images sizes"
+msgid "Add options on the Media settings page for image sizes"
 msgstr ""
 
 #. Author of the plugin
-#: simple_image_sizes.php
-msgid "Rahe"
+msgid "The Mediapapa Team"
 msgstr ""
 
 #. Author URI of the plugin
-#: simple_image_sizes.php
-msgid "http://nicolas-juen.fr"
-msgstr ""
-
-#: classes/Admin/Main.php:44
-msgid "Reading attachments..."
-msgstr ""
-
-#: classes/Admin/Main.php:45
-#: classes/Admin/Media.php:208
-msgid "Maximum width"
-msgstr ""
-
-#: classes/Admin/Main.php:46
-#: classes/Admin/Media.php:215
-msgid "Maximum height"
-msgstr ""
-
-#: classes/Admin/Main.php:47
-msgid "Crop"
-msgstr ""
-
-#: classes/Admin/Main.php:48
-msgid "yes"
+msgid "https://www.wp-mediapapa.com/"
 msgstr ""
 
 #: classes/Admin/Main.php:49
-msgid "no"
+msgid "Reading attachments..."
 msgstr ""
 
 #: classes/Admin/Main.php:50
-#: classes/Admin/Media.php:245
-msgid "Show in post insertion ?"
+#: classes/Admin/Media.php:397
+msgid "Maximum width"
 msgstr ""
 
 #: classes/Admin/Main.php:51
-msgid " of "
+#: classes/Admin/Media.php:404
+msgid "Maximum height"
 msgstr ""
 
 #: classes/Admin/Main.php:52
-msgid " or "
+msgid "Crop"
 msgstr ""
 
 #: classes/Admin/Main.php:53
-msgid " before the end."
+msgid "yes"
 msgstr ""
 
 #: classes/Admin/Main.php:54
-#: classes/Admin/Media.php:247
-msgid "Delete"
+msgid "no"
 msgstr ""
 
 #: classes/Admin/Main.php:55
-msgid "No media in your site to regenerate !"
+#: classes/Admin/Media.php:434
+msgid "Show in post insertion?"
 msgstr ""
 
 #: classes/Admin/Main.php:56
-msgid "Regenerating "
+msgid " of "
 msgstr ""
 
 #: classes/Admin/Main.php:57
-msgid "Regenerate "
+msgid " or "
 msgstr ""
 
 #: classes/Admin/Main.php:58
-msgid "Validate image size name"
+msgid " before the end."
 msgstr ""
 
 #: classes/Admin/Main.php:59
-msgid "Done."
+#: classes/Admin/Media.php:436
+msgid "Delete"
 msgstr ""
 
 #: classes/Admin/Main.php:60
-msgid "Size"
+msgid "No media on your site to regenerate!"
 msgstr ""
 
 #: classes/Admin/Main.php:61
-msgid "Don't use the basic WordPress thumbnail size name, use the form above to edit them"
+msgid "Regenerating "
 msgstr ""
 
 #: classes/Admin/Main.php:62
-msgid "This size is already registered, edit it instead of recreating it."
+msgid "Regenerate "
 msgstr ""
 
 #: classes/Admin/Main.php:63
-msgid "Do you really want to delete these size ?"
+msgid "Validate image size name"
 msgstr ""
 
 #: classes/Admin/Main.php:64
-#: classes/Admin/Media.php:248
-msgid "Update"
+msgid "Done."
 msgstr ""
 
 #: classes/Admin/Main.php:65
-msgid "Error requesting page"
+msgid "Size"
 msgstr ""
 
 #: classes/Admin/Main.php:66
-msgid "images have been regenerated !"
+msgid "Don't use the basic WordPress thumbnail size name, use the form above to edit them"
 msgstr ""
 
 #: classes/Admin/Main.php:67
-msgid "Validate"
+msgid "This size is already registered, edit it instead of recreating it."
 msgstr ""
 
 #: classes/Admin/Main.php:68
-msgid " started at"
+msgid "Do you really want to delete this size?"
 msgstr ""
 
 #: classes/Admin/Main.php:69
-#: classes/Admin/Media.php:222
-msgid "Public name"
+#: classes/Admin/Media.php:437
+msgid "Update"
 msgstr ""
 
 #: classes/Admin/Main.php:70
-msgid " finished at :"
+msgid "Error requesting page"
 msgstr ""
 
 #: classes/Admin/Main.php:71
-msgid "Error during the php treatment, be sure to not have php errors in your page"
+msgid "images have been regenerated!"
 msgstr ""
 
 #: classes/Admin/Main.php:72
-msgid "All the sizes you have modified are not saved, continue anyway ?"
+msgid "Validate"
+msgstr ""
+
+#: classes/Admin/Main.php:73
+msgid " started at"
+msgstr ""
+
+#: classes/Admin/Main.php:74
+#: classes/Admin/Media.php:411
+msgid "Public name"
+msgstr ""
+
+#: classes/Admin/Main.php:75
+msgid " finished at:"
+msgstr ""
+
+#: classes/Admin/Main.php:76
+msgid "Error during PHP processing; make sure there are no PHP errors on the page"
+msgstr ""
+
+#: classes/Admin/Main.php:77
+msgid "All the sizes you have modified are not saved, continue anyway?"
 msgstr ""
 
 #. translators: %s is the number of seconds for the image generation.
-#: classes/Admin/Main.php:77
+#: classes/Admin/Main.php:82
 msgid "This image has been regenerated in %s seconds"
 msgstr ""
 
-#: classes/Admin/Main.php:100
+#: classes/Admin/Main.php:84
+msgid "Try Mediapapa"
+msgstr ""
+
+#: classes/Admin/Main.php:85
+msgid "Thumbnails regenerated. Need usage or duplicates insights?"
+msgstr ""
+
+#: classes/Admin/Main.php:108
 msgid "No id given in POST datas."
 msgstr ""
 
 #. Translators: First element is link to the attachment admin edit, second the title of the attachment
-#: classes/Admin/Main.php:117
-msgid "This file already exists in this size and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
+#: classes/Admin/Main.php:125
+msgid "This file already exists in this size and have not been regenerated:<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
 msgstr ""
 
 #. Translators: First element is link to the attachment admin edit, second the title of the attachment
-#: classes/Admin/Main.php:131
-msgid "This file does not exists and have not been regenerated :<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
-msgstr ""
-
-#: classes/Admin/Main.php:180
-msgid "Left"
-msgstr ""
-
-#: classes/Admin/Main.php:181
-msgid "Center"
-msgstr ""
-
-#: classes/Admin/Main.php:182
-msgid "Right"
-msgstr ""
-
-#: classes/Admin/Main.php:186
-msgid "top"
-msgstr ""
-
-#: classes/Admin/Main.php:187
-msgid "center"
+#: classes/Admin/Main.php:139
+msgid "This file does not exist and has not been regenerated:<br/><a target=\"_blank\" href=\"%1$s\" >%2$s</a>"
 msgstr ""
 
 #: classes/Admin/Main.php:188
-msgid "bottom"
+msgid "Left"
+msgstr ""
+
+#: classes/Admin/Main.php:189
+msgid "Center"
+msgstr ""
+
+#: classes/Admin/Main.php:190
+msgid "Right"
+msgstr ""
+
+#: classes/Admin/Main.php:194
+msgid "top"
 msgstr ""
 
 #: classes/Admin/Main.php:195
+msgid "center"
+msgstr ""
+
+#: classes/Admin/Main.php:196
+msgid "bottom"
+msgstr ""
+
+#: classes/Admin/Main.php:203
 #: templates/options-media.php:42
 msgid "No"
 msgstr ""
 
-#: classes/Admin/Main.php:196
+#: classes/Admin/Main.php:204
 #: templates/options-media.php:42
 msgid "Yes"
 msgstr ""
 
-#: classes/Admin/Media.php:79
-msgid "Settings"
-msgstr ""
-
-#: classes/Admin/Media.php:120
-msgid "%s size"
-msgstr ""
-
-#: classes/Admin/Media.php:142
-msgid "Add a new size"
-msgstr ""
-
-#: classes/Admin/Media.php:153
-msgid "Get php for theme"
-msgstr ""
-
-#: classes/Admin/Media.php:164
+#: classes/Admin/Media.php:67
 msgid "Thumbnail regeneration"
 msgstr ""
 
-#: classes/Admin/Media.php:229
+#: classes/Admin/Media.php:146
+msgid "Mediapapa on WordPress.org"
+msgstr ""
+
+#. translators: %s: HTML link to Mediapapa.
+#: classes/Admin/Media.php:150
+msgid "Hi &mdash; I'm Nicolas Juen, the author of Simple Image Sizes. The plugin remains <strong>free</strong>, and I continue maintaining it with <strong>The Mediapapa Team</strong>. We also ship <strong>Mediapapa</strong>, a <strong>free</strong> plugin to better understand and organize your WordPress media library &mdash; if that sounds useful: %s Thank you for your trust."
+msgstr ""
+
+#: classes/Admin/Media.php:248
+msgid "Settings"
+msgstr ""
+
+#: classes/Admin/Media.php:277
+msgid "Visit plugin site"
+msgstr ""
+
+#. translators: %s is the image size slug.
+#: classes/Admin/Media.php:319
+msgid "%s size"
+msgstr ""
+
+#: classes/Admin/Media.php:341
+msgid "Add a new size"
+msgstr ""
+
+#: classes/Admin/Media.php:352
+msgid "Get PHP for theme"
+msgstr ""
+
+#: classes/Admin/Media.php:418
 msgid "Cropping"
 msgstr ""
 
-#: classes/Admin/Media.php:265
+#: classes/Admin/Media.php:454
 msgid "Add a new size of thumbnail"
 msgstr ""
 
-#: classes/Admin/Media.php:279
+#: classes/Admin/Media.php:468
 msgid "Get the PHP for the theme"
 msgstr ""
 
-#: classes/Admin/Media.php:280
-msgid "Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin."
+#: classes/Admin/Media.php:469
+msgid "Copy and paste the code below into your theme's functions file if you want to save them and deactivate the plugin."
 msgstr ""
 
-#: classes/Admin/Media.php:296
+#: classes/Admin/Media.php:485
 msgid "Admin option-media template missing"
 msgstr ""
 
-#: classes/Admin/Media.php:519
+#: classes/Admin/Media.php:716
 #: classes/Admin/Post.php:73
 #: classes/Admin/Post.php:135
-msgid "Trying to cheat ?"
+#: classes/Admin/Post.php:141
+msgid "Trying to cheat?"
 msgstr ""
 
-#: classes/Admin/Media.php:572
+#: classes/Admin/Media.php:773
 msgid "Regeneration ended"
 msgstr ""
 
@@ -272,13 +290,17 @@ msgstr ""
 msgid "There is no media attached to this content."
 msgstr ""
 
-#: classes/Admin/Post.php:227
+#: classes/Admin/Post.php:233
 msgid "Regenerate thumbnails"
 msgstr ""
 
-#: classes/Admin/Post.php:253
-#: classes/Admin/Post.php:262
-#: templates/options-media.php:152
+#: classes/Admin/Post.php:242
+msgid "Analyze in Mediapapa"
+msgstr ""
+
+#: classes/Admin/Post.php:273
+#: classes/Admin/Post.php:282
+#: templates/options-media.php:149
 msgid "Regenerate Thumbnails"
 msgstr ""
 
@@ -303,7 +325,7 @@ msgstr ""
 
 #: templates/options-media.php:20
 #: templates/options-media.php:76
-msgid "Crop ?"
+msgid "Crop?"
 msgstr ""
 
 #: templates/options-media.php:81
@@ -311,18 +333,27 @@ msgid "Select which post type source thumbnails you want to rebuild:"
 msgstr ""
 
 #: templates/options-media.php:88
-#: templates/options-media.php:119
+#: templates/options-media.php:116
 msgid "Post type"
 msgstr ""
 
-#: templates/options-media.php:138
-msgid "End time calculated :"
+#: templates/options-media.php:135
+msgid "End time calculated:"
 msgstr ""
 
-#: templates/options-media.php:139
+#: templates/options-media.php:136
 msgid "Calculating..."
 msgstr ""
 
-#: templates/options-media.php:150
+#: templates/options-media.php:147
 msgid "Last image:"
+msgstr ""
+
+#. translators: %s: anchor to the Mediapapa blog post about this release.
+#: templates/options-media.php:161
+msgid "Simple Image Sizes is maintained by Nicolas Juen and The Mediapapa Team. %s"
+msgstr ""
+
+#: templates/options-media.php:165
+msgid "Read more about this release"
 msgstr ""
