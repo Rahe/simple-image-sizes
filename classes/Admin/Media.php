@@ -176,31 +176,24 @@ class Media {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		// Paths match mediapapa-org / mediapapa-pro repos: bootstrap is always `mediapapa.php` (folder name varies).
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		// Paths match mediapapa-org / mediapapa-pro repos: bootstrap is always `mediapapa.php`.
 		$explicit = apply_filters(
 			'sis_mediapapa_plugin_bootstrap_paths',
 			array(
-				'mediapapa/mediapapa.php',       // WordPress.org + typical folder name.
-				'mediapapa-pro/mediapapa.php',   // Pro distribution (GitHub mediapapa-pro).
-				'mediapapa-org/mediapapa.php',   // Dev clone of mediapapa-org repo.
+				'mediapapa/mediapapa.php',
+				'mediapapa-pro/mediapapa.php',
+				'mediapapa-org/mediapapa.php',
 			)
 		);
 		foreach ( $explicit as $plugin_file ) {
-			if ( is_string( $plugin_file ) && '' !== $plugin_file && is_plugin_active( $plugin_file ) ) {
-				return true;
-			}
-		}
-
-		$active = array_merge(
-			(array) get_option( 'active_plugins', array() ),
-			array_keys( (array) get_site_option( 'active_sitewide_plugins', array() ) )
-		);
-		foreach ( $active as $plugin_file ) {
-			if ( ! is_string( $plugin_file ) ) {
+			if ( ! is_string( $plugin_file ) || '' === $plugin_file ) {
 				continue;
 			}
-			// mediapapa/, mediapapa-pro/, mediapapa-org/, mediapapa_pro/, etc.
-			if ( preg_match( '#^mediapapa(-(org|pro)|_pro)?/#i', $plugin_file ) ) {
+			if ( is_plugin_active( $plugin_file ) || is_plugin_active_for_network( $plugin_file ) ) {
 				return true;
 			}
 		}
@@ -219,10 +212,6 @@ class Media {
 		}
 
 		$user_id = get_current_user_id();
-		if ( ! $user_id ) {
-			wp_send_json_error( null, 400 );
-		}
-
 		update_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_version', (string) SIS_VERSION );
 		update_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_cycle', (int) get_option( 'sis_mediapapa_notice_cycle', 0 ) );
 		wp_send_json_success();
@@ -638,28 +627,24 @@ class Media {
 		// Basic vars
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 
-		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'getList' ) || ! current_user_can( 'manage_options' ) ) {
+		// Check the nonce
+		if ( ! wp_verify_nonce( $nonce, 'getList' ) ) {
 			wp_send_json( [] );
 		}
 
 		if ( isset( $_POST['post_types'] ) && ! empty( $_POST['post_types'] ) ) {
-			$valid_types = [];
-			foreach ( (array) $_POST['post_types'] as $type ) {
-				$type = sanitize_key( (string) $type );
-				if ( $type && post_type_exists( $type ) ) {
-					$valid_types[] = $type;
+			foreach ( $_POST['post_types'] as $key => $type ) {
+				if ( ! post_type_exists( $type ) ) {
+					unset( $_POST['post_types'][ $key ] );
 				}
 			}
-			$valid_types = array_values( array_unique( $valid_types ) );
 
-			if ( empty( $valid_types ) ) {
+			if ( empty( $_POST['post_types'][ $key ] ) ) {
 				wp_send_json( [] );
 			}
 
 			// Get image medias.
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
-			$sanitized_in  = "'" . implode( "','", array_map( 'esc_sql', $valid_types ) ) . "'";
 
 			// Get all parent from post type.
 			$attachments = $wpdb->get_var(
@@ -671,7 +656,7 @@ class Media {
 				AND post_parent IN (
 					SELECT DISTINCT ID 
 					FROM $wpdb->posts 
-					WHERE post_type IN ($sanitized_in)
+					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)"
 			);
 			// Return the Id's and Title of medias
@@ -717,22 +702,18 @@ class Media {
 		}
 
 		if ( 'any' !== $post_types ) {
-			$valid_types = [];
-			foreach ( (array) $_POST['post_types'] as $type ) {
-				$type = sanitize_key( (string) $type );
-				if ( $type && post_type_exists( $type ) ) {
-					$valid_types[] = $type;
+			foreach ( $_POST['post_types'] as $key => $type ) {
+				if ( ! post_type_exists( $type ) ) {
+					unset( $_POST['post_types'][ $key ] );
 				}
 			}
-			$valid_types = array_values( array_unique( $valid_types ) );
 
-			if ( empty( $valid_types ) ) {
+			if ( empty( $_POST['post_types'] ) ) {
 				wp_send_json( [] );
 			}
 
 			// Get image medias
 			$whichmimetype = wp_post_mime_type_where( 'image', $wpdb->posts );
-			$sanitized_in  = "'" . implode( "','", array_map( 'esc_sql', $valid_types ) ) . "'";
 
 			// Get all parent from post type
 			$attachment = $wpdb->get_var(
@@ -745,7 +726,7 @@ class Media {
 				AND post_parent IN (
 					SELECT DISTINCT ID 
 					FROM $wpdb->posts 
-					WHERE post_type IN ($sanitized_in)
+					WHERE post_type IN ('" . implode( "', '", $_POST['post_types'] ) . "')
 				)
 				LIMIT %d,1 
 			",

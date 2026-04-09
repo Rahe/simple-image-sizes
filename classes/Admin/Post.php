@@ -110,6 +110,9 @@ class Post {
 		if ( 'upload.php' === $hook_suffix || ( 'post.php' === $hook_suffix && isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' == $_GET['action'] ) ) {
 			// Add javascript.
 			wp_enqueue_script( 'sis_js' );
+
+			// Add underscore template.
+			add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
 		}
 	}
 
