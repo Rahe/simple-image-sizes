@@ -1,12 +1,17 @@
 {
   "name": "simple-image-sizes",
-  "version": "3.2.3",
+  "version": "3.2.5",
   "description": "Simple image sizes for WordPress",
-  "author": "Nicolas Juen",
+	"authors": [
+		{
+			"name": "njuen",
+			"email": "njuen@beapi.fr"
+		}
+	],
   "license": "GPL-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Rahe/simple-image-sizes"
+    "url": "https://github.com/Rahe/Simple-image-sizes"
   },
   "scripts": {
     "start": "wp-scripts start assets/src/js/index.js --output-path=assets/dist/",

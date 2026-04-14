@@ -1,11 +1,13 @@
 <?php
 /*
 Plugin Name: Simple Image Sizes
-Plugin URI: https://github.com/Rahe/simple-image-sizes
-Description: Add options in media setting page for images sizes
-Version: 3.2.4
-Author: Rahe
-Author URI: http://nicolas-juen.fr
+Plugin URI: https://github.com/Rahe/Simple-image-sizes
+Description: Add options on the Media settings page for image sizes
+Version: 3.2.5
+Author: The Mediapapa Team
+Author URI: https://www.wp-mediapapa.com/
+Original Author: Rahe
+Original Author URI: http://nicolas-juen.fr
 Text Domain: simple-image-sizes
 Domain Path: /languages
 License: GPLv2 or later
@@ -35,12 +37,28 @@ use Rahe\Simple_Image_Sizes\Admin\Post;
 
 define( 'SIS_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIS_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SIS_VERSION', '3.2.4' );
+define( 'SIS_VERSION', '3.2.5' );
 define( 'SIS_OPTION', 'custom_image_sizes' );
+
+if ( ! defined( 'SIS_MEDIAPAPA_CTA_URL' ) ) {
+	define( 'SIS_MEDIAPAPA_CTA_URL', 'https://www.wp-mediapapa.com/simple-image-sizes/' );
+}
+
+if ( ! defined( 'SIS_MEDIAPAPA_BLOG_URL' ) ) {
+	define( 'SIS_MEDIAPAPA_BLOG_URL', 'https://www.wp-mediapapa.com/blog/simple-image-sizes-update/' );
+}
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
+
+register_activation_hook(
+	__FILE__,
+	static function () {
+		$cycle = (int) get_option( 'sis_mediapapa_notice_cycle', 0 );
+		update_option( 'sis_mediapapa_notice_cycle', $cycle + 1, false );
+	}
+);
 
 add_action( 'plugins_loaded', 'init_sis' );
 function init_sis() {

@@ -68,9 +68,9 @@ class Post {
 		// Get the thumbnails.
 		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : null;
 
-		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) || ! \current_user_can( 'manage_options' ) ) {
-			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
+		// Check the nonce and capability on the post.
+		if ( ! wp_verify_nonce( $nonce, 'sis-regenerate-featured-' . $id ) || ! current_user_can( 'edit_post', $id ) ) {
+			wp_send_json( [ 'error' => __( 'Trying to cheat?', 'simple-image-sizes' ) ] );
 		}
 
 		$attachment_id = get_post_thumbnail_id( $id );
@@ -131,12 +131,15 @@ class Post {
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
 		// Check the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! \current_user_can( 'manage_options' ) ) {
-			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
+		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
+			wp_send_json( [ 'error' => __( 'Trying to cheat?', 'simple-image-sizes' ) ] );
 		}
 
 		// Get the id.
 		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		if ( ! $id || ! wp_attachment_is_image( $id ) || ! current_user_can( 'edit_post', $id ) ) {
+			wp_send_json( [ 'error' => __( 'Trying to cheat?', 'simple-image-sizes' ) ] );
+		}
 		wp_send_json( Main::thumbnail_rebuild( $id, $thumbnails ) );
 	}
 
@@ -223,8 +226,22 @@ class Post {
 		if ( ! wp_attachment_is_image( $object->ID ) ) {
 			return $actions;
 		}
+		if ( ! current_user_can( 'edit_post', $object->ID ) ) {
+			return $actions;
+		}
 		// Add action for regeneration.
 		$actions['sis-regenerate'] = sprintf( "<a href='#' data-id='%s' class='sis-regenerate-one'>%s</a>", esc_attr( $object->ID ), esc_html__( 'Regenerate thumbnails', 'simple-image-sizes' ) );
+		$cta_url                   = apply_filters(
+			'sis_mediapapa_notice_cta_url',
+			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
+		);
+		if ( is_string( $cta_url ) && '' !== $cta_url ) {
+			$actions['sis-mediapapa'] = sprintf(
+				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+				esc_url( $cta_url ),
+				esc_html__( 'Analyze in Mediapapa', 'simple-image-sizes' )
+			);
+		}
 
 		// Return actions.
 		return $actions;
@@ -246,6 +263,9 @@ class Post {
 	public static function add_field_regenerate( $fields, $post ) {
 		// Check this is an image.
 		if ( false === strpos( $post->post_mime_type, 'image' ) ) {
+			return $fields;
+		}
+		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 			return $fields;
 		}
 

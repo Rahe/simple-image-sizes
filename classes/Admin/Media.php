@@ -25,9 +25,13 @@ class Media {
 		add_action( 'wp_ajax_sis_get_sizes', [ __CLASS__, 'a_get_sizes' ] );
 		add_action( 'wp_ajax_sis_add_size', [ __CLASS__, 'a_add_size' ] );
 		add_action( 'wp_ajax_sis_remove_size', [ __CLASS__, 'a_remove_size' ] );
+		add_action( 'wp_ajax_sis_dismiss_mediapapa_notice', [ __CLASS__, 'a_dismiss_mediapapa_notice' ] );
 
 		// Add link in plugins list.
 		add_filter( 'plugin_action_links', [ __CLASS__, 'add_settings_link' ], 10, 2 );
+		add_filter( 'plugin_row_meta', [ __CLASS__, 'add_plugin_row_meta' ], 10, 2 );
+		add_action( 'all_admin_notices', [ __CLASS__, 'render_mediapapa_notice' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_notice_dismiss' ], 20 );
 	}
 
 	/**
@@ -57,6 +61,160 @@ class Media {
 
 		// Add underscore template.
 		add_action( 'admin_footer', [ 'Rahe\Simple_Image_Sizes\Admin\Main', 'add_template' ] );
+		// Add section for the thumbnail regeneration.
+		add_settings_section(
+			'thumbnail_regenerate',
+			__( 'Thumbnail regeneration', 'simple-image-sizes' ),
+			[
+				__CLASS__,
+				'thumbnailRegenerate',
+			],
+			'media'
+		);
+
+	}
+
+	/**
+	 * Enqueue dismiss script for Mediapapa notice.
+	 *
+	 * @param string $hook_suffix Current admin page.
+	 * @return void
+	 */
+	public static function enqueue_notice_dismiss( $hook_suffix = '' ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		if ( ! in_array( (string) $hook_suffix, [ 'upload.php', 'options-media.php', 'settings_page_media' ], true ) ) {
+			return;
+		}
+
+		wp_register_script( 'sis_mediapapa_notice', false, [ 'jquery' ], SIS_VERSION, true );
+		wp_enqueue_script( 'sis_mediapapa_notice' );
+		$js = sprintf(
+			'jQuery(function($){$(document).on("click","#sis-mediapapa-notice .notice-dismiss",function(){$.post(%1$s,{action:%2$s,nonce:%3$s});});});',
+			wp_json_encode( admin_url( 'admin-ajax.php' ) ),
+			wp_json_encode( 'sis_dismiss_mediapapa_notice' ),
+			wp_json_encode( wp_create_nonce( 'sis_dismiss_mediapapa_notice' ) )
+		);
+		wp_add_inline_script( 'sis_mediapapa_notice', $js );
+	}
+
+	/**
+	 * Display Mediapapa notice on media screens.
+	 *
+	 * @return void
+	 */
+	public static function render_mediapapa_notice() {
+		if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || empty( $screen->id ) || ! in_array( $screen->id, [ 'upload', 'options-media' ], true ) ) {
+			return;
+		}
+
+		if ( self::is_mediapapa_family_active() ) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return;
+		}
+		$dismissed_version = (string) get_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_version', true );
+		$dismissed_cycle   = (int) get_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_cycle', true );
+		$current_cycle     = (int) get_option( 'sis_mediapapa_notice_cycle', 0 );
+		if ( (string) SIS_VERSION === $dismissed_version && $current_cycle <= $dismissed_cycle ) {
+			return;
+		}
+
+		$cta_url = apply_filters(
+			'sis_mediapapa_notice_cta_url',
+			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
+		);
+		if ( ! is_string( $cta_url ) || '' === $cta_url ) {
+			return;
+		}
+
+		$link = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( $cta_url ),
+			esc_html__( 'Mediapapa on WordPress.org', 'simple-image-sizes' )
+		);
+		$message = sprintf(
+			/* translators: %s: HTML link to Mediapapa. */
+			__( 'Hi, I\'m Nicolas Juen, the author of <strong>Simple Image Sizes</strong>. I\'m commited to keeping the plugin <strong>free</strong>, and I continue maintaining it as long as it will remain usefull. About 2 years ago, I started working on a new projet called <strong>Mediapapa</strong>, which now have a <strong>free</strong> version to better understand and organize your WordPress Media Library. I would be grateful for you to test it and share your feedback: %s Thank you for your trust.', 'simple-image-sizes' ),
+			$link
+		);
+
+		echo '<div id="sis-mediapapa-notice" class="notice notice-warning is-dismissible"><p>';
+		echo wp_kses(
+			$message,
+			[
+				'strong' => [],
+				'a'      => [
+					'href'   => [],
+					'target' => [],
+					'rel'    => [],
+				],
+			]
+		);
+		echo '</p></div>';
+	}
+
+	/**
+	 * Whether Mediapapa (free or Pro) is active — notice should stay hidden.
+	 *
+	 * @return bool
+	 */
+	private static function is_mediapapa_family_active() {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		// Paths match mediapapa-org / mediapapa-pro repos: bootstrap is always `mediapapa.php`.
+		$explicit = apply_filters(
+			'sis_mediapapa_plugin_bootstrap_paths',
+			array(
+				'mediapapa/mediapapa.php',
+				'mediapapa-pro/mediapapa.php',
+				'mediapapa-org/mediapapa.php',
+			)
+		);
+		foreach ( $explicit as $plugin_file ) {
+			if ( ! is_string( $plugin_file ) || '' === $plugin_file ) {
+				continue;
+			}
+			if ( is_plugin_active( $plugin_file ) || is_plugin_active_for_network( $plugin_file ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Dismiss Mediapapa notice.
+	 *
+	 * @return void
+	 */
+	public static function a_dismiss_mediapapa_notice() {
+		if ( ! check_ajax_referer( 'sis_dismiss_mediapapa_notice', 'nonce', false ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( null, 403 );
+		}
+
+		$user_id = get_current_user_id();
+		update_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_version', (string) SIS_VERSION );
+		update_user_meta( $user_id, 'sis_mediapapa_notice_dismissed_cycle', (int) get_option( 'sis_mediapapa_notice_cycle', 0 ) );
+		wp_send_json_success();
 	}
 
 
@@ -78,6 +236,35 @@ class Media {
 
 		$settings_link = sprintf( '<a href="%s"> %s </a>', admin_url( 'options-media.php' ), __( 'Settings', 'simple-image-sizes' ) );
 		array_unshift( $links, $settings_link );
+
+		return $links;
+	}
+
+	/**
+	 * Add plugin row meta links on plugins.php.
+	 *
+	 * @param array  $links Existing meta links.
+	 * @param string $file  Current plugin file basename.
+	 * @return array
+	 */
+	public static function add_plugin_row_meta( $links = array(), $file = '' ) {
+		if ( 'simple-image-sizes/simple_image_sizes.php' !== $file ) {
+			return $links;
+		}
+
+		$plugin_site_url = apply_filters(
+			'sis_mediapapa_notice_cta_url',
+			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
+		);
+		if ( ! is_string( $plugin_site_url ) || '' === $plugin_site_url ) {
+			return $links;
+		}
+
+		$links[] = sprintf(
+			'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( $plugin_site_url ),
+			esc_html__( 'Visit plugin site', 'simple-image-sizes' )
+		);
 
 		return $links;
 	}
@@ -117,6 +304,7 @@ class Media {
 			// Add the setting field for this size.
 			add_settings_field(
 				'image_size_' . $s,
+				/* translators: %s is the image size slug. */
 				sprintf( __( '%s size', 'simple-image-sizes' ), esc_html( $s ) ),
 				[
 					__CLASS__,
@@ -150,7 +338,7 @@ class Media {
 		// Add php button.
 		add_settings_field(
 			'get_php_button',
-			__( 'Get php for theme', 'simple-image-sizes' ),
+			__( 'Get PHP for theme', 'simple-image-sizes' ),
 			[
 				__CLASS__,
 				'getPhpButton',
@@ -158,16 +346,6 @@ class Media {
 			'media'
 		);
 
-		// Add section for the thumbnail regeneration.
-		add_settings_section(
-			'thumbnail_regenerate',
-			__( 'Thumbnail regeneration', 'simple-image-sizes' ),
-			[
-				__CLASS__,
-				'thumbnailRegenerate',
-			],
-			'media'
-		);
 	}
 
 	/**
@@ -242,7 +420,7 @@ class Media {
 				   class="s show" base_s='<?php echo esc_attr( $show ); ?>'
 				   name="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>" value="1"/>
 			<label class="s"
-				   for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php _e( 'Show in post insertion ?', 'simple-image-sizes' ); ?></label>
+				   for="<?php echo esc_attr( 'custom_image_sizes[' . $args['name'] . '][s]' ); ?>"><?php _e( 'Show in post insertion?', 'simple-image-sizes' ); ?></label>
 		</span>
 		<span class="delete_size  button-secondary"><?php _e( 'Delete', 'simple-image-sizes' ); ?></span>
 		<span class="add_size validate_size button-primary"><?php _e( 'Update', 'simple-image-sizes' ); ?></span>
@@ -267,7 +445,7 @@ class Media {
 	}
 
 	/**
-	 * Add the button to get the php for th sizes
+	 * Add the button to get the PHP for the sizes
 	 *
 	 * @access public
 	 * @return void
@@ -277,7 +455,7 @@ class Media {
 		?>
 		<input type="button" class="button-secondary action" id="get_php"
 			   value="<?php esc_attr_e( 'Get the PHP for the theme', 'simple-image-sizes' ); ?>"/>
-		<p> <?php _e( 'Copy and paste the code below into your WordPress theme function file if you wanted to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
+		<p> <?php _e( 'Copy and paste the code below into your theme\'s functions file if you want to save them and deactivate the plugin.', 'simple-image-sizes' ); ?> </p>
 		<code id="sis_get_php"></code>
 		<?php
 	}
@@ -372,8 +550,8 @@ class Media {
 		$nonce = isset( $_POST['nonce'] ) ? $_POST['nonce'] : '';
 		$name  = isset( $_POST['name'] ) ? sanitize_title( $_POST['name'] ) : '';
 
-		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'delete_' . $name ) ) {
+		// Check the nonce.
+		if ( ! wp_verify_nonce( $nonce, 'delete_' . $name ) || ! current_user_can( 'manage_options' ) ) {
 			die( 0 );
 		}
 
@@ -393,6 +571,10 @@ class Media {
 	 * @return void
 	 */
 	public static function a_get_sizes() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			die( 0 );
+		}
+
 		global $_wp_additional_image_sizes, $wp_version;
 
 		foreach ( get_intermediate_image_sizes() as $s ) {
@@ -514,9 +696,9 @@ class Media {
 		$post_types = isset( $_POST['post_types'] ) ? $_POST['post_types'] : 'any';
 		$thumbnails = isset( $_POST['thumbnails'] ) ? $_POST['thumbnails'] : null;
 
-		// Check the nonce
-		if ( ! wp_verify_nonce( $nonce, 'regen' ) ) {
-			wp_send_json( [ 'error' => __( 'Trying to cheat ?', 'simple-image-sizes' ) ] );
+		// Check the nonce.
+		if ( ! wp_verify_nonce( $nonce, 'regen' ) || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json( [ 'error' => __( 'Trying to cheat?', 'simple-image-sizes' ) ] );
 		}
 
 		if ( 'any' !== $post_types ) {
