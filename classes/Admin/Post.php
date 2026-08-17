@@ -231,17 +231,6 @@ class Post {
 		}
 		// Add action for regeneration.
 		$actions['sis-regenerate'] = sprintf( "<a href='#' data-id='%s' class='sis-regenerate-one'>%s</a>", esc_attr( $object->ID ), esc_html__( 'Regenerate thumbnails', 'simple-image-sizes' ) );
-		$cta_url                   = apply_filters(
-			'sis_mediapapa_notice_cta_url',
-			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
-		);
-		if ( is_string( $cta_url ) && '' !== $cta_url ) {
-			$actions['sis-mediapapa'] = sprintf(
-				'<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
-				esc_url( $cta_url ),
-				esc_html__( 'Analyze in Mediapapa', 'simple-image-sizes' )
-			);
-		}
 
 		// Return actions.
 		return $actions;

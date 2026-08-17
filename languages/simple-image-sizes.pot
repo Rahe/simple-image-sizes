@@ -161,14 +161,6 @@ msgstr ""
 msgid "This image has been regenerated in %s seconds"
 msgstr ""
 
-#: classes/Admin/Main.php:84
-msgid "Try Mediapapa"
-msgstr ""
-
-#: classes/Admin/Main.php:85
-msgid "Thumbnails regenerated. Need usage or duplicates insights?"
-msgstr ""
-
 #: classes/Admin/Main.php:108
 msgid "No id given in POST datas."
 msgstr ""
@@ -221,21 +213,18 @@ msgstr ""
 msgid "Thumbnail regeneration"
 msgstr ""
 
-#: classes/Admin/Media.php:146
+#: classes/Admin/Media.php:133
 msgid "Mediapapa on WordPress.org"
 msgstr ""
 
 #. translators: %s: HTML link to Mediapapa.
-#: classes/Admin/Media.php:150
+#: classes/Admin/Media.php:137
+#, php-format
 msgid "Hi &mdash; I'm Nicolas Juen, the author of Simple Image Sizes. The plugin remains <strong>free</strong>, and I continue maintaining it with <strong>The Mediapapa Team</strong>. We also ship <strong>Mediapapa</strong>, a <strong>free</strong> plugin to better understand and organize your WordPress media library &mdash; if that sounds useful: %s Thank you for your trust."
 msgstr ""
 
-#: classes/Admin/Media.php:248
+#: classes/Admin/Media.php:221
 msgid "Settings"
-msgstr ""
-
-#: classes/Admin/Media.php:277
-msgid "Visit plugin site"
 msgstr ""
 
 #. translators: %s is the image size slug.
@@ -292,10 +281,6 @@ msgstr ""
 
 #: classes/Admin/Post.php:233
 msgid "Regenerate thumbnails"
-msgstr ""
-
-#: classes/Admin/Post.php:242
-msgid "Analyze in Mediapapa"
 msgstr ""
 
 #: classes/Admin/Post.php:273

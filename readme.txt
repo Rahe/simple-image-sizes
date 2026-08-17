@@ -2,8 +2,8 @@
 Contributors: mediapapa, rahe, jaz_on
 Tags: images, image, custom sizes, custom images, thumbnail regenerate, thumbnail, regenerate
 Requires at least: 3.5
-Tested up to: 7.0
-Stable tag: 3.2.5
+Tested up to: 7.1
+Stable tag: 3.2.6
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -57,6 +57,11 @@ Simple Image Sizes focuses on creating and regenerating image sizes. Mediapapa f
 3. Choose the sizes to regenerate and regenerate them
 
 == Changelog ==
+* 3.2.6
+  * Limit Mediapapa promotion to a dismissible notice shown once per plugin version on the Plugins screen, plus a link below Settings > Media
+  * Register notice dismissal as private user metadata, excluded from the REST API
+  * Preserve attachment-level metadata, including WordPress 7.1 companion files, during thumbnail regeneration
+  * Require manage_options when loading the media list for bulk regeneration
 * 3.2.5
     * Add optional dismissible admin notice on Media library and Settings > Media about Mediapapa (not shown when Mediapapa is already active)
     * Remember notice dismissal per user until the next release or a new plugin activation

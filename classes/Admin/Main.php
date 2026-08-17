@@ -40,11 +40,6 @@ class Main {
 	 * @author Nicolas Juen
 	 */
 	public static function localize_vars() {
-		$mediapapa_cta_url = apply_filters(
-			'sis_mediapapa_notice_cta_url',
-			defined( 'SIS_MEDIAPAPA_CTA_URL' ) ? SIS_MEDIAPAPA_CTA_URL : 'https://www.wp-mediapapa.com/simple-image-sizes/'
-		);
-
 		return array(
 			'reading'            => __( 'Reading attachments...', 'simple-image-sizes' ),
 			'maximumWidth'       => __( 'Maximum width', 'simple-image-sizes' ),
@@ -80,9 +75,6 @@ class Main {
 			 * translators: %s is the number of seconds for the image generation.
 			 */
 			'soloRegenerated'    => __( 'This image has been regenerated in %s seconds', 'simple-image-sizes' ),
-			'mediapapaCtaUrl'    => esc_url_raw( $mediapapa_cta_url ),
-			'mediapapaCtaLabel'  => __( 'Try Mediapapa', 'simple-image-sizes' ),
-			'mediapapaAfterRegen'=> __( 'Thumbnails regenerated. Need usage or duplicates insights?', 'simple-image-sizes' ),
 			'crop_positions'     => self::get_available_crop(),
 			'regen_one'          => wp_create_nonce( 'regen' ),
 		);
@@ -260,8 +252,14 @@ class Main {
 		$attachment = get_post( $attachment_id );
 
 		$meta_datas = get_post_meta( $attachment_id, '_wp_attachment_metadata', true );
+		$metadata   = is_array( $meta_datas ) ? $meta_datas : [];
 
-		$metadata = [];
+		// Preserve attachment-level metadata, including companion files introduced by WordPress 7.1.
+		// A full rebuild should only replace the registered image sub-sizes.
+		if ( ! is_array( $thumbnails ) ) {
+			unset( $metadata['sizes'] );
+		}
+
 		if ( preg_match( '!^image/!', get_post_mime_type( $attachment ) ) && file_is_displayable_image( $file ) ) {
 			$imagesize                  = getimagesize( $file );
 			$metadata['width']          = $imagesize[0];
@@ -274,6 +272,7 @@ class Main {
 
 			// make thumbnails and other intermediate sizes.
 			global $_wp_additional_image_sizes;
+			$sizes = [];
 
 			foreach ( get_intermediate_image_sizes() as $s ) {
 				$sizes[ $s ] = [
@@ -302,14 +301,6 @@ class Main {
 			}
 
 			$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
-
-			// Only if not all sizes.
-			if ( isset( $thumbnails ) && is_array( $thumbnails ) && isset( $meta_datas['sizes'] ) && ! empty( $meta_datas['sizes'] ) ) {
-				// Fill the array with the other sizes not have to be done.
-				foreach ( $meta_datas['sizes'] as $name => $fsize ) {
-					$metadata['sizes'][ $name ] = $fsize;
-				}
-			}
 
 			foreach ( $sizes as $size => $size_data ) {
 				if ( isset( $thumbnails ) ) {

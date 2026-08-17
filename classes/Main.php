@@ -2,6 +2,7 @@
 namespace Rahe\Simple_Image_Sizes;
 
 class Main {
+	public const MEDIAPAPA_NOTICE_META_KEY = 'sis_mediapapa_notice_dismissed_version';
 
 	public function __construct() {
 		// Make new image sizes.
@@ -9,6 +10,29 @@ class Main {
 
 		// Add translation.
 		add_action( 'init', [ __CLASS__, 'init_translation' ], 2 );
+
+		// Register plugin metadata.
+		add_action( 'init', [ __CLASS__, 'register_notice_meta' ], 3 );
+	}
+
+	/**
+	 * Register the per-user notice dismissal state.
+	 *
+	 * @return void
+	 */
+	public static function register_notice_meta() {
+		register_meta(
+			'user',
+			self::MEDIAPAPA_NOTICE_META_KEY,
+			[
+				'type'              => 'string',
+				'description'       => 'Simple Image Sizes version for which the notice was dismissed.',
+				'single'            => true,
+				'default'           => '',
+				'sanitize_callback' => 'sanitize_text_field',
+				'show_in_rest'      => false,
+			]
+		);
 	}
 
 	/**

@@ -31,23 +31,6 @@ rahe.sis.regenerate = {
 	errorMessages: null,
 	thumb: null,
 	thumbImg: null,
-	getMediapapaLink: function ( text ) {
-		if (
-			! window.sis.mediapapaCtaUrl ||
-			typeof window.sis.mediapapaCtaUrl !== 'string'
-		) {
-			return '';
-		}
-
-		var label = text || window.sis.mediapapaCtaLabel;
-		return (
-			' <a href="' +
-			window.sis.mediapapaCtaUrl +
-			'" target="_blank" rel="noopener noreferrer">' +
-			label +
-			'</a>'
-		);
-	},
 	init: function () {
 		this.sisZone = jQuery( '.sis' );
 		this.percentText = jQuery( '#sis_progress-percent' );
@@ -195,10 +178,7 @@ rahe.sis.regenerate = {
 					':' +
 					now.getMinutes() +
 					':' +
-					now.getSeconds() +
-					'<br />' +
-					window.sis.mediapapaAfterRegen +
-					this.getMediapapaLink()
+					now.getSeconds()
 			);
 			return;
 		}
