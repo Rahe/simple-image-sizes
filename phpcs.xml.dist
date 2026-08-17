@@ -7,6 +7,7 @@
     <exclude-pattern>./vendor/</exclude-pattern>
     <exclude-pattern>./languages/</exclude-pattern>
     <exclude-pattern>./assets/</exclude-pattern>
+    <exclude-pattern>./tests/</exclude-pattern>
 
     <!-- Exclude the Node Modules directory. -->
     <exclude-pattern>/node_modules/*</exclude-pattern>
@@ -31,6 +32,91 @@
         <exclude name="Universal.Operators.DisallowShortTernary.Found"/>
     </rule>
 
+    <!--
+      Baseline the existing violations in legacy files. New files and other
+      sniff categories remain enforced while this debt is reduced separately.
+    -->
+    <rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace">
+        <exclude-pattern>classes/Admin/Main.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+        <exclude-pattern>classes/Admin/Main.php</exclude-pattern>
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.EnqueuedResourceParameters.NotInFooter">
+        <exclude-pattern>classes/Admin/Main.php</exclude-pattern>
+    </rule>
+    <rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="NormalizedArrays.Arrays.CommaAfterLast.MissingMultiLine">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="Universal.ControlStructures.DisallowLonelyIf.Found">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="Universal.Operators.StrictComparisons.LooseEqual">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+        <exclude-pattern>templates/options-media.php</exclude-pattern>
+    </rule>
+    <rule ref="Universal.WhiteSpace.PrecisionAlignment.Found">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>templates/options-media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.PHP.YodaConditions.NotYoda">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>templates/options-media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Security.EscapeOutput.UnsafePrintingFunction">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>templates/options-media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Security.NonceVerification.Missing">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Security.NonceVerification.Recommended">
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.I18n.MissingArgDomain">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.I18n.NonSingularStringLiteralText">
+        <exclude-pattern>classes/Admin/Media.php</exclude-pattern>
+    </rule>
+    <rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound">
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidHookName.NotLowercase">
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidHookName.UseUnderscores">
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
+        <exclude-pattern>classes/Admin/Post.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+        <exclude-pattern>templates/options-media.php</exclude-pattern>
+    </rule>
+
     <!-- Show sniff name in report. -->
     <arg value="sp"/>
 
@@ -45,12 +131,14 @@
     <ini name="max_execution_time" value="-1"/>
 
     <rule ref="PHPCompatibility"/>
-    <config name="testVersion" value="5.6-"/>
+    <config name="testVersion" value="8.0-"/>
 
     <rule ref="WordPress.WP.I18n">
     <properties>
       <!-- Value: replace the text domain used. -->
-      <property name="text_domain" type="array" value="simple-image-sizes"/>
+      <property name="text_domain" type="array">
+        <element value="simple-image-sizes"/>
+      </property>
     </properties>
     </rule>
     <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">

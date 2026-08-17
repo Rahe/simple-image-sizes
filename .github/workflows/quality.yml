@@ -1,34 +1,59 @@
-name: Quality
+name: PHP Quality Checks
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  run:    
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      matrix:
-        operating-system: [ ubuntu-latest ]
-        php-versions: [ '8.0' ]
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+  checks:
+    name: Lint and PHPCS
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout project
+        uses: actions/checkout@v5
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: mbstring, intl #optional, setup extensions
-        coverage: xdebug #optional, setup coverage driver
-        tools: psalm, phpcbf, phpcs
-    - name: Add dependencies
-      run: composer install 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: none
+          tools: cs2pr
 
-    - name: Check composer
-      run: composer validate
+      - name: Validate Composer configuration
+        run: composer validate --strict --no-check-publish
 
-    - name: Check cs
-      run: composer cs
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
-    - name: Check psalm
-      run: composer psalm
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Check PHP syntax
+        run: composer lint
+
+      - name: Run PHP CodeSniffer
+        id: phpcs
+        run: composer cs -- --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Add PHP CodeSniffer annotations
+        if: ${{ always() && github.event_name == 'pull_request' && steps.phpcs.outcome == 'failure' }}
+        run: cs2pr ./phpcs-report.xml

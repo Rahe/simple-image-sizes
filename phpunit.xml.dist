@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    convertDeprecationsToExceptions="true"
+>
+    <testsuites>
+        <testsuite name="unit">
+            <directory suffix="Test.php">./tests/php</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="false">
+        <include>
+            <file>simple_image_sizes.php</file>
+            <directory suffix=".php">classes</directory>
+        </include>
+    </coverage>
+</phpunit>

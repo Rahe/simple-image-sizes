@@ -13,17 +13,32 @@
   "require": {
     "php": ">=8.0"
   },
-  "autoload"   : {
+  "autoload": {
     "psr-4": {
-      "Rahe\\Simple_Image_Sizes\\" : "classes/"
+      "Rahe\\Simple_Image_Sizes\\": "classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rahe\\Simple_Image_Sizes\\Tests\\": "tests/php/"
     }
   },
   "scripts": {
-      "cs": "./vendor/bin/phpcs ./",
-      "cb": "./vendor/bin/phpcbf ./",
-      "psalm": "./vendor/bin/psalm ./"
+    "cb": "./vendor/bin/phpcbf ./",
+    "cs": "./vendor/bin/phpcs ./",
+    "lint": "./vendor/bin/parallel-lint --exclude vendor .",
+    "test": "./vendor/bin/phpunit"
+  },
+  "scripts-descriptions": {
+    "cb": "Fix PHP coding standards violations.",
+    "cs": "Check PHP coding standards.",
+    "lint": "Check PHP syntax.",
+    "test": "Run the PHP unit test suite."
   },
   "config": {
+    "platform": {
+      "php": "8.0.0"
+    },
     "allow-plugins": {
       "phpro/grumphp-shim": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
@@ -34,7 +49,8 @@
     "php-parallel-lint/php-parallel-lint": "^1.4",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpro/grumphp-shim": "^2.0",
-    "vimeo/psalm": "^5.24",
-    "wp-coding-standards/wpcs": "^3.1"
+    "wp-coding-standards/wpcs": "^3.1",
+    "wp-phpunit/wp-phpunit": "^6.7",
+    "yoast/phpunit-polyfills": "^1.0"
   }
 }

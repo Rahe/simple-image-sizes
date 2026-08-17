@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/wp-env.json",
+  "phpVersion": "8.0",
+  "core": null,
+  "testsEnvironment": false,
+  "port": 8889,
+  "config": {
+    "SCRIPT_DEBUG": true,
+    "WP_DEBUG": true
+  },
+  "plugins": [
+    "."
+  ]
+}

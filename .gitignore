@@ -165,6 +165,10 @@ node_modules/
 #Composer
 vendor
 
+# PHPUnit
+.phpunit.result.cache
+coverage/
+
 # IDE & env files
 .vscode/
 _todo

@@ -16,10 +16,16 @@
   "scripts": {
     "start": "wp-scripts start assets/src/js/index.js --output-path=assets/dist/",
     "build": "wp-scripts build assets/src/js/index.js --output-path=assets/dist/",
+    "env:start": "wp-env start",
+    "env:stop": "wp-env stop",
+    "env:start-tests": "wp-env start --config=./.wp-env.test.json",
+    "env:stop-tests": "wp-env stop --config=./.wp-env.test.json",
     "lint:css": "wp-scripts lint-style 'assets/src/css/*.css'",
-    "format": "wp-scripts format ./assets/src"
+    "format": "wp-scripts format ./assets/src",
+    "test:php": "wp-env run cli --config=./.wp-env.test.json --env-cwd=wp-content/plugins/simple-image-sizes/ -- ./vendor/bin/phpunit"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^25.2.0"
+    "@wordpress/env": "^11.2.0",
+    "@wordpress/scripts": "^34.1.0"
   }
 }

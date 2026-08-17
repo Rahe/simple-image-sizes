@@ -1,0 +1,84 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: PHP Unit Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'classes/**'
+      - 'tests/**'
+      - 'simple_image_sizes.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'phpunit.xml.dist'
+      - '.wp-env.json'
+      - '.wp-env.test.json'
+      - '.github/workflows/tests-php.yml'
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-php:
+    name: WP ${{ matrix.wordpress }} / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.0'
+            wordpress: '6.4'
+            core: 'WordPress/WordPress#6.4'
+          - php: '8.2'
+            wordpress: 'latest'
+            core: null
+          - php: '8.4'
+            wordpress: 'trunk'
+            core: 'WordPress/wordpress-develop#trunk'
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Start WordPress test environment
+        env:
+          WP_ENV_CORE: ${{ matrix.core }}
+          WP_ENV_PHP_VERSION: ${{ matrix.php }}
+        run: npm run env:start-tests
+
+      - name: Run PHPUnit
+        run: npm run test:php
+
+      - name: Stop WordPress test environment
+        if: always()
+        run: npm run env:stop-tests
